@@ -24,7 +24,20 @@ class CheckRole
             return $next($request);
         }
 
-        if (! in_array($user->role, $roles, true)) {
+        $userRole = $user->role;
+        $matched = in_array($userRole, $roles, true);
+
+        if (! $matched) {
+            if (in_array('reviewer', $roles, true) && $userRole === 'approver') {
+                $matched = true;
+            } elseif (in_array('approver', $roles, true) && $userRole === 'reviewer') {
+                $matched = true;
+            } elseif (in_array('admin', $roles, true) && $userRole === 'administrator') {
+                $matched = true;
+            }
+        }
+
+        if (! $matched) {
             abort(403, 'అనధికారిక ప్రవేశం: ఈ విభాగాన్ని యాక్సెస్ చేయడానికి మీకు అనుమతి లేదు. (Unauthorized).');
         }
 

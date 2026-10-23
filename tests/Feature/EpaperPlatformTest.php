@@ -409,5 +409,70 @@ class EpaperPlatformTest extends TestCase
         $this->assertEquals('published', $this->draftEdition->status);
         $this->assertNotNull($this->draftEdition->published_at);
     }
+
+    public function test_locale_switching_toggles_language_in_session(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
+
+        $response = $this->actingAs($admin)->get(route('admin.locale.switch', 'en'));
+        $response->assertSessionHas('locale', 'en');
+
+        $response = $this->actingAs($admin)->get(route('admin.locale.switch', 'te'));
+        $response->assertSessionHas('locale', 'te');
+    }
+
+    public function test_admin_can_create_new_editorial_user_with_role(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
+
+        $response = $this->actingAs($admin)->post(route('admin.users.store'), [
+            'name' => 'Vijayawada Desk',
+            'email' => 'vja.desk@vspmedianetwork.com',
+            'role' => 'editor',
+            'password' => 'Password123#',
+        ]);
+
+        $response->assertSessionHas('success');
+        $this->assertDatabaseHas('users', [
+            'email' => 'vja.desk@vspmedianetwork.com',
+            'role' => 'editor',
+            'is_active' => true,
+        ]);
+    }
+
+    public function test_editor_cannot_access_user_management(): void
+    {
+        $editor = User::factory()->create(['role' => 'editor', 'is_active' => true]);
+
+        $response = $this->actingAs($editor)->get(route('admin.users.index'));
+        $response->assertStatus(403);
+    }
+
+    public function test_admin_can_view_audit_logs(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
+
+        $response = $this->actingAs($admin)->get(route('admin.audit-logs.index'));
+        $response->assertStatus(200);
+        $response->assertSee('ఎడిటోరియల్ ఆడిట్ లాగ్స్');
+    }
+
+    public function test_admin_can_update_publishing_settings(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
+
+        $response = $this->actingAs($admin)->post(route('admin.settings.update'), [
+            'site_name' => 'VSP TIMES Digital Newspaper',
+            'timezone' => 'Asia/Kolkata',
+            'default_publish_time' => '05:00',
+            'max_pdf_size_mb' => 120,
+            'auto_archive_days' => 730,
+            'allow_public_downloads' => '1',
+            'contact_email' => 'editorial@vspmedianetwork.com',
+            'whatsapp_number' => '+91 99999 88888',
+        ]);
+
+        $response->assertSessionHas('success');
+    }
 }
 

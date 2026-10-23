@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'portal_title' => 'VSP TIMES ఈ-పేపర్ ఎడిటోరియల్ డెస్క్',
+    'dashboard' => 'డ్యాష్‌బోర్డ్',
+    'upload_edition' => 'కొత్త సంచిక అప్‌లోడ్',
+    'all_editions' => 'అన్ని సంచికలు',
+    'pending_approvals' => 'ఆమోదం కోసం వేచిఉన్నవి',
+    'scheduled_editions' => 'షెడ్యూల్డ్ సంచికలు (5:00 AM)',
+    'published_editions' => 'ప్రచురితమైనవి (Live)',
+    'users_roles' => 'వినియోగదారులు & పాత్రలు',
+    'audit_logs' => 'ఆడిట్ లాగ్స్',
+    'settings' => 'సెట్టింగ్స్',
+    'view_live_epaper' => 'లైవ్ ఈ-పేపర్ చూడండి',
+    'logout' => 'లాగౌట్',
+    'metrics_total' => 'మొత్తం సంచికలు',
+    'metrics_live' => 'లైవ్ సంచికలు',
+    'metrics_pending' => 'ఆమోదం కోసం పెండింగ్',
+    'metrics_scheduled' => 'షెడ్యూల్డ్ (5:00 AM IST)',
+    'metrics_views' => 'మొత్తం వ్యూస్',
+    'metrics_downloads' => 'పీడీఎఫ్ డౌన్‌లోడ్స్',
+    'reorder_pages' => 'పేజీల వరుస క్రమం',
+    'save_changes' => 'మార్పులను భద్రపరచండి',
+    'publish_now' => 'ఇప్పుడే లైవ్ చేయండి',
+    'approve_and_schedule' => 'ఆమోదించి 5:00 AM కి షెడ్యూల్ చేయండి',
+    'reject' => 'తిరస్కరించండి',
+    'submit_for_review' => 'ఆమోదం కొరకు పంపండి',
+];

@@ -246,15 +246,23 @@
                 <span style="color: #64748B;">&bull;</span>
                 <span style="color: #E2E8F0;">{{ $edition->edition_date->format('d M Y') }}</span>
             </div>
-            <span class="page-counter-badge">
-                పేజీ {{ $pageNumber }} / {{ $totalPages }}
-            </span>
+            <!-- Page Jump Selector -->
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <select onchange="window.location.href=this.value;" class="tool-btn" style="padding: 5px 10px; font-weight: 700; background: #0B132B; border-color: var(--epaper-gold); color: #FFFFFF;">
+                    @for($i = 1; $i <= $totalPages; $i++)
+                        <option value="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $i]) }}" {{ $i == $pageNumber ? 'selected' : '' }}>
+                            పేజీ {{ $i }} / {{ $totalPages }}
+                        </option>
+                    @endfor
+                </select>
+            </div>
         </div>
 
         <!-- Zoom & View Tools -->
         <div class="toolbar-center">
             <button class="tool-btn" id="btn-zoom-out" title="జూమ్ అవుట్"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
-            <button class="tool-btn" id="btn-zoom-reset" title="రీసెట్">Fit Page</button>
+            <button class="tool-btn" id="btn-zoom-reset" title="పేజీ సరిపోల్చండి (Fit Page)"><i class="fa-solid fa-arrows-to-eye"></i> Fit Page</button>
+            <button class="tool-btn" id="btn-fit-width" title="వెడల్పు సరిపోల్చండి (Fit Width)"><i class="fa-solid fa-arrows-left-right"></i> Fit Width</button>
             <button class="tool-btn" id="btn-zoom-in" title="జూమ్ ఇన్"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
             <button class="tool-btn" id="btn-fullscreen" title="పూర్తి స్క్రీన్"><i class="fa-solid fa-expand"></i></button>
         </div>
@@ -338,19 +346,21 @@
         const btnReset = document.getElementById('btn-zoom-reset');
         const btnFs = document.getElementById('btn-fullscreen');
 
+        const btnFitWidth = document.getElementById('btn-fit-width');
+
         function applyZoom() {
             pageWrapper.style.transform = `scale(${zoomLevel})`;
         }
 
         btnIn.addEventListener('click', () => {
-            if (zoomLevel < 2.5) {
+            if (zoomLevel < 3.0) {
                 zoomLevel += 0.25;
                 applyZoom();
             }
         });
 
         btnOut.addEventListener('click', () => {
-            if (zoomLevel > 0.75) {
+            if (zoomLevel > 0.6) {
                 zoomLevel -= 0.25;
                 applyZoom();
             }
@@ -358,6 +368,27 @@
 
         btnReset.addEventListener('click', () => {
             zoomLevel = 1.0;
+            pageWrapper.style.maxWidth = '900px';
+            applyZoom();
+        });
+
+        if (btnFitWidth) {
+            btnFitWidth.addEventListener('click', () => {
+                const stageWidth = document.getElementById('reader-stage').clientWidth - 40;
+                pageWrapper.style.maxWidth = stageWidth + 'px';
+                zoomLevel = 1.0;
+                applyZoom();
+            });
+        }
+
+        // Double Click to Zoom in / Reset
+        pageWrapper.addEventListener('dblclick', (e) => {
+            if (zoomLevel === 1.0) {
+                zoomLevel = 1.8;
+            } else {
+                zoomLevel = 1.0;
+                pageWrapper.style.maxWidth = '900px';
+            }
             applyZoom();
         });
 
@@ -379,6 +410,34 @@
                 if (next) next.click();
             }
         });
+
+        // Mobile touch swipe gesture
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const stage = document.getElementById('reader-stage');
+
+        stage.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        stage.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 60;
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // Swiped Left -> Next page
+                const next = document.querySelector('.nav-arrow-right');
+                if (next) next.click();
+            }
+            if (touchEndX > touchStartX + swipeThreshold) {
+                // Swiped Right -> Prev page
+                const prev = document.querySelector('.nav-arrow-left');
+                if (prev) prev.click();
+            }
+        }
     })();
 </script>
 @endpush

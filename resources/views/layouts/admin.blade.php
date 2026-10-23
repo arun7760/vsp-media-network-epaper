@@ -254,7 +254,7 @@
 
             <div class="nav-heading">పనితీరు &amp; ఆమోదాలు (Workflows)</div>
             <a href="{{ route('admin.editions.index', ['status' => 'pending_approval']) }}" class="nav-link {{ request('status') === 'pending_approval' ? 'active' : '' }}">
-                <i class="fa-solid fa-clipboard-check"></i> ఆమోదం కోసం వేచిఉన్నవి
+                <i class="fa-solid fa-clipboard-check"></i> {{ __('admin.pending_approvals') }}
                 @php $pendingCount = \App\Models\EpaperEdition::where('status', 'pending_approval')->count(); @endphp
                 @if($pendingCount > 0)
                     <span class="badge">{{ $pendingCount }}</span>
@@ -262,16 +262,29 @@
             </a>
 
             <a href="{{ route('admin.editions.index', ['status' => 'scheduled']) }}" class="nav-link {{ request('status') === 'scheduled' ? 'active' : '' }}">
-                <i class="fa-solid fa-calendar-clock"></i> షెడ్యూల్డ్ సంచికలు (5:00 AM)
+                <i class="fa-solid fa-calendar-clock"></i> {{ __('admin.scheduled_editions') }}
             </a>
 
             <a href="{{ route('admin.editions.index', ['status' => 'published']) }}" class="nav-link {{ request('status') === 'published' ? 'active' : '' }}">
-                <i class="fa-solid fa-circle-check"></i> ప్రచురితమైనవి (Live)
+                <i class="fa-solid fa-circle-check"></i> {{ __('admin.published_editions') }}
             </a>
+
+            @if(auth()->user()->isAdmin())
+                <div class="nav-heading">నిర్వాహణ వ్యవస్థ (Administration)</div>
+                <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-users-gear"></i> {{ __('admin.users_roles') }}
+                </a>
+                <a href="{{ route('admin.audit-logs.index') }}" class="nav-link {{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-clock-rotate-left"></i> {{ __('admin.audit_logs') }}
+                </a>
+                <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-sliders"></i> {{ __('admin.settings') }}
+                </a>
+            @endif
 
             <div class="nav-heading">పబ్లిక్ పోర్టల్ (Public)</div>
             <a href="{{ route('epaper.home') }}" target="_blank" class="nav-link">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> లైవ్ ఈ-పేపర్ చూడండి
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> {{ __('admin.view_live_epaper') }}
             </a>
         </nav>
 
@@ -288,7 +301,7 @@
             <form action="{{ route('admin.logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="btn-admin btn-outline" style="width: 100%; justify-content: center; background: rgba(255,255,255,0.06); color: #CBD5E1; border-color: rgba(255,255,255,0.15);">
-                    <i class="fa-solid fa-right-from-bracket"></i> లాగౌట్ (Logout)
+                    <i class="fa-solid fa-right-from-bracket"></i> {{ __('admin.logout') }}
                 </button>
             </form>
         </div>
@@ -297,9 +310,23 @@
     <!-- Main Content Area -->
     <div class="admin-main">
         <header class="admin-header">
-            <h2>@yield('header_title', 'ఈ-పేపర్ ఎడిటోరియల్ డెస్క్')</h2>
-            <div style="font-size: 13px; color: var(--admin-muted);">
-                <i class="fa-regular fa-clock"></i> {{ now('Asia/Kolkata')->format('d M Y, h:i A') }} IST
+            <h2>@yield('header_title', __('admin.portal_title'))</h2>
+            <div style="display: flex; align-items: center; gap: 18px;">
+                <!-- English / Telugu Language Toggle -->
+                <div style="display: flex; background: #F1F5F9; border-radius: 6px; padding: 3px; border: 1px solid var(--admin-border);">
+                    <a href="{{ route('admin.locale.switch', 'te') }}" 
+                       style="padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; color: {{ app()->getLocale() === 'te' ? 'var(--admin-navy)' : 'var(--admin-muted)' }}; background: {{ app()->getLocale() === 'te' ? 'var(--admin-gold)' : 'transparent' }};">
+                        తెలుగు
+                    </a>
+                    <a href="{{ route('admin.locale.switch', 'en') }}" 
+                       style="padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; color: {{ app()->getLocale() === 'en' ? 'var(--admin-navy)' : 'var(--admin-muted)' }}; background: {{ app()->getLocale() === 'en' ? 'var(--admin-gold)' : 'transparent' }};">
+                        English
+                    </a>
+                </div>
+
+                <div style="font-size: 13px; color: var(--admin-muted);">
+                    <i class="fa-regular fa-clock"></i> {{ now('Asia/Kolkata')->format('d M Y, h:i A') }} IST
+                </div>
             </div>
         </header>
 

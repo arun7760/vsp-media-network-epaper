@@ -67,16 +67,36 @@ class User extends Authenticatable
 
     public function canApprove(): bool
     {
-        return $this->is_active && in_array($this->role, ['super_admin', 'admin', 'reviewer'], true);
+        return $this->is_active && in_array($this->role, ['super_admin', 'admin', 'approver', 'reviewer'], true);
     }
 
     public function canPublish(): bool
     {
-        return $this->is_active && in_array($this->role, ['super_admin', 'admin'], true);
+        return $this->is_active && in_array($this->role, ['super_admin', 'admin', 'publisher'], true);
     }
 
     public function canDelete(): bool
     {
         return $this->is_active && in_array($this->role, ['super_admin', 'admin'], true);
+    }
+
+    public function canManageUsers(): bool
+    {
+        return $this->is_active && in_array($this->role, ['super_admin', 'admin'], true);
+    }
+
+    public function canViewAuditLogs(): bool
+    {
+        return $this->is_active && in_array($this->role, ['super_admin', 'admin'], true);
+    }
+
+    public function canManageSettings(): bool
+    {
+        return $this->is_active && in_array($this->role, ['super_admin', 'admin'], true);
+    }
+
+    public function isViewer(): bool
+    {
+        return $this->role === 'viewer';
     }
 }

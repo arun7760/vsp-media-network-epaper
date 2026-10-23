@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'portal_title' => 'VSP TIMES E-Paper Editorial Desk',
+    'dashboard' => 'Dashboard',
+    'upload_edition' => 'Upload New Edition',
+    'all_editions' => 'All Editions',
+    'pending_approvals' => 'Pending Approvals',
+    'scheduled_editions' => 'Scheduled (5:00 AM)',
+    'published_editions' => 'Published (Live)',
+    'users_roles' => 'Users & Roles',
+    'audit_logs' => 'Audit Logs',
+    'settings' => 'Settings',
+    'view_live_epaper' => 'View Live E-Paper',
+    'logout' => 'Logout',
+    'metrics_total' => 'Total Editions',
+    'metrics_live' => 'Live Editions',
+    'metrics_pending' => 'Pending Approval',
+    'metrics_scheduled' => 'Scheduled (5:00 AM IST)',
+    'metrics_views' => 'Total Views',
+    'metrics_downloads' => 'PDF Downloads',
+    'reorder_pages' => 'Page Reordering',
+    'save_changes' => 'Save Changes',
+    'publish_now' => 'Publish Live Now',
+    'approve_and_schedule' => 'Approve & Schedule (5:00 AM IST)',
+    'reject' => 'Reject Edition',
+    'submit_for_review' => 'Submit for Review',
+];

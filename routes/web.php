@@ -81,4 +81,39 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::delete('/editions/{edition}', [EpaperAdminController::class, 'destroy'])
         ->name('editions.destroy')
         ->middleware('role:super_admin,admin');
+
+    // Language / Locale Switcher
+    Route::get('/locale/{lang}', function ($lang) {
+        if (in_array($lang, ['te', 'en'], true)) {
+            session(['locale' => $lang]);
+        }
+        return back();
+    })->name('locale.switch');
+
+    // User & Role Management (Super Admin, Admin)
+    Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])
+        ->name('users.index')
+        ->middleware('role:super_admin,admin');
+    Route::post('/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])
+        ->name('users.store')
+        ->middleware('role:super_admin,admin');
+    Route::put('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'update'])
+        ->name('users.update')
+        ->middleware('role:super_admin,admin');
+    Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])
+        ->name('users.destroy')
+        ->middleware('role:super_admin,admin');
+
+    // Audit Logs (Super Admin, Admin)
+    Route::get('/audit-logs', [\App\Http\Controllers\Admin\AuditLogController::class, 'index'])
+        ->name('audit-logs.index')
+        ->middleware('role:super_admin,admin');
+
+    // System Settings (Super Admin, Admin)
+    Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])
+        ->name('settings.index')
+        ->middleware('role:super_admin,admin');
+    Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])
+        ->name('settings.update')
+        ->middleware('role:super_admin,admin');
 });
