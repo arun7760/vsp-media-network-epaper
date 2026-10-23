@@ -14,12 +14,34 @@ class EpaperSampleSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Ensure an Admin user exists
-        $admin = User::firstOrCreate(
+        // 1. Ensure Editorial users exist with proper roles
+        $admin = User::updateOrCreate(
             ['email' => 'admin@vspmedianetwork.com'],
             [
-                'name' => 'VSP Times Editorial Administrator',
+                'name' => 'VSP Times Chief Administrator',
                 'password' => Hash::make('AdminVsp@2026#'),
+                'role' => 'super_admin',
+                'is_active' => true,
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'editor@vspmedianetwork.com'],
+            [
+                'name' => 'Newsroom Upload Desk',
+                'password' => Hash::make('EditorVsp@2026#'),
+                'role' => 'editor',
+                'is_active' => true,
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'reviewer@vspmedianetwork.com'],
+            [
+                'name' => 'Editorial Review Desk',
+                'password' => Hash::make('ReviewerVsp@2026#'),
+                'role' => 'reviewer',
+                'is_active' => true,
             ]
         );
 
