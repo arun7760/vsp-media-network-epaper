@@ -146,4 +146,73 @@ class EpaperPlatformTest extends TestCase
             'notes' => 'Ready for editorial check',
         ]);
     }
+
+    public function test_scheduled_publication_command_publishes_approved_ready_editions(): void
+    {
+        $user = \App\Models\User::factory()->create();
+        $tomorrow = Carbon::tomorrow();
+
+        // Create an edition scheduled for tomorrow 5:00 AM IST
+        $scheduled = EpaperEdition::create([
+            'region_id' => $this->mainRegion->id,
+            'edition_date' => $tomorrow,
+            'title' => 'షెడ్యూల్డ్ ఉదయపు సంచిక',
+            'total_pages' => 2,
+            'status' => 'scheduled',
+            'scheduled_at' => Carbon::now('Asia/Kolkata')->subMinutes(5), // time has arrived
+            'approved_by' => $user->id,
+        ]);
+
+        EpaperPage::create([
+            'edition_id' => $scheduled->id,
+            'page_number' => 1,
+            'page_title' => 'Page 1',
+            'status' => 'ready',
+        ]);
+
+        $this->artisan('epaper:publish-scheduled')
+            ->expectsOutputToContain('Published Edition ID '.$scheduled->id)
+            ->assertExitCode(0);
+
+        $scheduled->refresh();
+        $this->assertEquals('published', $scheduled->status);
+        $this->assertNotNull($scheduled->published_at);
+
+        $this->assertDatabaseHas('epaper_workflow_logs', [
+            'edition_id' => $scheduled->id,
+            'action' => 'auto_publish',
+            'from_status' => 'scheduled',
+            'to_status' => 'published',
+        ]);
+    }
+
+    public function test_scheduled_publication_skips_unapproved_or_pageless_editions(): void
+    {
+        $nextWeek = Carbon::today()->addDays(3);
+
+        // 1. Unapproved edition
+        $unapproved = EpaperEdition::create([
+            'region_id' => $this->mainRegion->id,
+            'edition_date' => $nextWeek,
+            'title' => 'ఆమోదం లేని సంచిక',
+            'total_pages' => 1,
+            'status' => 'scheduled',
+            'scheduled_at' => Carbon::now('Asia/Kolkata')->subMinutes(10),
+            'approved_by' => null, // Not approved!
+        ]);
+
+        EpaperPage::create([
+            'edition_id' => $unapproved->id,
+            'page_number' => 1,
+            'page_title' => 'Page 1',
+            'status' => 'ready',
+        ]);
+
+        $this->artisan('epaper:publish-scheduled')
+            ->expectsOutputToContain('Lacks editorial approval')
+            ->assertExitCode(0);
+
+        $unapproved->refresh();
+        $this->assertEquals('scheduled', $unapproved->status);
+    }
 }
