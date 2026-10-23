@@ -512,5 +512,40 @@ class EpaperPlatformTest extends TestCase
             @unlink($tempPath);
         }
     }
+
+    public function test_unauthorized_roles_cannot_access_restricted_settings_or_audit_logs(): void
+    {
+        $editor = User::factory()->create(['role' => 'editor', 'is_active' => true]);
+        $reviewer = User::factory()->create(['role' => 'reviewer', 'is_active' => true]);
+
+        // Editor cannot access settings or audit logs
+        $this->actingAs($editor)->get(route('admin.settings.index'))->assertStatus(403);
+        $this->actingAs($editor)->get(route('admin.audit-logs.index'))->assertStatus(403);
+
+        // Reviewer cannot access settings or audit logs
+        $this->actingAs($reviewer)->get(route('admin.settings.index'))->assertStatus(403);
+        $this->actingAs($reviewer)->get(route('admin.audit-logs.index'))->assertStatus(403);
+    }
+
+    public function test_inactive_user_is_logged_out_and_forbidden(): void
+    {
+        $inactiveAdmin = User::factory()->create(['role' => 'admin', 'is_active' => false]);
+
+        $response = $this->actingAs($inactiveAdmin)->get(route('admin.dashboard'));
+        $response->assertRedirect(route('admin.login'));
+        $this->assertGuest();
+    }
+
+    public function test_download_full_edition_pdf(): void
+    {
+        // Public download of published edition
+        $response = $this->get(route('epaper.download', $this->publishedEdition));
+        $this->assertTrue(in_array($response->status(), [200, 302], true));
+
+        // Guest cannot download draft edition
+        $draftResponse = $this->get(route('epaper.download', $this->draftEdition));
+        $draftResponse->assertStatus(403);
+    }
 }
+
 

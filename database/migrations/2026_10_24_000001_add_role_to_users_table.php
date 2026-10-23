@@ -8,17 +8,39 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role', 30)->default('editor')->after('email')->index();
-            $table->boolean('is_active')->default(true)->after('role')->index();
-            $table->timestamp('last_login_at')->nullable()->after('is_active');
-        });
+        if (Schema::hasTable('users')) {
+            Schema::table('users', function (Blueprint $table) {
+                if (!Schema::hasColumn('users', 'role')) {
+                    $table->string('role', 30)->default('editor')->after('email')->index();
+                }
+                if (!Schema::hasColumn('users', 'is_active')) {
+                    $table->boolean('is_active')->default(true)->after('role')->index();
+                }
+                if (!Schema::hasColumn('users', 'last_login_at')) {
+                    $table->timestamp('last_login_at')->nullable()->after('is_active');
+                }
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['role', 'is_active', 'last_login_at']);
-        });
+        if (Schema::hasTable('users')) {
+            Schema::table('users', function (Blueprint $table) {
+                $dropColumns = [];
+                if (Schema::hasColumn('users', 'role')) {
+                    $dropColumns[] = 'role';
+                }
+                if (Schema::hasColumn('users', 'is_active')) {
+                    $dropColumns[] = 'is_active';
+                }
+                if (Schema::hasColumn('users', 'last_login_at')) {
+                    $dropColumns[] = 'last_login_at';
+                }
+                if (!empty($dropColumns)) {
+                    $table->dropColumn($dropColumns);
+                }
+            });
+        }
     }
 };

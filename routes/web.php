@@ -34,7 +34,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 | Protected E-Paper Admin Publishing Suite
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'active'])->group(function () {
     Route::get('/dashboard', [EpaperAdminController::class, 'dashboard'])->name('dashboard');
 
     // Editions Management
