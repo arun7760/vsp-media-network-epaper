@@ -474,5 +474,43 @@ class EpaperPlatformTest extends TestCase
 
         $response->assertSessionHas('success');
     }
+
+    public function test_upload_and_processing_with_actual_vsp_times_newspaper_pdf(): void
+    {
+        $fixturePath = base_path('tests/fixtures/vsp_times_sample.pdf');
+        $this->assertFileExists($fixturePath, 'Actual VSP Times PDF fixture must be available for testing.');
+
+        $editor = User::factory()->create(['role' => 'editor', 'is_active' => true]);
+
+        // Create a copy to simulate uploaded file
+        $tempPath = tempnam(sys_get_temp_dir(), 'vsp_test_') . '.pdf';
+        copy($fixturePath, $tempPath);
+
+        $uploadedFile = new UploadedFile($tempPath, 'vsp_times_edition_oct2026.pdf', 'application/pdf', null, true);
+
+        $uploadDate = Carbon::today()->addDays(10)->toDateString();
+
+        $response = $this->actingAs($editor)->post(route('admin.editions.store'), [
+            'region_id' => $this->vskpRegion->id,
+            'edition_date' => $uploadDate,
+            'title' => 'విశాఖపట్నం అసలైన నమూనా ఈ-పేపర్ సంచిక',
+            'volume_number' => 'సంపుటి 1',
+            'issue_number' => 'సంచిక 105',
+            'pdf_file' => $uploadedFile,
+        ]);
+
+        $response->assertSessionHasNoErrors();
+
+        $edition = EpaperEdition::where('title', 'విశాఖపట్నం అసలైన నమూనా ఈ-పేపర్ సంచిక')->first();
+        $this->assertNotNull($edition);
+        $this->assertEquals('draft', $edition->status);
+        $this->assertGreaterThan(0, $edition->total_pages);
+        $this->assertEquals($edition->total_pages, $edition->pages()->count());
+
+        // Cleanup
+        if (file_exists($tempPath)) {
+            @unlink($tempPath);
+        }
+    }
 }
 
