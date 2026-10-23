@@ -1,0 +1,60 @@
+# Application Caches & Logs
+*.log
+.phpunit.result.cache
+/.phpunit.cache
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+!/storage/framework/cache/.gitignore
+!/storage/framework/sessions/.gitignore
+!/storage/framework/views/.gitignore
+!/storage/logs/.gitignore
+
+# Environment & Secrets
+.env
+.env.backup
+.env.production
+.env.local
+.env.*.local
+!.env.example
+!.env.production.example
+/auth.json
+*.cookie
+*cookie*.txt
+
+# Local Database Files
+database/*.sqlite
+database/*.sqlite-journal
+database/*.sqlite-shm
+database/*.sqlite-wal
+
+# E-Paper Raw PDFs & Storage Uploads
+/storage/app/public/epaper/
+/storage/app/private/epaper/
+/storage/app/epaper/
+*.pdf
+
+# Dependencies & Build Artifacts
+/node_modules
+/vendor
+/public/build
+/public/hot
+/public/storage
+/public/fonts-manifest.dev.json
+
+# IDE & Editor Specific
+.DS_Store
+Thumbs.db
+/.codex
+/.cursor/
+/.idea
+/.nova
+/.vscode
+/.zed
+.phpactor.json
+_ide_helper.php
+Homestead.json
+Homestead.yaml
+/storage/*.key
+/storage/pail
