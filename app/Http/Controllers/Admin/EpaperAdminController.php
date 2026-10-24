@@ -298,6 +298,6 @@ class EpaperAdminController extends Controller
         $edition->recordWorkflow('delete', $edition->status, 'deleted', 'Edition soft-deleted', Auth::id());
         $edition->delete();
 
-        return redirect()->route('admin.editions.index')->with('info', "సంచిక '{$title}' తొలగించబడింది.");
+        return redirect()->route('admin.editions.index')->with('success', "సంచిక '{$title}' విజయవంతంగా తొలగించబడింది.");
     }
 }

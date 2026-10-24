@@ -87,6 +87,83 @@
     .badge-scheduled { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
     .badge-pending_approval { background: #FFFBEB; color: #92400E; border: 1px solid #FDE68A; }
     .badge-draft { background: #F1F5F9; color: #475569; border: 1px solid #E2E8F0; }
+
+    /* Delete Confirmation Modal */
+    .delete-modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 29, 55, 0.65);
+        backdrop-filter: blur(4px);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        animation: fadeInModal 0.2s ease-out;
+    }
+    .delete-modal-card {
+        background: #FFFFFF;
+        border-radius: 14px;
+        width: 100%;
+        max-width: 480px;
+        padding: 30px;
+        box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+        text-align: center;
+        animation: scaleUpModal 0.25s ease-out;
+    }
+    @keyframes fadeInModal {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    @keyframes scaleUpModal {
+        from { transform: scale(0.92); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+    .delete-modal-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: #FEE2E2;
+        color: #DC2626;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin: 0 auto 16px;
+        box-shadow: 0 0 0 8px #FEF2F2;
+    }
+    .delete-modal-title {
+        font-family: 'Ramabhadra', sans-serif;
+        font-size: 20px;
+        color: var(--admin-navy);
+        margin-bottom: 2px;
+    }
+    .delete-modal-subtitle {
+        font-size: 12px;
+        color: var(--admin-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 14px;
+        font-weight: 700;
+    }
+    .delete-modal-desc {
+        font-size: 13.5px;
+        color: #475569;
+        line-height: 1.5;
+        margin-bottom: 18px;
+    }
+    .delete-modal-info {
+        background: #F8FAFC;
+        border: 1px solid var(--admin-border);
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 22px;
+        text-align: left;
+    }
+    .delete-modal-actions {
+        display: flex;
+        gap: 12px;
+    }
 </style>
 @endpush
 
@@ -161,13 +238,13 @@
                                     @endif
 
                                     @if(auth()->user()->canDelete())
-                                        <form action="{{ route('admin.editions.destroy', $ed) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('ఈ సంచికను నిజంగానే తొలగించాలనుకుంటున్నారా?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn-admin btn-outline" style="padding: 5px 10px; font-size: 12px; color: #DC2626;" title="తొలగించండి">
-                                                <i class="fa-solid fa-trash-can"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button" 
+                                                class="btn-admin btn-outline" 
+                                                style="padding: 5px 10px; font-size: 12px; color: #DC2626;" 
+                                                title="తొలగించండి (Delete)"
+                                                onclick="openDeleteEditionModal('{{ route('admin.editions.destroy', $ed) }}', '{{ addslashes($ed->title) }}', '{{ $ed->edition_date->format('d M Y') }}', '{{ addslashes($ed->region->name) }}')">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
                                     @endif
                                 </td>
                             </tr>
@@ -188,4 +265,67 @@
         @endif
     </div>
 
+    <!-- Delete Confirmation Modal Popup -->
+    <div id="deleteEditionModal" class="delete-modal-backdrop" style="display: none;">
+        <div class="delete-modal-card">
+            <div class="delete-modal-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="delete-modal-title">సంచికను తొలగించాలా?</h3>
+            <p class="delete-modal-subtitle">Delete Edition Confirmation</p>
+            
+            <p class="delete-modal-desc">
+                మీరు నిజంగానే ఈ సంచికను తొలగించాలనుకుంటున్నారా? ఈ చర్య ద్వారా సంచిక పబ్లిక్ పోర్టల్ మరియు ఆర్కైవ్ నుండి తక్షణమే తీసివేయబడుతుంది.
+            </p>
+
+            <div class="delete-modal-info">
+                <div style="font-weight: 700; color: var(--admin-navy); font-size: 14px; margin-bottom: 4px;" id="modalEditionTitle"></div>
+                <div style="font-size: 12px; color: var(--admin-muted);" id="modalEditionMeta"></div>
+            </div>
+
+            <form id="deleteEditionForm" method="POST" action="">
+                @csrf
+                @method('DELETE')
+                <div class="delete-modal-actions">
+                    <button type="button" class="btn-admin btn-outline" style="flex: 1; justify-content: center; padding: 10px; font-weight: 700;" onclick="closeDeleteEditionModal()">
+                        <i class="fa-solid fa-xmark"></i> రద్దు చేయండి (Cancel)
+                    </button>
+                    <button type="submit" class="btn-admin btn-danger" style="flex: 1; justify-content: center; padding: 10px; font-weight: 700;">
+                        <i class="fa-solid fa-trash-can"></i> అవును, తొలగించండి (Delete)
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 @endsection
+
+@push('scripts')
+<script>
+    function openDeleteEditionModal(url, title, date, region) {
+        document.getElementById('deleteEditionForm').action = url;
+        document.getElementById('modalEditionTitle').textContent = title;
+        document.getElementById('modalEditionMeta').textContent = region + ' • ' + date;
+        const modal = document.getElementById('deleteEditionModal');
+        modal.style.display = 'flex';
+    }
+
+    function closeDeleteEditionModal() {
+        const modal = document.getElementById('deleteEditionModal');
+        modal.style.display = 'none';
+    }
+
+    window.addEventListener('click', function(e) {
+        const modal = document.getElementById('deleteEditionModal');
+        if (e.target === modal) {
+            closeDeleteEditionModal();
+        }
+    });
+
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeDeleteEditionModal();
+        }
+    });
+</script>
+@endpush

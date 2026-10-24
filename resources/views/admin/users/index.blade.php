@@ -86,14 +86,11 @@
                                 </button>
 
                                 @if($user->id !== auth()->id())
-                                    <form action="{{ route('admin.users.destroy', $user) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-admin btn-danger" style="padding: 5px 10px; font-size: 11px;"
-                                                onclick="return confirm('ఈ యూజర్‌ను ఖచ్చితంగా తొలగించాలనుకుంటున్నారా?');">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    <button type="button" class="btn-admin btn-danger" style="padding: 5px 10px; font-size: 11px;"
+                                            title="తొలగించండి (Delete)"
+                                            onclick="openDeleteUserModal('{{ route('admin.users.destroy', $user) }}', '{{ addslashes($user->name) }}', '{{ addslashes($user->email) }}')">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
                                 @endif
                             </div>
                         </td>
@@ -208,6 +205,39 @@
         </form>
     </div>
 </div>
+
+<!-- Delete User Confirmation Modal Popup -->
+<div id="deleteUserModal" style="display: none; position: fixed; inset: 0; background: rgba(10, 29, 55, 0.65); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #FFFFFF; border-radius: 14px; width: 100%; max-width: 460px; padding: 30px; box-shadow: 0 20px 45px rgba(0,0,0,0.25); text-align: center;">
+        <div style="width: 64px; height: 64px; border-radius: 50%; background: #FEE2E2; color: #DC2626; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 16px; box-shadow: 0 0 0 8px #FEF2F2;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 20px; color: var(--admin-navy); margin-bottom: 2px;">యూజర్‌ను తొలగించాలా?</h3>
+        <p style="font-size: 12px; color: var(--admin-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; font-weight: 700;">Delete User Confirmation</p>
+        
+        <p style="font-size: 13.5px; color: #475569; line-height: 1.5; margin-bottom: 18px;">
+            మీరు నిజంగానే ఈ యూజర్‌ను తొలగించాలనుకుంటున్నారా? ఈ ఖాతా సిస్టమ్ నుండి శాశ్వతంగా తొలగించబడుతుంది.
+        </p>
+
+        <div style="background: #F8FAFC; border: 1px solid var(--admin-border); border-radius: 8px; padding: 12px 16px; margin-bottom: 22px; text-align: left;">
+            <div style="font-weight: 700; color: var(--admin-navy); font-size: 14px; margin-bottom: 4px;" id="modalUserName"></div>
+            <div style="font-size: 12px; color: var(--admin-muted);" id="modalUserEmail"></div>
+        </div>
+
+        <form id="deleteUserForm" method="POST" action="">
+            @csrf
+            @method('DELETE')
+            <div style="display: flex; gap: 12px;">
+                <button type="button" class="btn-admin btn-outline" style="flex: 1; justify-content: center; padding: 10px; font-weight: 700;" onclick="closeDeleteUserModal()">
+                    <i class="fa-solid fa-xmark"></i> రద్దు (Cancel)
+                </button>
+                <button type="submit" class="btn-admin btn-danger" style="flex: 1; justify-content: center; padding: 10px; font-weight: 700;">
+                    <i class="fa-solid fa-trash-can"></i> అవును, తొలగించు (Delete)
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -221,5 +251,33 @@
         document.getElementById('edit_is_active').value = isActive;
         document.getElementById('editUserModal').style.display = 'flex';
     }
+
+    function openDeleteUserModal(url, name, email) {
+        document.getElementById('deleteUserForm').action = url;
+        document.getElementById('modalUserName').textContent = name;
+        document.getElementById('modalUserEmail').textContent = email;
+        document.getElementById('deleteUserModal').style.display = 'flex';
+    }
+
+    function closeDeleteUserModal() {
+        document.getElementById('deleteUserModal').style.display = 'none';
+    }
+
+    window.addEventListener('click', function(e) {
+        const deleteModal = document.getElementById('deleteUserModal');
+        const createModal = document.getElementById('createUserModal');
+        const editModal = document.getElementById('editUserModal');
+        if (e.target === deleteModal) closeDeleteUserModal();
+        if (e.target === createModal) createModal.style.display = 'none';
+        if (e.target === editModal) editModal.style.display = 'none';
+    });
+
+    window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeDeleteUserModal();
+            document.getElementById('createUserModal').style.display = 'none';
+            document.getElementById('editUserModal').style.display = 'none';
+        }
+    });
 </script>
 @endpush
