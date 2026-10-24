@@ -281,8 +281,11 @@
                 </select>
             @endif
 
-            <a href="{{ route('epaper.download', $edition) }}" class="tool-btn" style="background: linear-gradient(135deg, var(--epaper-red) 0%, var(--epaper-red-dark) 100%); color: #FFFFFF; border-color: var(--epaper-red); box-shadow: 0 2px 8px rgba(214, 0, 28, 0.4); font-weight: 700;">
-                <i class="fa-solid fa-download"></i> పీడీఎఫ్
+            <a href="{{ route('epaper.download', $edition) }}" 
+               onclick="if(window.vspAnalytics){window.vspAnalytics.track('epaper_pdf_download', {edition_id: {{ $edition->id }}, edition_title: '{{ addslashes($edition->title) }}'});}" 
+               class="tool-btn" 
+               style="background: linear-gradient(135deg, var(--epaper-red) 0%, var(--epaper-red-dark) 100%); color: #FFFFFF; border-color: var(--epaper-red); box-shadow: 0 2px 8px rgba(214, 0, 28, 0.4); font-weight: 700;">
+                <i class="fa-solid fa-download"></i> {{ __('epaper.download_pdf') }}
             </a>
         </div>
     </div>
@@ -440,6 +443,26 @@
                 const prev = document.querySelector('.nav-arrow-left');
                 if (prev) prev.click();
             }
+        }
+
+        // GA4 / GTM / Google Ads & First-Party Reader Tracking
+        if (window.vspAnalytics) {
+            window.vspAnalytics.track('epaper_reader_open', {
+                edition_id: {{ $edition->id }},
+                edition_title: '{{ addslashes($edition->title) }}',
+                page_number: {{ $pageNumber }},
+                total_pages: {{ $totalPages }},
+                publication_date: '{{ $edition->edition_date->toDateString() }}',
+                region: '{{ addslashes($edition->region?->name ?? "General") }}'
+            });
+
+            @if($pageNumber > 1)
+            window.vspAnalytics.track('epaper_page_navigation', {
+                edition_id: {{ $edition->id }},
+                page_number: {{ $pageNumber }},
+                total_pages: {{ $totalPages }}
+            });
+            @endif
         }
     })();
 </script>

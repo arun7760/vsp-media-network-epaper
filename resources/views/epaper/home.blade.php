@@ -328,7 +328,9 @@
                     <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => 1]) }}" class="btn-read-now">
                         <i class="fa-solid fa-book-open-reader"></i> {{ __('epaper.read_online') }}
                     </a>
-                    <a href="{{ route('epaper.download', $edition) }}" class="btn-download-pdf">
+                    <a href="{{ route('epaper.download', $edition) }}" 
+                       onclick="if(window.vspAnalytics){window.vspAnalytics.track('epaper_pdf_download', {edition_id: {{ $edition->id }}, edition_title: '{{ addslashes($edition->title) }}'});}" 
+                       class="btn-download-pdf">
                         <i class="fa-solid fa-file-pdf" style="color: var(--epaper-red);"></i> {{ __('epaper.download_pdf') }}
                     </a>
                 </div>
