@@ -133,7 +133,9 @@
                         
                         <!-- Page Preview Thumbnail -->
                         <div style="position: relative; background: #F8FAFC; aspect-ratio: 0.7; overflow: hidden; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--admin-border);">
-                            <img src="{{ asset($page->thumbnail_path) }}" alt="పేజీ {{ $page->page_number }}" 
+                            <canvas class="admin-page-thumb-canvas" data-page-num="{{ $page->page_number }}" style="display: none; width: 100%; height: 100%; object-fit: contain;"></canvas>
+                            <img src="{{ $page->thumbnail_url }}" alt="పేజీ {{ $page->page_number }}" 
+                                 onerror="this.src='/images/logo.png';"
                                  style="width: 100%; height: 100%; object-fit: contain;">
                             
                             <!-- Page Number Badge -->
@@ -326,3 +328,37 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+    (function() {
+        const masterPdfUrl = @json($edition->master_pdf_url);
+        if (typeof pdfjsLib !== 'undefined' && masterPdfUrl) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            
+            pdfjsLib.getDocument(masterPdfUrl).promise.then(pdf => {
+                const canvases = document.querySelectorAll('.admin-page-thumb-canvas');
+                canvases.forEach(canvas => {
+                    const pageNum = parseInt(canvas.dataset.pageNum, 10);
+                    if (pageNum && pageNum <= pdf.numPages) {
+                        pdf.getPage(pageNum).then(page => {
+                            const viewport = page.getViewport({ scale: 0.5 });
+                            canvas.width = viewport.width;
+                            canvas.height = viewport.height;
+                            const ctx = canvas.getContext('2d');
+                            page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                                canvas.style.display = 'block';
+                                const fallbackImg = canvas.parentElement.querySelector('img');
+                                if (fallbackImg) fallbackImg.style.display = 'none';
+                            });
+                        });
+                    }
+                });
+            }).catch(err => {
+                console.warn('Admin PDF preview fallback:', err);
+            });
+        }
+    })();
+</script>
+@endpush

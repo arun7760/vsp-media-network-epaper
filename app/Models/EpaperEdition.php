@@ -127,6 +127,18 @@ class EpaperEdition extends Model
         return $this->cover_url;
     }
 
+    public function getMasterPdfUrlAttribute(): ?string
+    {
+        if ($this->master_pdf_path) {
+            if (str_starts_with($this->master_pdf_path, 'http://') || str_starts_with($this->master_pdf_path, 'https://')) {
+                return $this->master_pdf_path;
+            }
+            return '/' . ltrim($this->master_pdf_path, '/');
+        }
+
+        return null;
+    }
+
     public function getTeluguDateStringAttribute(): string
     {
         if (! $this->edition_date) {

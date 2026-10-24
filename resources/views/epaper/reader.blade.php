@@ -652,6 +652,16 @@
         @endif
 
         <div class="page-viewport-card" id="page-wrapper">
+            <!-- Loading Spinner while rendering PDF -->
+            <div id="pdf-page-loading" style="display: none; padding: 100px 40px; text-align: center; color: var(--epaper-navy); background: #FFFFFF; border-radius: 6px;">
+                <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 42px; color: var(--epaper-red); margin-bottom: 16px;"></i>
+                <div style="font-weight: 700; font-size: 16px;">వార్తాపత్రిక పేజీ సిద్ధమవుతోంది...</div>
+                <div style="font-size: 13px; color: #64748B; margin-top: 6px;">Loading high-resolution broadsheet...</div>
+            </div>
+
+            <!-- PDF.js Canvas for real newspaper broadsheet rendering -->
+            <canvas id="pdf-page-canvas" class="broadsheet-canvas" style="display: none; width: 100%; height: auto; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.12);"></canvas>
+
             @if($currentPage)
                 <img id="page-image" 
                      class="broadsheet-img"
@@ -695,6 +705,7 @@
                    class="filmstrip-thumb {{ $p->page_number === $pageNumber ? 'active' : '' }}"
                    title="పేజీ {{ $p->page_number }}: {{ $p->page_title }}">
                     <div class="thumb-preview-box">
+                        <canvas class="filmstrip-thumb-canvas" data-page-num="{{ $p->page_number }}" style="display: none; width: 100%; height: 100%; object-fit: cover;"></canvas>
                         <img src="{{ $p->thumbnail_url }}" alt="పేజీ {{ $p->page_number }}" onerror="this.src='/images/logo.png';">
                         <span class="thumb-badge">{{ $p->page_number }}</span>
                     </div>
@@ -708,6 +719,7 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
     (function() {
         let zoomLevel = 1.0;
@@ -724,6 +736,74 @@
         const closeFilmstripBtn = document.getElementById('closeFilmstripBtn');
         const filmstripDrawer = document.getElementById('filmstripDrawer');
         const filmstripChevron = document.getElementById('filmstripChevron');
+
+        const masterPdfUrl = @json($edition->master_pdf_url);
+        const activePageNum = {{ $pageNumber }};
+        const pdfCanvas = document.getElementById('pdf-page-canvas');
+        const fallbackImg = document.getElementById('page-image');
+        const loadingSpinner = document.getElementById('pdf-page-loading');
+        let loadedPdfDoc = null;
+
+        // Load & Render BroadSheet using PDF.js if PDF is available
+        if (typeof pdfjsLib !== 'undefined' && masterPdfUrl) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            
+            if (loadingSpinner) loadingSpinner.style.display = 'block';
+
+            pdfjsLib.getDocument(masterPdfUrl).promise.then(pdf => {
+                loadedPdfDoc = pdf;
+                return renderPdfPage(activePageNum);
+            }).then(() => {
+                renderFilmstripThumbnails();
+            }).catch(err => {
+                console.warn('PDF.js reader fallback to raster:', err);
+                if (loadingSpinner) loadingSpinner.style.display = 'none';
+                if (fallbackImg) fallbackImg.style.display = 'block';
+            });
+        }
+
+        function renderPdfPage(pageNum) {
+            if (!loadedPdfDoc || !pdfCanvas) return Promise.resolve();
+
+            return loadedPdfDoc.getPage(pageNum).then(page => {
+                const viewport = page.getViewport({ scale: 2.0 });
+                pdfCanvas.width = viewport.width;
+                pdfCanvas.height = viewport.height;
+                const ctx = pdfCanvas.getContext('2d');
+
+                const renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+
+                return page.render(renderContext).promise.then(() => {
+                    if (loadingSpinner) loadingSpinner.style.display = 'none';
+                    pdfCanvas.style.display = 'block';
+                    if (fallbackImg) fallbackImg.style.display = 'none';
+                });
+            });
+        }
+
+        function renderFilmstripThumbnails() {
+            if (!loadedPdfDoc) return;
+            const thumbCanvases = document.querySelectorAll('.filmstrip-thumb-canvas');
+            thumbCanvases.forEach(tc => {
+                const pg = parseInt(tc.dataset.pageNum, 10);
+                if (pg && pg <= loadedPdfDoc.numPages) {
+                    loadedPdfDoc.getPage(pg).then(p => {
+                        const vp = p.getViewport({ scale: 0.35 });
+                        tc.width = vp.width;
+                        tc.height = vp.height;
+                        const tctx = tc.getContext('2d');
+                        p.render({ canvasContext: tctx, viewport: vp }).promise.then(() => {
+                            tc.style.display = 'block';
+                            const img = tc.parentElement.querySelector('img');
+                            if (img) img.style.display = 'none';
+                        });
+                    });
+                }
+            });
+        }
 
         function updateZoomDisplay() {
             if (zoomPercentEl) {

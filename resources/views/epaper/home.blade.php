@@ -333,7 +333,8 @@
         <div class="hero-edition-card">
             <!-- Left: Broadsheet Cover with 3D Depth -->
             <div class="cover-wrapper">
-                <img src="{{ $edition->cover_url }}" alt="{{ $edition->title }}" onerror="this.src='/images/logo.png';">
+                <canvas id="hero-cover-canvas" style="display: none; width: 100%; height: auto; border-radius: 6px;"></canvas>
+                <img id="hero-cover-img" src="{{ $edition->cover_url }}" alt="{{ $edition->title }}" onerror="this.src='/images/logo.png';">
                 <span class="live-badge-overlay">
                     <span class="live-badge-dot"></span>
                     <span>{{ $edition->total_pages }} {{ __('epaper.pages') }} &bull; లైవ్</span>
@@ -450,3 +451,32 @@
 
 </div>
 @endsection
+
+@if($edition && $edition->master_pdf_url)
+@push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+    (function() {
+        const masterPdfUrl = @json($edition->master_pdf_url);
+        if (typeof pdfjsLib !== 'undefined' && masterPdfUrl) {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            pdfjsLib.getDocument(masterPdfUrl).promise.then(pdf => {
+                pdf.getPage(1).then(page => {
+                    const canvas = document.getElementById('hero-cover-canvas');
+                    if (!canvas) return;
+                    const viewport = page.getViewport({ scale: 0.8 });
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    const ctx = canvas.getContext('2d');
+                    page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                        canvas.style.display = 'block';
+                        const img = document.getElementById('hero-cover-img');
+                        if (img) img.style.display = 'none';
+                    });
+                });
+            }).catch(err => console.warn('Home hero PDF preview fallback:', err));
+        }
+    })();
+</script>
+@endpush
+@endif
