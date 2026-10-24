@@ -4,71 +4,43 @@
 
 @push('styles')
 <style>
-    /* Region Nav Pills */
-    .region-nav {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: #FFFFFF;
-        padding: 12px 18px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-        margin-bottom: 28px;
-        overflow-x: auto;
-        border: 1px solid var(--epaper-border);
-    }
-    .region-label {
-        font-weight: 700;
-        font-size: 14px;
-        color: var(--epaper-navy);
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding-right: 12px;
-        border-right: 2px solid var(--epaper-border);
-        white-space: nowrap;
-    }
-    .region-pill {
-        padding: 8px 18px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 14px;
-        color: var(--epaper-text);
-        background: #F1F5F9;
-        transition: all 0.2s;
-        white-space: nowrap;
-    }
-    .region-pill:hover {
-        background: #E2E8F0;
-        color: var(--epaper-navy);
-    }
-    .region-pill.active {
-        background: var(--epaper-navy);
-        color: #FFFFFF;
-        box-shadow: 0 4px 12px rgba(10,29,55,0.18);
+    /* Premium Newspaper Portal Layout */
+    .portal-hero-container {
+        max-width: 1240px;
+        margin: 0 auto 40px;
     }
 
-    /* Hero Broadsheet Card */
+    /* Hero Spotlight Broadsheet Card */
     .hero-edition-card {
         background: #FFFFFF;
-        border-radius: 14px;
-        border: 1px solid var(--epaper-border);
-        box-shadow: 0 10px 30px rgba(10,29,55,0.07);
-        padding: 32px;
+        border-radius: 20px;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 20px 50px rgba(10, 29, 55, 0.08), 0 4px 14px rgba(10, 29, 55, 0.03);
+        padding: 44px;
         display: grid;
-        grid-template-columns: 340px 1fr;
-        gap: 40px;
+        grid-template-columns: 380px 1fr;
+        gap: 50px;
         align-items: center;
-        margin-bottom: 40px;
+        position: relative;
+        overflow: hidden;
     }
+    .hero-edition-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--epaper-red) 0%, var(--epaper-gold) 50%, var(--epaper-blue) 100%);
+    }
+
     .cover-wrapper {
         position: relative;
         border-radius: 8px;
         overflow: hidden;
-        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        box-shadow: -10px 18px 40px rgba(15, 23, 42, 0.18), 0 2px 8px rgba(15, 23, 42, 0.06);
         border: 1px solid #CBD5E1;
-        transition: transform 0.3s ease;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
         background: #F8FAFC;
         aspect-ratio: 1 / 1.414;
         display: flex;
@@ -76,55 +48,107 @@
         justify-content: center;
     }
     .cover-wrapper:hover {
-        transform: scale(1.02);
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: -12px 24px 50px rgba(15, 23, 42, 0.24);
     }
     .cover-wrapper img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
+        background: #FFFFFF;
     }
-    .page-badge-overlay {
+    .live-badge-overlay {
         position: absolute;
-        top: 12px;
-        right: 12px;
-        background: rgba(10, 29, 55, 0.85);
+        top: 14px;
+        right: 14px;
+        background: rgba(10, 29, 55, 0.88);
         color: #FFFFFF;
         font-size: 12px;
-        font-weight: 700;
-        padding: 4px 10px;
-        border-radius: 4px;
-        backdrop-filter: blur(4px);
+        font-weight: 800;
+        padding: 5px 12px;
+        border-radius: 999px;
+        backdrop-filter: blur(6px);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    .live-badge-dot {
+        width: 7px;
+        height: 7px;
+        background: #10B981;
+        border-radius: 50%;
+        box-shadow: 0 0 8px #10B981;
     }
 
-    .edition-details h1 {
-        font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-telugu-headline)" }};
-        font-size: 32px;
-        color: var(--epaper-navy);
-        line-height: 1.25;
-        margin-bottom: 12px;
-        font-weight: 800;
-    }
-    .edition-meta-strip {
+    /* Edition Details */
+    .hero-kicker-strip {
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 10px;
         flex-wrap: wrap;
-        color: var(--epaper-muted);
-        font-size: 14px;
-        margin-bottom: 24px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--epaper-border);
+        margin-bottom: 12px;
     }
-    .meta-item {
-        display: flex;
+    .kicker-tag {
+        font-size: 12px;
+        font-weight: 800;
+        padding: 4px 12px;
+        border-radius: 999px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        display: inline-flex;
         align-items: center;
         gap: 6px;
     }
-    .meta-item strong {
-        color: var(--epaper-text);
+    .kicker-red {
+        background: #FEE2E2;
+        color: #B91C1C;
+        border: 1px solid #FECACA;
+    }
+    .kicker-blue {
+        background: #EFF6FF;
+        color: #1D4ED8;
+        border: 1px solid #BFDBFE;
     }
 
+    .hero-edition-title {
+        font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-telugu-headline)" }};
+        font-size: 34px;
+        color: var(--epaper-navy);
+        line-height: 1.25;
+        margin-bottom: 16px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    .edition-meta-strip {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 26px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #E2E8F0;
+    }
+    .meta-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #F8FAFC;
+        padding: 6px 14px;
+        border-radius: 8px;
+        border: 1px solid #E2E8F0;
+        font-size: 13px;
+        color: #475569;
+        font-weight: 600;
+    }
+    .meta-pill strong {
+        color: #0F172A;
+    }
+
+    /* Action Buttons */
     .action-buttons {
         display: flex;
         gap: 16px;
@@ -132,33 +156,33 @@
         margin-bottom: 28px;
     }
     .btn-read-now {
-        background: linear-gradient(135deg, #0A1D37 0%, #1A365D 100%);
-        color: #FFFFFF;
+        background: linear-gradient(135deg, var(--epaper-red) 0%, #A90D15 100%);
+        color: #FFFFFF !important;
         font-size: 16px;
-        font-weight: 700;
-        padding: 14px 28px;
-        border-radius: 8px;
+        font-weight: 800;
+        padding: 14px 32px;
+        border-radius: 10px;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        box-shadow: 0 4px 14px rgba(10,29,55,0.25);
-        transition: all 0.2s ease;
+        box-shadow: 0 6px 20px rgba(214, 0, 28, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .btn-read-now:hover {
-        background: linear-gradient(135deg, var(--epaper-blue) 0%, var(--epaper-navy) 100%);
-        color: #FFFFFF;
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 71, 171, 0.4);
+        box-shadow: 0 10px 28px rgba(214, 0, 28, 0.55);
+        filter: brightness(1.08);
     }
     .btn-download-pdf {
         background: #FFFFFF;
-        color: var(--epaper-navy);
-        border: 2px solid var(--epaper-navy);
+        color: var(--epaper-navy) !important;
+        border: 2px solid #CBD5E1;
         font-size: 15px;
         font-weight: 700;
-        padding: 12px 24px;
-        border-radius: 8px;
+        padding: 13px 26px;
+        border-radius: 10px;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
@@ -166,17 +190,21 @@
         transition: all 0.2s;
     }
     .btn-download-pdf:hover {
-        background: #F8FAFC;
-        border-color: var(--epaper-blue);
-        color: var(--epaper-blue);
+        border-color: var(--epaper-red);
+        color: var(--epaper-red) !important;
+        background: #FFF1F2;
+        transform: translateY(-2px);
     }
 
     /* Page Rail Grid inside Card */
     .page-rail-heading {
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 700;
-        color: var(--epaper-navy);
-        margin-bottom: 12px;
+        color: #475569;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
     .page-quick-jump {
         display: flex;
@@ -185,167 +213,193 @@
     }
     .page-jump-chip {
         background: #F1F5F9;
-        color: var(--epaper-text);
+        color: #1E293B;
         text-decoration: none;
         font-size: 13px;
-        font-weight: 600;
-        padding: 6px 14px;
-        border-radius: 6px;
-        border: 1px solid var(--epaper-border);
+        font-weight: 700;
+        padding: 7px 14px;
+        border-radius: 8px;
+        border: 1px solid #E2E8F0;
         transition: all 0.15s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
     }
     .page-jump-chip:hover {
-        background: var(--epaper-blue);
+        background: var(--epaper-navy);
         color: #FFFFFF;
-        border-color: var(--epaper-blue);
+        border-color: var(--epaper-navy);
+        transform: translateY(-1px);
     }
 
-    /* Other Regional Editions */
-    .section-title {
-        font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-telugu-headline)" }};
-        font-size: 22px;
-        color: var(--epaper-navy);
-        margin-bottom: 18px;
+    /* Recent Editions Strip (Archive Highlights) */
+    .recent-strip-container {
+        background: #FFFFFF;
+        border-radius: 16px;
+        border: 1px solid #E2E8F0;
+        padding: 24px 28px;
+        box-shadow: 0 4px 18px rgba(10, 29, 55, 0.04);
+        margin-top: 32px;
+    }
+    .strip-header {
         display: flex;
         align-items: center;
-        gap: 10px;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .strip-title {
+        font-size: 17px;
         font-weight: 800;
+        color: var(--epaper-navy);
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-    .editions-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        gap: 24px;
-        margin-bottom: 40px;
-    }
-    .edition-subcard {
-        background: #FFFFFF;
-        border: 1px solid var(--epaper-border);
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-        transition: transform 0.2s, box-shadow 0.2s;
+    .strip-link {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--epaper-blue);
         text-decoration: none;
-        color: inherit;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .strip-link:hover {
+        color: var(--epaper-red);
+    }
+    .recent-dates-grid {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        scrollbar-width: thin;
+    }
+    .recent-date-card {
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        padding: 12px 18px;
+        text-decoration: none;
+        color: #1E293B;
+        min-width: 140px;
         display: flex;
         flex-direction: column;
-    }
-    .edition-subcard:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.09);
-    }
-    .edition-subcard-thumb {
-        aspect-ratio: 1 / 1.35;
-        background: #EEF2F6;
-        display: flex;
         align-items: center;
-        justify-content: center;
-        overflow: hidden;
+        transition: all 0.2s;
     }
-    .edition-subcard-thumb img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+    .recent-date-card:hover {
+        background: #FFFFFF;
+        border-color: var(--epaper-red);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(214, 0, 28, 0.12);
     }
-    .edition-subcard-info {
-        padding: 16px;
-    }
-    .edition-subcard-title {
+    .recent-date-day {
+        font-size: 11px;
         font-weight: 700;
-        font-size: 16px;
-        color: var(--epaper-navy);
-        margin-bottom: 4px;
+        text-transform: uppercase;
+        color: #64748B;
+        margin-bottom: 2px;
     }
-    .edition-subcard-date {
-        font-size: 13px;
-        color: var(--epaper-muted);
+    .recent-date-num {
+        font-size: 16px;
+        font-weight: 800;
+        color: var(--epaper-navy);
     }
 
     @media (max-width: 900px) {
         .hero-edition-card {
             grid-template-columns: 1fr;
-            padding: 20px;
-            gap: 24px;
+            padding: 24px;
+            gap: 28px;
         }
         .cover-wrapper {
-            max-width: 280px;
+            max-width: 300px;
             margin: 0 auto;
+        }
+        .hero-edition-title {
+            font-size: 26px;
         }
     }
 </style>
 @endpush
 
 @section('content')
-
-    @if($regions->count() > 1)
-        <!-- Regional Edition Selector Tabs -->
-        <div class="region-nav">
-            <div class="region-label">
-                {{ __('epaper.select_edition') }}
-            </div>
-            @foreach($regions as $region)
-                <a href="{{ route('epaper.home', ['region' => $region->slug, 'date' => request('date')]) }}" 
-                   class="region-pill {{ ($selectedRegion && $selectedRegion->id === $region->id) ? 'active' : '' }}">
-                    {{ $region->name }}
-                </a>
-            @endforeach
-        </div>
-    @endif
+<div class="portal-hero-container">
 
     @if($edition)
-        <!-- Hero Spotlight Card -->
+        <!-- Hero Spotlight Broadsheet Card -->
         <div class="hero-edition-card">
+            <!-- Left: Broadsheet Cover with 3D Depth -->
             <div class="cover-wrapper">
                 <img src="{{ $edition->cover_url }}" alt="{{ $edition->title }}" onerror="this.src='/images/logo.png';">
-                <span class="page-badge-overlay"><i class="fa-regular fa-file"></i> {{ $edition->total_pages }} {{ __('epaper.pages') }}</span>
+                <span class="live-badge-overlay">
+                    <span class="live-badge-dot"></span>
+                    <span>{{ $edition->total_pages }} {{ __('epaper.pages') }} &bull; లైవ్</span>
+                </span>
             </div>
 
+            <!-- Right: Metadata & Actions -->
             <div class="edition-details">
-                <div style="color: var(--epaper-red); font-weight: 800; font-size: 14px; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">
-                    <i class="fa-regular fa-newspaper"></i> {{ $edition->region->name ?? __('epaper.main_edition') }}
+                <div class="hero-kicker-strip">
+                    <span class="kicker-tag kicker-red">
+                        <i class="fa-solid fa-newspaper"></i> {{ $edition->region->name ?? __('epaper.main_edition') }}
+                    </span>
+                    <span class="kicker-tag kicker-blue">
+                        <i class="fa-solid fa-bolt"></i> డిజిటల్ లైవ్ ఎడిషన్
+                    </span>
                 </div>
-                <h1>{{ $edition->title }}</h1>
+
+                <h1 class="hero-edition-title">{{ $edition->title }}</h1>
 
                 <div class="edition-meta-strip">
-                    <div class="meta-item">
-                        <i class="fa-regular fa-calendar-check" style="color: var(--epaper-blue);"></i>
-                        <span>{{ __('epaper.date') }} <strong>{{ app()->getLocale() === 'te' && $edition->telugu_date_string ? $edition->telugu_date_string : $edition->edition_date->format('d M Y') }}</strong></span>
+                    <div class="meta-pill">
+                        <i class="fa-regular fa-calendar-check" style="color: var(--epaper-red);"></i>
+                        <span>{{ __('epaper.date') }}: <strong>{{ app()->getLocale() === 'te' && $edition->telugu_date_string ? $edition->telugu_date_string : $edition->edition_date->format('d M Y') }}</strong></span>
                     </div>
                     @if($edition->volume_number)
-                        <div class="meta-item">
+                        <div class="meta-pill">
+                            <i class="fa-solid fa-layer-group" style="color: var(--epaper-blue);"></i>
                             <span>{{ $edition->volume_number }}</span>
                         </div>
                     @endif
                     @if($edition->issue_number)
-                        <div class="meta-item">
+                        <div class="meta-pill">
+                            <i class="fa-regular fa-bookmark" style="color: #D97706;"></i>
                             <span>{{ $edition->issue_number }}</span>
                         </div>
                     @endif
-                    <div class="meta-item">
-                        <i class="fa-regular fa-eye"></i>
-                        <span><strong>{{ number_format($edition->views_count) }}</strong> {{ __('epaper.views') }}</span>
+                    <div class="meta-pill">
+                        <i class="fa-regular fa-eye" style="color: #059669;"></i>
+                        <span><strong>{{ number_format($edition->views_count) }}</strong> పాఠకులు</span>
                     </div>
                 </div>
 
+                <!-- Primary CTAs -->
                 <div class="action-buttons">
-                    <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => 1]) }}" class="btn-read-now">
-                        <i class="fa-solid fa-book-open-reader"></i> {{ __('epaper.read_online') }}
+                    <a href="{{ route('epaper.edition', $edition) }}" class="btn-read-now">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                        <span>{{ __('epaper.read_online') }}</span>
                     </a>
-                    <a href="{{ route('epaper.download', $edition) }}" 
-                       onclick="if(window.vspAnalytics){window.vspAnalytics.track('epaper_pdf_download', {edition_id: {{ $edition->id }}, edition_title: '{{ addslashes($edition->title) }}'});}" 
-                       class="btn-download-pdf">
-                        <i class="fa-solid fa-file-pdf" style="color: var(--epaper-red);"></i> {{ __('epaper.download_pdf') }}
+
+                    <a href="{{ route('epaper.download', $edition) }}" class="btn-download-pdf">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                        <span>{{ __('epaper.download_pdf') }}</span>
                     </a>
                 </div>
 
-                <!-- Quick Page Jump Chips -->
+                <!-- Interactive Page Jump Strip -->
                 <div>
                     <div class="page-rail-heading">
-                        <i class="fa-solid fa-list-ol"></i> {{ __('epaper.direct_page_access') }}
+                        <i class="fa-solid fa-hand-pointer"></i>
+                        <span>నేరుగా పేజీని ఎంచుకోండి (Quick Page Jump):</span>
                     </div>
                     <div class="page-quick-jump">
-                        @foreach($edition->pages as $p)
-                            <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $p->page_number]) }}" class="page-jump-chip">
-                                {{ __('epaper.page') }} {{ $p->page_number }}: {{ Str::limit($p->page_title, 18) }}
+                        @foreach($edition->pages as $page)
+                            <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $page->page_number]) }}" class="page-jump-chip">
+                                <i class="fa-regular fa-file-lines"></i>
+                                <span>పేజీ {{ $page->page_number }}</span>
                             </a>
                         @endforeach
                     </div>
@@ -353,32 +407,46 @@
             </div>
         </div>
     @else
-        <div style="background: #FFFFFF; padding: 48px; border-radius: 12px; text-align: center; border: 1px solid var(--epaper-border);">
-            <i class="fa-regular fa-newspaper" style="font-size: 48px; color: var(--epaper-muted); margin-bottom: 16px;"></i>
-            <h2 style="font-size: 22px; color: var(--epaper-navy); margin-bottom: 8px;">{{ __('epaper.no_edition_for_date') }}</h2>
-            <p style="color: var(--epaper-muted); margin-bottom: 24px;">{{ __('epaper.choose_another_date') }}</p>
-            <a href="{{ route('epaper.archive') }}" class="btn-epaper btn-epaper-red">{{ __('epaper.browse_archive') }}</a>
+        <!-- No Edition Available Fallback -->
+        <div style="background: #FFFFFF; border-radius: 16px; padding: 60px 24px; text-align: center; border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+            <i class="fa-regular fa-newspaper" style="font-size: 56px; color: #94A3B8; margin-bottom: 16px;"></i>
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--epaper-navy); margin-bottom: 8px;">
+                ఈ తేదీకి సంచిక ఇంకా ప్రచురించబడలేదు
+            </h2>
+            <p style="color: #64748B; font-size: 15px; margin-bottom: 24px;">
+                దయచేసి ఆర్కైవ్ నుండి మునుపటి తేదీల దినపత్రికలను ఎంచుకోండి.
+            </p>
+            <a href="{{ route('epaper.archive') }}" class="btn-read-now" style="display: inline-flex;">
+                <i class="fa-solid fa-box-archive"></i> ఆర్కైవ్ చూడండి
+            </a>
         </div>
     @endif
 
-    <!-- Other Regional Editions Published on this Date -->
-    @if(isset($otherEditions) && $otherEditions->isNotEmpty())
-        <div class="section-title">
-            <i class="fa-solid fa-earth-asia" style="color: var(--epaper-red);"></i> {{ __('epaper.other_editions') }}
-        </div>
-        <div class="editions-grid">
-            @foreach($otherEditions as $oe)
-                <a href="{{ route('epaper.reader', ['edition' => $oe, 'pageNumber' => 1]) }}" class="edition-subcard">
-                    <div class="edition-subcard-thumb">
-                        <img src="{{ $oe->cover_url }}" alt="{{ $oe->title }}" onerror="this.src='/images/logo.png';">
-                    </div>
-                    <div class="edition-subcard-info">
-                        <div class="edition-subcard-title">{{ $oe->region->name ?? $oe->title }}</div>
-                        <div class="edition-subcard-date"><i class="fa-regular fa-calendar"></i> {{ $oe->edition_date->format('d M Y') }} &bull; {{ $oe->total_pages }} {{ __('epaper.pages') }}</div>
-                    </div>
+    <!-- Recent Editions / Date Quick Browser Strip -->
+    @if(isset($recentEditions) && $recentEditions->isNotEmpty())
+        <div class="recent-strip-container">
+            <div class="strip-header">
+                <div class="strip-title">
+                    <i class="fa-regular fa-calendar-days" style="color: var(--epaper-red);"></i>
+                    <span>మునుపటి దినపత్రికలు (Recent Editions Archive):</span>
+                </div>
+                <a href="{{ route('epaper.archive') }}" class="strip-link">
+                    <span>పూర్తి ఆర్కైవ్ క్యాలెండర్</span>
+                    <i class="fa-solid fa-arrow-right"></i>
                 </a>
-            @endforeach
+            </div>
+
+            <div class="recent-dates-grid">
+                @foreach($recentEditions as $re)
+                    <a href="{{ route('epaper.edition', $re) }}" class="recent-date-card">
+                        <span class="recent-date-day">{{ $re->edition_date->format('D') }}</span>
+                        <span class="recent-date-num">{{ $re->edition_date->format('d M Y') }}</span>
+                        <span style="font-size: 11px; color: var(--epaper-red); font-weight: 700; margin-top: 4px;">{{ $re->total_pages }} పేజీలు</span>
+                    </a>
+                @endforeach
+            </div>
         </div>
     @endif
 
+</div>
 @endsection

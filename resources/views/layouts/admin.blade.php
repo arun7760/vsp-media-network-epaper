@@ -64,80 +64,116 @@
         /* Sidebar */
         .admin-sidebar {
             width: 275px;
-            background: linear-gradient(180deg, var(--admin-navy) 0%, var(--admin-navy-dark) 100%);
+            background: linear-gradient(180deg, #061124 0%, #0A1D37 60%, #050E1C 100%);
             color: #FFFFFF;
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
             border-right: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 2px 0 16px rgba(10, 29, 55, 0.15);
+            box-shadow: 4px 0 24px rgba(6, 17, 36, 0.35);
         }
         .sidebar-brand {
-            padding: 20px 18px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 22px 18px 18px;
             text-decoration: none;
             display: block;
-            background: rgba(0, 0, 0, 0.12);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0, 0, 0, 0.18);
         }
         .brand-logo-card {
             background: #FFFFFF;
-            border-radius: 10px;
-            padding: 8px 14px;
+            border-radius: 12px;
+            padding: 10px 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-            border: 1px solid rgba(255,255,255,0.3);
-            transition: transform 0.2s;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+            border: 1px solid rgba(255,255,255,0.4);
+            transition: all 0.25s ease;
         }
         .brand-logo-card:hover {
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.45);
         }
         .brand-logo-img {
-            max-height: 60px;
+            max-height: 48px;
             width: auto;
             max-width: 100%;
             object-fit: contain;
         }
+        .brand-meta-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+            font-size: 10.5px;
+            letter-spacing: 0.8px;
+            font-weight: 800;
+            color: #94A3B8;
+            text-transform: uppercase;
+        }
+        .live-dot-pulse {
+            width: 7px;
+            height: 7px;
+            background: #10B981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10B981;
+            animation: pulse-dot 2s infinite;
+        }
+        @keyframes pulse-dot {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.7; }
+        }
 
         .sidebar-nav {
-            padding: 16px 12px;
+            padding: 18px 14px;
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 5px;
+            overflow-y: auto;
         }
         .nav-heading {
             font-size: 11px;
             text-transform: uppercase;
-            color: #94A3B8;
+            color: #64748B;
             font-weight: 800;
-            padding: 12px 12px 4px;
-            letter-spacing: 0.6px;
+            padding: 14px 12px 6px;
+            letter-spacing: 0.8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-heading::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
         }
         .nav-link {
             padding: 10px 14px;
-            border-radius: 8px;
+            border-radius: 9px;
             color: #CBD5E1;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
         }
         .nav-link:hover {
             background: rgba(255,255,255,0.08);
             color: #FFFFFF;
-            transform: translateX(2px);
+            transform: translateX(3px);
         }
         .nav-link.active {
-            background: linear-gradient(135deg, #D91B24 0%, #B80F17 100%);
+            background: linear-gradient(135deg, #D91B24 0%, #A90D15 100%);
             color: #FFFFFF;
             font-weight: 700;
-            box-shadow: 0 4px 12px rgba(217, 27, 36, 0.35);
+            box-shadow: 0 4px 15px rgba(217, 27, 36, 0.4);
         }
         .nav-link .badge {
             margin-left: auto;
@@ -147,22 +183,27 @@
             padding: 2px 7px;
             border-radius: 999px;
             font-weight: 800;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
 
         .sidebar-footer {
-            padding: 16px 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            background: var(--admin-navy-dark);
+            padding: 16px 18px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            background: rgba(0, 0, 0, 0.35);
         }
         .user-info {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.06);
         }
         .user-avatar {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--admin-red) 0%, var(--admin-blue) 100%);
             color: #FFFFFF;
@@ -170,8 +211,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 15px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.3);
         }
         .user-name {
             font-size: 13px;
@@ -183,6 +225,7 @@
             font-size: 11px;
             color: #94A3B8;
             text-transform: capitalize;
+            margin-top: 1px;
         }
 
         /* Main Workspace */
@@ -313,6 +356,10 @@
             <div class="brand-logo-card">
                 <img src="{{ asset('images/logo.png') }}" alt="VSP TIMES" class="brand-logo-img">
             </div>
+            <div class="brand-meta-badge">
+                <span class="live-dot-pulse"></span>
+                <span>EDITORIAL CONTROL SUITE</span>
+            </div>
         </a>
 
         <nav class="sidebar-nav">
@@ -393,41 +440,54 @@
     <div class="admin-main">
         <header class="admin-header">
             <div>
-                <div style="font-size: 12px; color: var(--admin-muted); display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
-                    <i class="fa-solid fa-house"></i>
+                <div style="font-size: 12px; color: var(--admin-muted); display: flex; align-items: center; gap: 6px; margin-bottom: 3px; font-weight: 600;">
+                    <i class="fa-solid fa-house" style="font-size: 11px;"></i>
                     <span>{{ __('admin.dashboard') }}</span>
+                    <span style="color: #CBD5E1;">/</span>
+                    <span style="color: var(--admin-navy);">{{ __('admin.portal_title') }}</span>
                 </div>
-                <h2 style="font-size: 20px; font-weight: 800; color: var(--admin-navy); margin: 0;">
+                <h2 style="font-size: 22px; font-weight: 800; color: var(--admin-navy); margin: 0; letter-spacing: -0.3px;">
                     @yield('header_title', __('admin.portal_title'))
                 </h2>
             </div>
             
-            <div style="display: flex; align-items: center; gap: 18px;">
-                <!-- English / Telugu Language Toggle (Image 3 Style) -->
-                <div style="display: flex; background: #F1F5F9; border-radius: 6px; padding: 3px; border: 1px solid var(--admin-border);">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <!-- System Status Indicator -->
+                <div style="display: flex; align-items: center; gap: 7px; background: #ECFDF5; border: 1px solid #A7F3D0; padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #065F46;">
+                    <span class="live-dot-pulse"></span>
+                    <span>5:00 AM IST Auto-Publish Active</span>
+                </div>
+
+                <!-- English / Telugu Language Segmented Control -->
+                <div style="display: flex; background: #F1F5F9; border-radius: 8px; padding: 3px; border: 1px solid var(--admin-border); box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);">
                     <a href="{{ route('admin.locale.switch', 'en') }}" 
-                       style="padding: 5px 14px; font-size: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; color: {{ app()->getLocale() === 'en' ? '#FFFFFF' : '#64748B' }}; background: {{ app()->getLocale() === 'en' ? '#0F172A' : 'transparent' }}; transition: all 0.2s;">
+                       style="padding: 5px 14px; font-size: 12px; font-weight: 700; border-radius: 6px; text-decoration: none; color: {{ app()->getLocale() === 'en' ? '#FFFFFF' : '#64748B' }}; background: {{ app()->getLocale() === 'en' ? '#0F172A' : 'transparent' }}; box-shadow: {{ app()->getLocale() === 'en' ? '0 2px 6px rgba(0,0,0,0.18)' : 'none' }}; transition: all 0.2s;">
                         English
                     </a>
                     <a href="{{ route('admin.locale.switch', 'te') }}" 
-                       style="padding: 5px 14px; font-size: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; color: {{ app()->getLocale() === 'te' ? '#FFFFFF' : '#64748B' }}; background: {{ app()->getLocale() === 'te' ? '#0F172A' : 'transparent' }}; transition: all 0.2s;">
+                       style="padding: 5px 14px; font-size: 12px; font-weight: 700; border-radius: 6px; text-decoration: none; color: {{ app()->getLocale() === 'te' ? '#FFFFFF' : '#64748B' }}; background: {{ app()->getLocale() === 'te' ? '#0F172A' : 'transparent' }}; box-shadow: {{ app()->getLocale() === 'te' ? '0 2px 6px rgba(0,0,0,0.18)' : 'none' }}; transition: all 0.2s;">
                         తెలుగు
                     </a>
                 </div>
 
-                <a href="{{ route('epaper.home') }}" target="_blank" style="color: var(--admin-navy); font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px;">
-                    <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--admin-red);"></i> {{ __('admin.view_live_website') }}
+                <!-- View Live E-Paper Button -->
+                <a href="{{ route('epaper.home') }}" target="_blank" 
+                   style="background: #FFFFFF; color: var(--admin-navy); border: 1px solid var(--admin-border); font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); transition: all 0.2s;">
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--admin-red);"></i>
+                    <span>{{ __('admin.view_live_website') }}</span>
                 </a>
 
+                <!-- Logout Button -->
                 <form action="{{ route('admin.logout') }}" method="POST" style="margin: 0;">
                     @csrf
-                    <button type="submit" style="background: none; border: none; color: #DC2626; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-                        <i class="fa-solid fa-power-off"></i> {{ __('admin.logout') }}
+                    <button type="submit" style="background: rgba(220, 38, 38, 0.08); border: 1px solid rgba(220, 38, 38, 0.2); color: #DC2626; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 8px; transition: all 0.2s;">
+                        <i class="fa-solid fa-power-off"></i>
+                        <span>{{ __('admin.logout') }}</span>
                     </button>
                 </form>
 
-                <div style="font-size: 12px; color: var(--admin-muted); border-left: 1px solid var(--admin-border); padding-left: 14px;">
-                    <i class="fa-regular fa-clock"></i> {{ now('Asia/Kolkata')->format('d M Y, h:i A') }} IST
+                <div style="font-size: 12px; color: var(--admin-muted); border-left: 1px solid var(--admin-border); padding-left: 14px; font-weight: 600;">
+                    <i class="fa-regular fa-clock" style="color: var(--admin-blue); margin-right: 4px;"></i> {{ now('Asia/Kolkata')->format('d M Y, h:i A') }} IST
                 </div>
             </div>
         </header>

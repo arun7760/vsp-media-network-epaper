@@ -5,174 +5,494 @@
 
 @push('styles')
 <style>
-    .metrics-grid {
+    /* Premium Enterprise Dashboard Metrics */
+    .metrics-container {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-        margin-bottom: 32px;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 18px;
+        margin-bottom: 28px;
     }
-    .metric-card {
+
+    .premium-stat-card {
         background: #FFFFFF;
-        border: 1px solid var(--admin-border);
-        border-radius: 12px;
-        padding: 20px 24px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        border: 1px solid #E2E8F0;
+        border-radius: 14px;
+        padding: 20px 18px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .premium-stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.09);
+        border-color: #CBD5E1;
+    }
+
+    .stat-accent-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+    }
+    .accent-blue { background: linear-gradient(90deg, #0284C7 0%, #38BDF8 100%); }
+    .accent-green { background: linear-gradient(90deg, #059669 0%, #34D399 100%); }
+    .accent-amber { background: linear-gradient(90deg, #D97706 0%, #FBBF24 100%); }
+    .accent-indigo { background: linear-gradient(90deg, #6366F1 0%, #818CF8 100%); }
+    .accent-rose { background: linear-gradient(90deg, #E11D48 0%, #FB7185 100%); }
+
+    .stat-card-top {
         display: flex;
         align-items: center;
-        gap: 16px;
-        transition: transform 0.2s, box-shadow 0.2s;
+        justify-content: space-between;
+        margin-bottom: 12px;
     }
-    .metric-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(10, 29, 55, 0.08);
-    }
-    .metric-icon {
-        width: 48px;
-        height: 48px;
+    .stat-icon-wrap {
+        width: 44px;
+        height: 44px;
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 20px;
+        font-size: 18px;
         flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
-    .metric-num {
-        font-size: 28px;
+    .icon-blue { background: #E0F2FE; color: #0284C7; }
+    .icon-green { background: #ECFDF5; color: #059669; }
+    .icon-amber { background: #FFFBEB; color: #D97706; }
+    .icon-indigo { background: #EEF2FF; color: #6366F1; }
+    .icon-rose { background: #FFF1F2; color: #E11D48; }
+
+    .stat-number {
+        font-size: 32px;
         font-weight: 800;
-        color: var(--admin-navy);
-        line-height: 1.1;
+        color: #0F172A;
+        line-height: 1;
+        letter-spacing: -0.5px;
+        font-family: var(--font-sans);
+        margin-bottom: 4px;
     }
-    .metric-label {
+    .stat-label {
         font-size: 13px;
-        color: var(--admin-muted);
-        font-weight: 600;
-        margin-top: 3px;
+        font-weight: 700;
+        color: #475569;
+        margin-bottom: 12px;
     }
 
-    .table-responsive {
-        overflow-x: auto;
-    }
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
-        text-align: left;
-    }
-    .data-table th {
-        background: #F8FAFC;
-        padding: 12px 16px;
+    .stat-footer-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
         font-weight: 700;
-        color: var(--admin-navy);
-        border-bottom: 2px solid var(--admin-border);
+        padding: 3px 8px;
+        border-radius: 6px;
+        width: fit-content;
     }
-    .data-table td {
-        padding: 12px 16px;
-        border-bottom: 1px solid var(--admin-border);
-        vertical-align: middle;
+    .badge-soft-blue { background: #F0F9FF; color: #0369A1; border: 1px solid #BAE6FD; }
+    .badge-soft-green { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
+    .badge-soft-amber { background: #FFFBEB; color: #B45309; border: 1px solid #FDE68A; }
+    .badge-soft-indigo { background: #EEF2FF; color: #4338CA; border: 1px solid #C7D2FE; }
+    .badge-soft-rose { background: #FFF1F2; color: #BE123C; border: 1px solid #FECDD3; }
+
+    /* Command Publishing Hero Desk */
+    .publishing-desk-card {
+        background: linear-gradient(135deg, #061226 0%, #0C2145 50%, #15386C 100%);
+        border-radius: 16px;
+        padding: 32px 36px;
+        color: #FFFFFF;
+        margin-bottom: 30px;
+        box-shadow: 0 12px 36px rgba(6, 18, 38, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 24px;
     }
-    .status-badge {
-        display: inline-block;
-        padding: 3px 10px;
+    .publishing-desk-card::after {
+        content: '';
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(217, 27, 36, 0.35) 0%, transparent 70%);
+        pointer-events: none;
+    }
+    .desk-header-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: rgba(255, 255, 255, 0.12);
+        padding: 4px 12px;
         border-radius: 999px;
-        font-size: 12px;
-        font-weight: 700;
+        font-size: 11.5px;
+        font-weight: 800;
+        letter-spacing: 0.8px;
         text-transform: uppercase;
+        color: #F8FAFC;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        margin-bottom: 12px;
     }
-    .badge-published { background: #ECFDF5; color: #065F46; }
-    .badge-scheduled { background: #EFF6FF; color: #1E40AF; }
-    .badge-pending { background: #FFFBEB; color: #92400E; }
-    .badge-draft { background: #F1F5F9; color: #475569; }
+    .desk-heading {
+        font-size: 24px;
+        font-weight: 800;
+        color: #FFFFFF;
+        margin-bottom: 8px;
+        letter-spacing: -0.3px;
+    }
+    .desk-subheading {
+        font-size: 14px;
+        color: #CBD5E1;
+        max-width: 620px;
+        line-height: 1.6;
+        margin: 0;
+    }
+    .desk-actions {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        z-index: 2;
+    }
+    .btn-hero-primary {
+        background: linear-gradient(135deg, var(--admin-red) 0%, #A90D15 100%);
+        color: #FFFFFF !important;
+        padding: 13px 26px;
+        border-radius: 9px;
+        font-size: 14px;
+        font-weight: 800;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        box-shadow: 0 4px 16px rgba(217, 27, 36, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        transition: all 0.2s;
+    }
+    .btn-hero-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(217, 27, 36, 0.6);
+        filter: brightness(1.08);
+    }
+    .btn-hero-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: #FFFFFF !important;
+        padding: 13px 22px;
+        border-radius: 9px;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        transition: all 0.2s;
+    }
+    .btn-hero-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    /* Grid Section: Approvals & Audit Timeline */
+    .dashboard-grid-2col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+    }
+
+    .panel-card {
+        background: #FFFFFF;
+        border-radius: 14px;
+        border: 1px solid #E2E8F0;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+        display: flex;
+        flex-direction: column;
+    }
+    .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 16px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid #F1F5F9;
+    }
+    .panel-title {
+        font-size: 16px;
+        font-weight: 800;
+        color: #0F172A;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+    .panel-link {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--admin-blue);
+        text-decoration: none;
+        transition: color 0.15s;
+    }
+    .panel-link:hover {
+        color: var(--admin-red);
+    }
+
+    /* Empty state */
+    .empty-card-state {
+        padding: 44px 20px;
+        text-align: center;
+        color: #64748B;
+        margin: auto;
+    }
+    .empty-icon-circle {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #ECFDF5;
+        color: #059669;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin: 0 auto 14px;
+        border: 2px solid #A7F3D0;
+    }
+
+    /* Timeline Audit List */
+    .timeline-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .timeline-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 14px;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        transition: all 0.2s;
+    }
+    .timeline-item:hover {
+        background: #FFFFFF;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+        border-color: #CBD5E1;
+    }
+    .timeline-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+        color: #FFFFFF;
+        font-weight: 800;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+    }
+    .timeline-content {
+        flex: 1;
+        font-size: 13px;
+    }
+    .timeline-user {
+        font-weight: 700;
+        color: #0F172A;
+    }
+    .timeline-action-badge {
+        font-size: 10.5px;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 2px 7px;
+        border-radius: 4px;
+        background: #E0F2FE;
+        color: #0369A1;
+        margin-left: 6px;
+    }
+    .timeline-notes {
+        font-size: 12px;
+        color: #64748B;
+        margin-top: 2px;
+        line-height: 1.4;
+    }
+    .timeline-time {
+        font-size: 11px;
+        color: #94A3B8;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    @media (max-width: 1200px) {
+        .metrics-container {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+    @media (max-width: 900px) {
+        .metrics-container {
+            grid-template-columns: 1fr 1fr;
+        }
+        .dashboard-grid-2col {
+            grid-template-columns: 1fr;
+        }
+        .publishing-desk-card {
+            padding: 24px;
+        }
+    }
+    @media (max-width: 600px) {
+        .metrics-container {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 @endpush
 
 @section('content')
 
-    <!-- Metrics Grid (Styled after vspmedianetwork.com/admin/dashboard) -->
-    <div class="metrics-grid">
-        <div class="metric-card">
-            <div class="metric-icon" style="background: #E0F2FE; color: #0284C7;">
-                <i class="fa-solid fa-newspaper"></i>
-            </div>
+    <!-- 1. Five Elevated Floating Stat Cards -->
+    <div class="metrics-container">
+        <!-- Total Editions -->
+        <div class="premium-stat-card">
+            <div class="stat-accent-bar accent-blue"></div>
             <div>
-                <div class="metric-num">{{ $metrics['total_editions'] }}</div>
-                <div class="metric-label">{{ __('admin.metrics_total') }}</div>
+                <div class="stat-card-top">
+                    <span class="stat-label">{{ __('admin.metrics_total') }}</span>
+                    <div class="stat-icon-wrap icon-blue">
+                        <i class="fa-solid fa-newspaper"></i>
+                    </div>
+                </div>
+                <div class="stat-number">{{ $metrics['total_editions'] }}</div>
+            </div>
+            <div class="stat-footer-badge badge-soft-blue">
+                <i class="fa-solid fa-layer-group"></i> All Broadsheet Issues
             </div>
         </div>
 
-        <div class="metric-card">
-            <div class="metric-icon" style="background: #DCFCE7; color: #16A34A;">
-                <i class="fa-solid fa-circle-check"></i>
-            </div>
+        <!-- Live Editions -->
+        <div class="premium-stat-card">
+            <div class="stat-accent-bar accent-green"></div>
             <div>
-                <div class="metric-num">{{ $metrics['published_editions'] }}</div>
-                <div class="metric-label">{{ __('admin.metrics_live') }}</div>
+                <div class="stat-card-top">
+                    <span class="stat-label">{{ __('admin.metrics_live') }}</span>
+                    <div class="stat-icon-wrap icon-green">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                </div>
+                <div class="stat-number">{{ $metrics['published_editions'] }}</div>
+            </div>
+            <div class="stat-footer-badge badge-soft-green">
+                <i class="fa-solid fa-circle-dot"></i> Live for Public Readers
             </div>
         </div>
 
-        <div class="metric-card">
-            <div class="metric-icon" style="background: #FEF3C7; color: #D97706;">
-                <i class="fa-solid fa-clock"></i>
-            </div>
+        <!-- Pending Approvals -->
+        <div class="premium-stat-card">
+            <div class="stat-accent-bar accent-amber"></div>
             <div>
-                <div class="metric-num">{{ $metrics['pending_approvals'] }}</div>
-                <div class="metric-label">{{ __('admin.metrics_pending') }}</div>
+                <div class="stat-card-top">
+                    <span class="stat-label">{{ __('admin.metrics_pending') }}</span>
+                    <div class="stat-icon-wrap icon-amber">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                </div>
+                <div class="stat-number">{{ $metrics['pending_approvals'] }}</div>
+            </div>
+            <div class="stat-footer-badge badge-soft-amber">
+                <i class="fa-solid fa-user-check"></i> Requires Review
             </div>
         </div>
 
-        <div class="metric-card">
-            <div class="metric-icon" style="background: #E0E7FF; color: #4F46E5;">
-                <i class="fa-solid fa-calendar-check"></i>
-            </div>
+        <!-- Scheduled Editions -->
+        <div class="premium-stat-card">
+            <div class="stat-accent-bar accent-indigo"></div>
             <div>
-                <div class="metric-num">{{ $metrics['scheduled_editions'] }}</div>
-                <div class="metric-label">{{ __('admin.metrics_scheduled') }}</div>
+                <div class="stat-card-top">
+                    <span class="stat-label">{{ __('admin.metrics_scheduled') }}</span>
+                    <div class="stat-icon-wrap icon-indigo">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                </div>
+                <div class="stat-number">{{ $metrics['scheduled_editions'] }}</div>
+            </div>
+            <div class="stat-footer-badge badge-soft-indigo">
+                <i class="fa-solid fa-robot"></i> 5:00 AM Cron Release
             </div>
         </div>
 
-        <div class="metric-card">
-            <div class="metric-icon" style="background: #F3E8FF; color: #9333EA;">
-                <i class="fa-regular fa-eye"></i>
-            </div>
+        <!-- Total Readership Views -->
+        <div class="premium-stat-card">
+            <div class="stat-accent-bar accent-rose"></div>
             <div>
-                <div class="metric-num">{{ number_format($metrics['total_views']) }}</div>
-                <div class="metric-label">{{ __('admin.metrics_views') }}</div>
+                <div class="stat-card-top">
+                    <span class="stat-label">{{ __('admin.metrics_views') }}</span>
+                    <div class="stat-icon-wrap icon-rose">
+                        <i class="fa-regular fa-eye"></i>
+                    </div>
+                </div>
+                <div class="stat-number">{{ number_format($metrics['total_views']) }}</div>
+            </div>
+            <div class="stat-footer-badge badge-soft-rose">
+                <i class="fa-solid fa-chart-line"></i> GA4 &amp; Real-time Views
             </div>
         </div>
     </div>
 
-    <!-- Quick Action Banner -->
-    <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; background: linear-gradient(135deg, #0A1D37 0%, #173868 100%); color: #FFFFFF; border-radius: 12px; margin-bottom: 28px;">
+    <!-- 2. Command Publishing Hero Desk -->
+    <div class="publishing-desk-card">
         <div>
-            <h3 style="font-family: inherit; font-size: 20px; font-weight: 800; color: #FFFFFF; margin-bottom: 6px;">
+            <div class="desk-header-tag">
+                <i class="fa-solid fa-newspaper" style="color: var(--admin-red);"></i>
+                DAILY BROADSHEET PUBLISHING DESK &bull; LIVE CMS
+            </div>
+            <h3 class="desk-heading">
                 {{ __('admin.ready_upload_title') }}
             </h3>
-            <p style="color: #CBD5E1; font-size: 14px; margin: 0;">
+            <p class="desk-subheading">
                 {{ __('admin.ready_upload_desc') }}
             </p>
         </div>
-        <div style="display: flex; gap: 12px;">
+
+        <div class="desk-actions">
             @if(auth()->user()->canUpload())
-                <a href="{{ route('admin.editions.create') }}" class="btn-admin btn-gold" style="font-size: 14px; padding: 11px 22px;">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> {{ __('admin.upload_new_pdf') }}
+                <a href="{{ route('admin.editions.create') }}" class="btn-hero-primary">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>{{ __('admin.upload_new_pdf') }}</span>
+                </a>
+            @endif
+            @if(auth()->user()->isAdmin())
+                <a href="{{ route('admin.analytics.index') }}" class="btn-hero-secondary">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>{{ __('admin.analytics') }}</span>
                 </a>
             @endif
         </div>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px;">
-        <!-- Pending Approvals -->
-        <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <h3 style="font-size: 16px; font-weight: 700; color: var(--admin-navy); margin: 0;">
-                    <i class="fa-solid fa-clipboard-check" style="color: #F59E0B; margin-right: 6px;"></i> {{ __('admin.pending_approval_heading') }}
+    <!-- 3. Two-Column Panels: Pending Approvals & Editorial Activity -->
+    <div class="dashboard-grid-2col">
+        <!-- Pending Approvals Queue -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title">
+                    <i class="fa-solid fa-clipboard-check" style="color: #D97706;"></i>
+                    <span>{{ __('admin.pending_approval_heading') }}</span>
                 </h3>
-                <a href="{{ route('admin.editions.index', ['status' => 'pending_approval']) }}" style="font-size: 13px; color: var(--admin-blue); font-weight: 700; text-decoration: none;">
+                <a href="{{ route('admin.editions.index', ['status' => 'pending_approval']) }}" class="panel-link">
                     {{ __('admin.view_all') }} &rarr;
                 </a>
             </div>
 
             @if($pendingEditions->isNotEmpty())
-                <div class="table-responsive">
+                <div style="overflow-x: auto;">
                     <table class="data-table">
                         <thead>
                             <tr>
@@ -192,8 +512,8 @@
                                     <td>{{ $pe->edition_date->format('d M Y') }}</td>
                                     <td>{{ $pe->creator?->name ?? 'Editor' }}</td>
                                     <td>
-                                        <a href="{{ route('admin.editions.edit', $pe) }}" class="btn-admin btn-gold" style="padding: 4px 10px; font-size: 12px;">
-                                            {{ __('admin.table_review') }}
+                                        <a href="{{ route('admin.editions.edit', $pe) }}" class="btn-admin btn-gold" style="padding: 5px 12px; font-size: 12px; border-radius: 6px;">
+                                            <i class="fa-solid fa-magnifying-glass"></i> {{ __('admin.table_review') }}
                                         </a>
                                     </td>
                                 </tr>
@@ -202,40 +522,60 @@
                     </table>
                 </div>
             @else
-                <div style="text-align: center; padding: 32px 16px; color: var(--admin-muted);">
-                    <i class="fa-solid fa-circle-check" style="font-size: 28px; color: #10B981; margin-bottom: 8px;"></i>
-                    <p style="margin: 0;">{{ __('admin.no_pending_editions') }}</p>
+                <div class="empty-card-state">
+                    <div class="empty-icon-circle">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h4 style="font-size: 15px; font-weight: 700; color: #0F172A; margin-bottom: 4px;">
+                        అన్ని సంచికలు ఆమోదించబడ్డాయి!
+                    </h4>
+                    <p style="font-size: 13px; color: #64748B; margin: 0;">
+                        ప్రస్తుతం ఎలాంటి పెండింగ్ సంచికలు లేవు. అన్నీ తాజాగా ప్రచురించబడ్డాయి.
+                    </p>
                 </div>
             @endif
         </div>
 
-        <!-- Recent Audit Activity -->
-        <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <h3 style="font-size: 16px; font-weight: 700; color: var(--admin-navy); margin: 0;">
-                    <i class="fa-solid fa-clock-rotate-left" style="color: var(--admin-blue); margin-right: 6px;"></i> {{ __('admin.recent_audit_logs') }}
+        <!-- Recent Editorial Activity (Audit Logs) -->
+        <div class="panel-card">
+            <div class="panel-header">
+                <h3 class="panel-title">
+                    <i class="fa-solid fa-clock-rotate-left" style="color: var(--admin-blue);"></i>
+                    <span>{{ __('admin.recent_audit_logs') }}</span>
                 </h3>
+                @if(auth()->user()->isAdmin())
+                    <a href="{{ route('admin.audit-logs.index') }}" class="panel-link">
+                        {{ __('admin.view_all') }} &rarr;
+                    </a>
+                @endif
             </div>
 
             @if($recentLogs->isNotEmpty())
-                <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div class="timeline-list">
                     @foreach($recentLogs as $log)
-                        <div style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border-radius: 6px; background: #F8FAFC; border: 1px solid var(--admin-border);">
-                            <div style="width: 28px; height: 28px; border-radius: 50%; background: #E0F2FE; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #0284C7;">
+                        <div class="timeline-item">
+                            <div class="timeline-avatar">
                                 {{ strtoupper(substr($log->user?->name ?? 'S', 0, 1)) }}
                             </div>
-                            <div style="flex: 1; font-size: 13px;">
-                                <div><strong>{{ $log->user?->name ?? __('admin.system') }}</strong> &bull; <span style="text-transform: capitalize; color: #0284C7; font-weight: 700;">{{ str_replace('_', ' ', $log->action) }}</span></div>
-                                <div style="color: #64748B; font-size: 12px;">{{ $log->edition?->title }}: {{ $log->notes }}</div>
+                            <div class="timeline-content">
+                                <div>
+                                    <span class="timeline-user">{{ $log->user?->name ?? __('admin.system') }}</span>
+                                    <span class="timeline-action-badge">{{ str_replace('_', ' ', $log->action) }}</span>
+                                </div>
+                                <div class="timeline-notes">
+                                    <strong>{{ $log->edition?->title ?? 'Edition' }}</strong>: {{ $log->notes }}
+                                </div>
                             </div>
-                            <div style="font-size: 11px; color: #94A3B8; white-space: nowrap;">
+                            <div class="timeline-time">
                                 {{ $log->created_at->diffForHumans() }}
                             </div>
                         </div>
                     @endforeach
                 </div>
             @else
-                <p style="color: var(--admin-muted); font-size: 13px; margin: 0;">{{ __('admin.no_recent_activity') }}</p>
+                <p style="color: var(--admin-muted); font-size: 13px; margin: 0; text-align: center; padding: 40px 0;">
+                    {{ __('admin.no_recent_activity') }}
+                </p>
             @endif
         </div>
     </div>
