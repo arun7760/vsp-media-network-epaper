@@ -103,4 +103,22 @@ class AnalyticsTrackingTest extends TestCase
         $response->assertDontSee('googletagmanager.com/gtm.js');
         $response->assertDontSee('googletagmanager.com/gtag/js');
     }
+
+    public function test_ga4_and_gtm_tags_render_properly_when_configured(): void
+    {
+        config([
+            'analytics.ga4_measurement_id' => 'G-VSPTIMES01',
+            'analytics.gtm_container_id' => 'GTM-VSP999',
+            'analytics.cross_domains' => ['vspmedianetwork.com', 'epaper.vspmedianetwork.com'],
+        ]);
+
+        $response = $this->get('/');
+        $response->assertStatus(200);
+        $response->assertSee('googletagmanager.com/gtag/js?id=G-VSPTIMES01', false);
+        $response->assertSee("gtag('config', 'G-VSPTIMES01'", false);
+        $response->assertSee("googletagmanager.com/gtm.js?id='+i+dl", false);
+        $response->assertSee('googletagmanager.com/ns.html?id=GTM-VSP999', false);
+        $response->assertSee('vspmedianetwork.com', false);
+        $response->assertSee('window.vspAnalytics', false);
+    }
 }
