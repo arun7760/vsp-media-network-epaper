@@ -16,7 +16,7 @@ return [
     |--------------------------------------------------------------------------
     | Measurement ID format: G-XXXXXXXXXX
     */
-    'ga4_measurement_id' => env('GA4_MEASUREMENT_ID', null),
+    'ga4_measurement_id' => env('GA4_MEASUREMENT_ID', 'G-T6B0DCE3D7'),
 
     /*
     |--------------------------------------------------------------------------
