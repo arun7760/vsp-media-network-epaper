@@ -276,18 +276,20 @@
 
 @section('content')
 
-    <!-- Regional Edition Selector Tabs -->
-    <div class="region-nav">
-        <div class="region-label">
-            {{ __('epaper.select_edition') }}
+    @if($regions->count() > 1)
+        <!-- Regional Edition Selector Tabs -->
+        <div class="region-nav">
+            <div class="region-label">
+                {{ __('epaper.select_edition') }}
+            </div>
+            @foreach($regions as $region)
+                <a href="{{ route('epaper.home', ['region' => $region->slug, 'date' => request('date')]) }}" 
+                   class="region-pill {{ ($selectedRegion && $selectedRegion->id === $region->id) ? 'active' : '' }}">
+                    {{ $region->name }}
+                </a>
+            @endforeach
         </div>
-        @foreach($regions as $region)
-            <a href="{{ route('epaper.home', ['region' => $region->slug, 'date' => request('date')]) }}" 
-               class="region-pill {{ ($selectedRegion && $selectedRegion->id === $region->id) ? 'active' : '' }}">
-                {{ $region->name }}
-            </a>
-        @endforeach
-    </div>
+    @endif
 
     @if($edition)
         <!-- Hero Spotlight Card -->

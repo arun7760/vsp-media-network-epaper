@@ -194,18 +194,20 @@
         </div>
 
         <form action="{{ route('epaper.archive') }}" method="GET" class="filter-form">
-            <!-- Region Filter -->
-            <div class="filter-group">
-                <label for="region_id"><i class="fa-solid fa-location-dot"></i> ఎడిషన్:</label>
-                <select name="region_id" id="region_id" class="filter-select">
-                    <option value="">అన్ని ప్రాంతాలు (All Regions)</option>
-                    @foreach($regions as $r)
-                        <option value="{{ $r->id }}" {{ $selectedRegionId == $r->id ? 'selected' : '' }}>
-                            {{ $r->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+            @if($regions->count() > 1)
+                <!-- Region Filter -->
+                <div class="filter-group">
+                    <label for="region_id">{{ __('epaper.select_edition') }}</label>
+                    <select name="region_id" id="region_id" class="filter-select">
+                        <option value="">{{ __('epaper.all_editions') }}</option>
+                        @foreach($regions as $r)
+                            <option value="{{ $r->id }}" {{ $selectedRegionId == $r->id ? 'selected' : '' }}>
+                                {{ $r->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
 
             <!-- Month Filter -->
             <div class="filter-group">

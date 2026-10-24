@@ -44,9 +44,10 @@ class PublicEpaperController extends Controller
                 ->first();
         }
 
-        // Today's editions across other regions
+        // Today's editions across other active regions
         $otherEditions = EpaperEdition::with('region')
             ->published()
+            ->whereHas('region', fn ($q) => $q->where('is_active', true))
             ->whereDate('edition_date', $edition?->edition_date ?? Carbon::today())
             ->when($edition, fn ($q) => $q->where('id', '!=', $edition->id))
             ->get();
@@ -100,9 +101,10 @@ class PublicEpaperController extends Controller
         $prevPageNumber = ($pageNumber > 1) ? $pageNumber - 1 : null;
         $nextPageNumber = ($pageNumber < $totalPages) ? $pageNumber + 1 : null;
 
-        // All editions published on the same date for regional switching inside reader
+        // All active editions published on the same date for regional switching inside reader
         $siblingEditions = EpaperEdition::with('region')
             ->published()
+            ->whereHas('region', fn ($q) => $q->where('is_active', true))
             ->whereDate('edition_date', $edition->edition_date)
             ->get();
 

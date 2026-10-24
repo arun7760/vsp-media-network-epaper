@@ -57,7 +57,7 @@
                     సంచిక శీర్షిక (Edition Title) <span style="color: #DC2626;">*</span>
                 </label>
                 <input type="text" name="title" id="title" required 
-                       value="{{ old('title', 'విశాఖపట్నం ప్రధాన సంచిక') }}"
+                       value="{{ old('title', 'విఎస్పీ టైమ్స్ ప్రధాన సంచిక') }}"
                        placeholder="ఉదా: విశాఖపట్నం ప్రధాన సంచిక"
                        style="width: 100%; padding: 11px 14px; border: 1px solid var(--admin-border); border-radius: 6px; font-size: 14px; font-family: inherit;">
             </div>
