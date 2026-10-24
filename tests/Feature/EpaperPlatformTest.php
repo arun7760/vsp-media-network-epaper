@@ -59,7 +59,7 @@ class EpaperPlatformTest extends TestCase
             'issue_number' => 'సంచిక 101',
             'total_pages' => 4,
             'status' => 'published',
-            'published_at' => $today->copy()->setTime(5, 0, 0),
+            'published_at' => now()->subHour(),
             'views_count' => 50,
         ]);
 

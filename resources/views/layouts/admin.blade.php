@@ -12,8 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Ramabhadra&family=Source+Sans+3:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    @include('partials.analytics')
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Ramabhadra&family=Source+Sans+3:wght@400;600;700;800;900&display=swap');
 

@@ -16,7 +16,7 @@ return [
     |--------------------------------------------------------------------------
     | Measurement ID format: G-XXXXXXXXXX
     */
-    'ga4_measurement_id' => env('GA4_MEASUREMENT_ID', 'G-T6B0DCE3D7'),
+    'ga4_measurement_id' => env('EPAPER_GA4_MEASUREMENT_ID', env('GA4_MEASUREMENT_ID', 'G-VHYRSKXX6D')),
 
     /*
     |--------------------------------------------------------------------------

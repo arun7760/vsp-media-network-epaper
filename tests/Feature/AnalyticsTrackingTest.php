@@ -107,18 +107,35 @@ class AnalyticsTrackingTest extends TestCase
     public function test_ga4_and_gtm_tags_render_properly_when_configured(): void
     {
         config([
-            'analytics.ga4_measurement_id' => 'G-VSPTIMES01',
+            'analytics.ga4_measurement_id' => 'G-VHYRSKXX6D',
             'analytics.gtm_container_id' => 'GTM-VSP999',
             'analytics.cross_domains' => ['vspmedianetwork.com', 'epaper.vspmedianetwork.com'],
         ]);
 
         $response = $this->get('/');
         $response->assertStatus(200);
-        $response->assertSee('googletagmanager.com/gtag/js?id=G-VSPTIMES01', false);
-        $response->assertSee("gtag('config', 'G-VSPTIMES01'", false);
+        $response->assertSee('googletagmanager.com/gtag/js?id=G-VHYRSKXX6D', false);
+        $response->assertSee("gtag('config', 'G-VHYRSKXX6D'", false);
         $response->assertSee("googletagmanager.com/gtm.js?id='+i+dl", false);
         $response->assertSee('googletagmanager.com/ns.html?id=GTM-VSP999', false);
         $response->assertSee('vspmedianetwork.com', false);
         $response->assertSee('window.vspAnalytics', false);
+    }
+
+    public function test_admin_dashboard_does_not_render_public_analytics_tags(): void
+    {
+        config([
+            'analytics.ga4_measurement_id' => 'G-VHYRSKXX6D',
+        ]);
+
+        $admin = User::factory()->create([
+            'role' => 'admin',
+            'is_active' => true,
+        ]);
+
+        $response = $this->actingAs($admin)->get('/admin/dashboard');
+        $response->assertStatus(200);
+        $response->assertDontSee('googletagmanager.com/gtag/js');
+        $response->assertDontSee('G-VHYRSKXX6D');
     }
 }
