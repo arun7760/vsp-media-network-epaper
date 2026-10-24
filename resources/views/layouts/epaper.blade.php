@@ -390,7 +390,6 @@
             <div class="topbar-right">
                 <!-- English / Telugu Language Switcher in Top Bar -->
                 <div class="locale-switcher">
-                    <span style="color: #94A3B8; font-size: 11px; padding-left: 6px;"><i class="fa-solid fa-language"></i></span>
                     <a href="{{ route('locale.switch', 'en') }}" class="locale-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">
                         English
                     </a>
@@ -431,7 +430,7 @@
                 <!-- Prominent Language Toggle matching Admin Header -->
                 <div class="masthead-lang-switcher" title="{{ app()->getLocale() === 'en' ? 'Switch to Telugu' : 'Switch to English' }}">
                     <a href="{{ route('locale.switch', 'en') }}" class="masthead-lang-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">
-                        <i class="fa-solid fa-globe" style="font-size: 11px;"></i> English
+                        English
                     </a>
                     <a href="{{ route('locale.switch', 'te') }}" class="masthead-lang-btn {{ app()->getLocale() === 'te' ? 'active' : '' }}">
                         తెలుగు

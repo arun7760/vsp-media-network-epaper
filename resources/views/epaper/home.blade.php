@@ -279,7 +279,7 @@
     <!-- Regional Edition Selector Tabs -->
     <div class="region-nav">
         <div class="region-label">
-            <i class="fa-solid fa-location-dot"></i> {{ __('epaper.select_edition') }}
+            {{ __('epaper.select_edition') }}
         </div>
         @foreach($regions as $region)
             <a href="{{ route('epaper.home', ['region' => $region->slug, 'date' => request('date')]) }}" 
@@ -368,7 +368,7 @@
             @foreach($otherEditions as $oe)
                 <a href="{{ route('epaper.reader', ['edition' => $oe, 'pageNumber' => 1]) }}" class="edition-subcard">
                     <div class="edition-subcard-thumb">
-                        <img src="{{ $oe->cover_url }}" alt="{{ $oe->title }}" onerror="this.src='https://placehold.co/400x550/0A1D37/FFFFFF/png?text='+encodeURIComponent('{{ $oe->region->name }}');">
+                        <img src="{{ $oe->cover_url }}" alt="{{ $oe->title }}" onerror="this.src='https://placehold.co/400x550/0A1D37/FFFFFF/png?text=VSP+TIMES';">
                     </div>
                     <div class="edition-subcard-info">
                         <div class="edition-subcard-title">{{ $oe->region->name ?? $oe->title }}</div>
