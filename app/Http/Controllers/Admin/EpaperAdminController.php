@@ -11,6 +11,7 @@ use App\Services\EpaperPdfService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class EpaperAdminController extends Controller
 {
@@ -91,15 +92,41 @@ class EpaperAdminController extends Controller
             'pdf_file' => ['required', 'file', 'mimes:pdf', 'max:102400'], // 100MB max
         ]);
 
-        // Duplicate Check: Same region on same date
-        $exists = EpaperEdition::where('region_id', $validated['region_id'])
-            ->whereDate('edition_date', $validated['edition_date'])
-            ->exists();
+        $region = EpaperRegion::findOrFail($validated['region_id']);
+        $date = Carbon::parse($validated['edition_date']);
+        $dateString = $date->toDateString();
+        $editionCode = $date->format('Y-m-d') . '-' . $region->slug;
 
-        if ($exists) {
-            return back()->withInput()->withErrors([
-                'edition_date' => 'ఎంచుకున్న ప్రాంతానికి ఈ తేదీన ఇప్పటికే ఒక సంచిక సృష్టించబడింది. (Duplicate edition).',
-            ]);
+        // Duplicate Check: Same region on same date (including soft-deleted / trashed records)
+        $existing = EpaperEdition::withTrashed()
+            ->where('region_id', $region->id)
+            ->whereDate('edition_date', $dateString)
+            ->first();
+
+        if ($existing) {
+            if ($existing->trashed()) {
+                // Previously deleted edition - purge it completely so the new upload replaces it seamlessly
+                $existing->forceDelete();
+            } else {
+                return back()->withInput()->withErrors([
+                    'edition_date' => 'ఎంచుకున్న ప్రాంతానికి ఈ తేదీన (' . $date->format('d-m-Y') . ') ఇప్పటికే ఒక సంచిక సృష్టించబడింది. దయచేసి ఉన్న సంచికను సవరించండి లేదా వేరొక తేదీని ఎంచుకోండి. (An edition already exists for this date and region).',
+                ]);
+            }
+        }
+
+        // Duplicate check for edition code as well
+        $codeExisting = EpaperEdition::withTrashed()
+            ->where('edition_code', $editionCode)
+            ->first();
+
+        if ($codeExisting) {
+            if ($codeExisting->trashed()) {
+                $codeExisting->forceDelete();
+            } else {
+                return back()->withInput()->withErrors([
+                    'edition_date' => "ఈ సంచిక కోడ్‌తో ({$editionCode}) ఇప్పటికే ఒక సంచిక ఉంది.",
+                ]);
+            }
         }
 
         // Validate PDF Integrity & Magic Header
@@ -108,26 +135,29 @@ class EpaperAdminController extends Controller
             return back()->withInput()->withErrors(['pdf_file' => $check['error']]);
         }
 
-        // Create Edition in Draft
-        $region = EpaperRegion::findOrFail($validated['region_id']);
-        $date = Carbon::parse($validated['edition_date']);
-
-        $edition = EpaperEdition::create([
-            'region_id' => $region->id,
-            'edition_date' => $date->toDateString(),
-            'edition_code' => $date->format('Y-m-d') . '-' . $region->slug,
-            'title' => $validated['title'],
-            'volume_number' => $validated['volume_number'] ?? 'సంపుటి 1',
-            'issue_number' => $validated['issue_number'] ?? 'సంచిక 1',
-            'status' => 'draft',
-            'created_by' => Auth::id(),
-        ]);
+        // Create Edition in Draft with defensive exception handling
+        try {
+            $edition = EpaperEdition::create([
+                'region_id' => $region->id,
+                'edition_date' => $dateString,
+                'edition_code' => $editionCode,
+                'title' => $validated['title'],
+                'volume_number' => $validated['volume_number'] ?? 'సంపుటి 1',
+                'issue_number' => $validated['issue_number'] ?? 'సంచిక 1',
+                'status' => 'draft',
+                'created_by' => Auth::id(),
+            ]);
+        } catch (\Throwable $e) {
+            return back()->withInput()->withErrors([
+                'edition_date' => 'ఎంచుకున్న ప్రాంతం మరియు తేదీకి ఇప్పటికే ఒక సంచిక ఉంది. దయచేసి ఉన్న సంచికను సవరించండి లేదా వేరొక తేదీని ఎంచుకోండి.',
+            ]);
+        }
 
         // Process PDF decomposition
         $success = $pdfService->processEditionPdf($request->file('pdf_file'), $edition);
 
         if (! $success) {
-            $edition->delete();
+            $edition->forceDelete();
             return back()->withInput()->withErrors(['pdf_file' => 'పీడీఎఫ్ పేజీలను ప్రాసెస్ చేయడం విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి.']);
         }
 
@@ -290,13 +320,31 @@ class EpaperAdminController extends Controller
     }
 
     /**
-     * Soft Delete Edition
+     * Delete Edition & Storage Files Permanently
      */
     public function destroy(EpaperEdition $edition)
     {
         $title = $edition->title;
-        $edition->recordWorkflow('delete', $edition->status, 'deleted', 'Edition soft-deleted', Auth::id());
-        $edition->delete();
+        $edition->recordWorkflow('delete', $edition->status, 'deleted', 'Edition deleted permanently', Auth::id());
+
+        // Clean up page image and thumbnail files
+        foreach ($edition->pages as $page) {
+            if ($page->image_path && Storage::disk('public')->exists($page->image_path)) {
+                Storage::disk('public')->delete($page->image_path);
+            }
+            if ($page->thumbnail_path && Storage::disk('public')->exists($page->thumbnail_path)) {
+                Storage::disk('public')->delete($page->thumbnail_path);
+            }
+            if ($page->page_pdf_path && Storage::disk('public')->exists($page->page_pdf_path)) {
+                Storage::disk('public')->delete($page->page_pdf_path);
+            }
+        }
+
+        if ($edition->master_pdf_path && Storage::disk('public')->exists($edition->master_pdf_path)) {
+            Storage::disk('public')->delete($edition->master_pdf_path);
+        }
+
+        $edition->forceDelete();
 
         return redirect()->route('admin.editions.index')->with('success', "సంచిక '{$title}' విజయవంతంగా తొలగించబడింది.");
     }

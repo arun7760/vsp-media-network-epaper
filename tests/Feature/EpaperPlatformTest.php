@@ -546,6 +546,49 @@ class EpaperPlatformTest extends TestCase
         $draftResponse = $this->get(route('epaper.download', $this->draftEdition));
         $draftResponse->assertStatus(403);
     }
+
+    public function test_duplicate_edition_date_upload_returns_validation_error_gracefully(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
+        $pdfFile = \Illuminate\Http\UploadedFile::fake()->createWithContent('oct_edition.pdf', "%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF");
+
+        // Try to upload an edition with the exact same region and date as $this->publishedEdition
+        $response = $this->actingAs($admin)->post(route('admin.editions.store'), [
+            'region_id' => $this->publishedEdition->region_id,
+            'edition_date' => $this->publishedEdition->edition_date->toDateString(),
+            'title' => 'Duplicate Edition Attempt',
+            'pdf_file' => $pdfFile,
+        ]);
+
+        $response->assertSessionHasErrors(['edition_date']);
+        $response->assertStatus(302);
+    }
+
+    public function test_uploading_previously_deleted_date_succeeds_without_unique_constraint_violation(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
+        $pdfFile = \Illuminate\Http\UploadedFile::fake()->createWithContent('oct22_edition.pdf', "%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF");
+
+        // First, soft delete the draft edition
+        $dateToReuse = $this->draftEdition->edition_date->toDateString();
+        $regionId = $this->draftEdition->region_id;
+        $this->draftEdition->delete();
+
+        // Now upload for the same deleted date
+        $response = $this->actingAs($admin)->post(route('admin.editions.store'), [
+            'region_id' => $regionId,
+            'edition_date' => $dateToReuse,
+            'title' => 'VSP Times Re-uploaded Edition',
+            'pdf_file' => $pdfFile,
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('epaper_editions', [
+            'region_id' => $regionId,
+            'title' => 'VSP Times Re-uploaded Edition',
+            'deleted_at' => null,
+        ]);
+    }
 }
 
 

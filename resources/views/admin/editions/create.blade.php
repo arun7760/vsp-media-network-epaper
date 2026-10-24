@@ -30,7 +30,7 @@
                     <label style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--admin-navy);">
                         ప్రాంతీయ ఎడిషన్ (Region) <span style="color: #DC2626;">*</span>
                     </label>
-                    <select name="region_id" id="region_id" required style="width: 100%; padding: 11px 14px; border: 1px solid var(--admin-border); border-radius: 6px; font-size: 14px; font-family: inherit; background: #FFFFFF;">
+                    <select name="region_id" id="region_id" required style="width: 100%; padding: 11px 14px; border: 1px solid {{ $errors->has('region_id') ? '#DC2626' : 'var(--admin-border)' }}; border-radius: 6px; font-size: 14px; font-family: inherit; background: #FFFFFF;">
                         <option value="">-- ప్రాంతాన్ని ఎంచుకోండి --</option>
                         @foreach($regions as $region)
                             <option value="{{ $region->id }}" {{ old('region_id') == $region->id ? 'selected' : '' }}>
@@ -38,6 +38,11 @@
                             </option>
                         @endforeach
                     </select>
+                    @error('region_id')
+                        <div style="color: #DC2626; font-size: 13px; margin-top: 6px; font-weight: 600;">
+                            <i class="fa-solid fa-circle-exclamation"></i> {{ $message }}
+                        </div>
+                    @enderror
                 </div>
 
                 <!-- Edition Date -->
@@ -47,7 +52,12 @@
                     </label>
                     <input type="date" name="edition_date" id="edition_date" required 
                            value="{{ old('edition_date', now('Asia/Kolkata')->toDateString()) }}"
-                           style="width: 100%; padding: 11px 14px; border: 1px solid var(--admin-border); border-radius: 6px; font-size: 14px; font-family: inherit;">
+                           style="width: 100%; padding: 11px 14px; border: 1px solid {{ $errors->has('edition_date') ? '#DC2626' : 'var(--admin-border)' }}; border-radius: 6px; font-size: 14px; font-family: inherit;">
+                    @error('edition_date')
+                        <div style="color: #DC2626; font-size: 13px; margin-top: 6px; font-weight: 600; line-height: 1.4;">
+                            <i class="fa-solid fa-circle-exclamation"></i> {{ $message }}
+                        </div>
+                    @enderror
                 </div>
             </div>
 
@@ -106,6 +116,11 @@
                         <i class="fa-solid fa-circle-check"></i> <span id="fileName"></span> (<span id="fileSize"></span>)
                     </div>
                 </div>
+                @error('pdf_file')
+                    <div style="color: #DC2626; font-size: 13px; margin-top: 6px; font-weight: 600;">
+                        <i class="fa-solid fa-circle-exclamation"></i> {{ $message }}
+                    </div>
+                @enderror
             </div>
 
             <!-- Progress Bar (Hidden initially) -->
