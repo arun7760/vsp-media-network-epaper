@@ -346,6 +346,7 @@
             margin-bottom: 28px;
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('css/admin-datatable.css') }}">
     @stack('styles')
 </head>
 <body>
@@ -529,6 +530,7 @@
         </main>
     </div>
 
+    <script src="{{ asset('js/admin-datatable.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

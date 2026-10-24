@@ -49,24 +49,54 @@ class EpaperAdminController extends Controller
     }
 
     /**
-     * Manage Editions List with Status & Region Filters
+     * Manage Editions List with Search, Filter & Status Badges
      */
     public function index(Request $request)
     {
         $status = $request->query('status');
         $regionId = $request->query('region_id');
         $date = $request->query('date');
+        $search = trim($request->query('search', ''));
+        $perPage = (int) $request->query('per_page', 50);
 
         $query = EpaperEdition::with(['region', 'creator', 'approver'])
             ->when($status, fn ($q) => $q->where('status', $status))
             ->when($regionId, fn ($q) => $q->where('region_id', $regionId))
             ->when($date, fn ($q) => $q->whereDate('edition_date', $date))
+            ->when($search, function ($q, $search) {
+                $q->where(function ($sub) use ($search) {
+                    $sub->where('title', 'like', "%{$search}%")
+                        ->orWhere('edition_code', 'like', "%{$search}%")
+                        ->orWhere('volume_number', 'like', "%{$search}%")
+                        ->orWhere('issue_number', 'like', "%{$search}%")
+                        ->orWhereHas('region', function ($r) use ($search) {
+                            $r->where('name', 'like', "%{$search}%")
+                              ->orWhere('name_te', 'like', "%{$search}%");
+                        });
+                });
+            })
             ->latest('edition_date');
 
-        $editions = $query->paginate(15)->withQueryString();
+        $statusCounts = [
+            'all' => EpaperEdition::count(),
+            'pending_approval' => EpaperEdition::where('status', 'pending_approval')->count(),
+            'scheduled' => EpaperEdition::where('status', 'scheduled')->count(),
+            'published' => EpaperEdition::where('status', 'published')->count(),
+            'draft' => EpaperEdition::where('status', 'draft')->count(),
+        ];
+
+        $editions = $query->paginate($perPage)->withQueryString();
         $regions = EpaperRegion::active()->get();
 
-        return view('admin.editions.index', compact('editions', 'regions', 'status', 'regionId', 'date'));
+        return view('admin.editions.index', compact(
+            'editions',
+            'regions',
+            'status',
+            'regionId',
+            'date',
+            'search',
+            'statusCounts'
+        ));
     }
 
     /**

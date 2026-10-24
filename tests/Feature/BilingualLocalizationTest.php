@@ -179,4 +179,27 @@ class BilingualLocalizationTest extends TestCase
         $approveResponse->assertRedirect();
         $this->assertEquals('scheduled', $draftEdition->fresh()->status);
     }
+
+    public function test_editions_search_and_filter_portal_and_datatable_rendering(): void
+    {
+        // In English
+        $responseEn = $this->actingAs($this->admin)
+            ->withSession(['locale' => 'en'])
+            ->get('/admin/editions');
+
+        $responseEn->assertStatus(200);
+        $responseEn->assertSee('Editions Search &amp; Filter Portal', false);
+        $responseEn->assertSee('data-datatable="true"', false);
+        $responseEn->assertSee('admin-datatable.css');
+        $responseEn->assertSee('admin-datatable.js');
+
+        // In Telugu
+        $responseTe = $this->actingAs($this->admin)
+            ->withSession(['locale' => 'te'])
+            ->get('/admin/editions');
+
+        $responseTe->assertStatus(200);
+        $responseTe->assertSee('సంచికల శోధన &amp; ఫిల్టర్ పోర్టల్', false);
+        $responseTe->assertSee('data-datatable="true"', false);
+    }
 }

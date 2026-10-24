@@ -1,0 +1,279 @@
+/* ===================================================================
+ * VSP TIMES Admin Suite - Universal Auto-DataTable Stylesheet
+ * Responsive, Accessible, and State-Aware Datatable Styling
+ * =================================================================== */
+
+.dt-container {
+    width: 100%;
+    margin-bottom: 24px;
+    background: #FFFFFF;
+    border: 1px solid var(--admin-border, #E2E8F0);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(10, 29, 55, 0.04);
+    transition: box-shadow 0.2s ease;
+}
+
+.dt-container:hover {
+    box-shadow: 0 4px 16px rgba(10, 29, 55, 0.07);
+}
+
+/* --- Top Toolbar (Entries Length & Live Instant Search) --- */
+.dt-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 14px 20px;
+    background: #F8FAFC;
+    border-bottom: 1px solid var(--admin-border, #E2E8F0);
+}
+
+.dt-length {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--admin-muted, #64748B);
+}
+
+.dt-length select {
+    padding: 7px 28px 7px 12px;
+    border: 1px solid #CBD5E1;
+    border-radius: 7px;
+    background: #FFFFFF url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%23475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>') no-repeat right 10px center;
+    background-size: 12px;
+    appearance: none;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--admin-navy, #0A1D37);
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dt-length select:focus {
+    border-color: var(--admin-navy, #0A1D37);
+    box-shadow: 0 0 0 3px rgba(10, 29, 55, 0.1);
+}
+
+.dt-search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 260px;
+    max-width: 340px;
+    flex-grow: 1;
+}
+
+.dt-search-icon {
+    position: absolute;
+    left: 12px;
+    color: #94A3B8;
+    font-size: 13px;
+    pointer-events: none;
+    transition: color 0.2s;
+}
+
+.dt-search-input {
+    width: 100%;
+    padding: 8px 34px 8px 34px;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: var(--admin-navy, #0A1D37);
+    background: #FFFFFF;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.dt-search-input:focus {
+    border-color: var(--admin-navy, #0A1D37);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(10, 29, 55, 0.1);
+}
+
+.dt-search-input:focus + .dt-search-icon,
+.dt-search-wrapper:hover .dt-search-icon {
+    color: var(--admin-red, #D91B24);
+}
+
+.dt-search-clear {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #94A3B8;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 2px 6px;
+    line-height: 1;
+    display: none;
+    border-radius: 50%;
+    transition: color 0.2s, background 0.2s;
+}
+
+.dt-search-clear:hover {
+    color: #DC2626;
+    background: #FEE2E2;
+}
+
+/* --- Sortable Headers --- */
+th.dt-sortable {
+    cursor: pointer !important;
+    user-select: none;
+    position: relative;
+    padding-right: 26px !important;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+th.dt-sortable:hover {
+    background-color: #F1F5F9 !important;
+    color: var(--admin-navy, #0A1D37) !important;
+}
+
+.dt-sort-icon {
+    display: inline-flex;
+    align-items: center;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94A3B8;
+    font-size: 11px;
+    transition: color 0.15s ease, transform 0.15s ease;
+}
+
+th.dt-sort-asc .dt-sort-icon {
+    color: var(--admin-red, #D91B24);
+}
+
+th.dt-sort-desc .dt-sort-icon {
+    color: var(--admin-red, #D91B24);
+}
+
+/* --- No Matching Results Row --- */
+.dt-no-match-card {
+    padding: 48px 20px;
+    text-align: center;
+    color: var(--admin-muted, #64748B);
+}
+
+.dt-no-match-card i {
+    font-size: 36px;
+    color: #CBD5E1;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.dt-no-match-card h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--admin-navy, #0A1D37);
+    margin-bottom: 6px;
+}
+
+.dt-no-match-card p {
+    font-size: 13px;
+    color: var(--admin-muted, #64748B);
+}
+
+/* --- Bottom Toolbar (Info & Interactive Pagination) --- */
+.dt-bottombar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 14px 20px;
+    background: #F8FAFC;
+    border-top: 1px solid var(--admin-border, #E2E8F0);
+}
+
+.dt-info {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--admin-muted, #64748B);
+}
+
+.dt-info strong {
+    color: var(--admin-navy, #0A1D37);
+    font-weight: 700;
+}
+
+.dt-pagination {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dt-page-btn {
+    border: 1px solid #CBD5E1;
+    background: #FFFFFF;
+    color: var(--admin-navy, #0A1D37);
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 7px;
+    min-width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s ease;
+}
+
+.dt-page-btn:hover:not(:disabled):not(.active) {
+    background: #F1F5F9;
+    border-color: #94A3B8;
+    color: var(--admin-navy, #0A1D37);
+    transform: translateY(-1px);
+}
+
+.dt-page-btn.active {
+    background: var(--admin-navy, #0A1D37);
+    color: #FFFFFF;
+    border-color: var(--admin-navy, #0A1D37);
+    box-shadow: 0 2px 8px rgba(10, 29, 55, 0.25);
+    cursor: default;
+}
+
+.dt-page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: #F8FAFC;
+    border-color: #E2E8F0;
+    color: #94A3B8;
+}
+
+.dt-page-ellipsis {
+    color: #94A3B8;
+    padding: 0 4px;
+    font-weight: 700;
+    font-size: 13px;
+    user-select: none;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .dt-topbar,
+    .dt-bottombar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .dt-search-wrapper {
+        max-width: 100%;
+    }
+    .dt-pagination {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
