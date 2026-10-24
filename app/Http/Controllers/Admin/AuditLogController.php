@@ -17,7 +17,7 @@ class AuditLogController extends Controller
             ->when($action, fn ($q) => $q->where('action', $action))
             ->when($search, function ($q) use ($search) {
                 $q->where('notes', 'like', "%{$search}%")
-                  ->orWhereHas('user', fn ($uq) => $uq->where('name', 'like', "%{$search}%"));
+                    ->orWhereHas('user', fn ($uq) => $uq->where('name', 'like', "%{$search}%"));
             })
             ->latest();
 

@@ -71,7 +71,7 @@ class EpaperAdminController extends Controller
                         ->orWhere('issue_number', 'like', "%{$search}%")
                         ->orWhereHas('region', function ($r) use ($search) {
                             $r->where('name', 'like', "%{$search}%")
-                              ->orWhere('name_te', 'like', "%{$search}%");
+                                ->orWhere('name_te', 'like', "%{$search}%");
                         });
                 });
             })
@@ -105,6 +105,7 @@ class EpaperAdminController extends Controller
     public function create()
     {
         $regions = EpaperRegion::active()->get();
+
         return view('admin.editions.create', compact('regions'));
     }
 
@@ -126,7 +127,7 @@ class EpaperAdminController extends Controller
         $region = EpaperRegion::findOrFail($validated['region_id']);
         $date = Carbon::parse($validated['edition_date']);
         $dateString = $date->toDateString();
-        $editionCode = $date->format('Y-m-d') . '-' . $region->slug;
+        $editionCode = $date->format('Y-m-d').'-'.$region->slug;
 
         // Duplicate Check: Same region on same date (including soft-deleted / trashed records)
         $existing = EpaperEdition::withTrashed()
@@ -140,7 +141,7 @@ class EpaperAdminController extends Controller
                 $existing->forceDelete();
             } else {
                 return back()->withInput()->withErrors([
-                    'edition_date' => 'ఎంచుకున్న ప్రాంతానికి ఈ తేదీన (' . $date->format('d-m-Y') . ') ఇప్పటికే ఒక సంచిక సృష్టించబడింది. దయచేసి ఉన్న సంచికను సవరించండి లేదా వేరొక తేదీని ఎంచుకోండి. (An edition already exists for this date and region).',
+                    'edition_date' => 'ఎంచుకున్న ప్రాంతానికి ఈ తేదీన ('.$date->format('d-m-Y').') ఇప్పటికే ఒక సంచిక సృష్టించబడింది. దయచేసి ఉన్న సంచికను సవరించండి లేదా వేరొక తేదీని ఎంచుకోండి. (An edition already exists for this date and region).',
                 ]);
             }
         }
@@ -189,6 +190,7 @@ class EpaperAdminController extends Controller
 
         if (! $success) {
             $edition->forceDelete();
+
             return back()->withInput()->withErrors(['pdf_file' => 'పీడీఎఫ్ పేజీలను ప్రాసెస్ చేయడం విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి.']);
         }
 
@@ -211,7 +213,7 @@ class EpaperAdminController extends Controller
             $edition->approved_by = Auth::id();
             $edition->save();
 
-            $edition->recordWorkflow('schedule', 'draft', 'scheduled', 'Scheduled on upload for 5:00 AM IST on ' . $dateString, Auth::id());
+            $edition->recordWorkflow('schedule', 'draft', 'scheduled', 'Scheduled on upload for 5:00 AM IST on '.$dateString, Auth::id());
             $successMsg = app()->getLocale() === 'en'
                 ? "Edition uploaded and scheduled for 5:00 AM on {$dateString}. Total {$edition->total_pages} pages ready."
                 : "సంచిక విజయవంతంగా అప్‌లోడ్ చేయబడింది మరియు {$dateString} ఉదయం 5:00 AM కి షెడ్యూల్ చేయబడింది. మొత్తం {$edition->total_pages} పేజీలు సిద్ధమయ్యాయి.";
@@ -288,6 +290,7 @@ class EpaperAdminController extends Controller
                 'published_at' => now(),
             ]);
             $edition->recordWorkflow('approve_and_publish', $fromStatus, 'published', $notes, Auth::id());
+
             return back()->with('success', app()->getLocale() === 'en' ? 'Edition approved and published live!' : 'సంచిక ఆమోదించబడి లైవ్ చేయబడింది.');
         }
 

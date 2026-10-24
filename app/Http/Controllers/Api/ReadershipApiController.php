@@ -36,8 +36,8 @@ class ReadershipApiController extends Controller
             'page_number' => 'nullable|integer|min:1|max:200',
         ]);
 
-        $edition = ! empty($validated['edition_id']) 
-            ? EpaperEdition::find($validated['edition_id']) 
+        $edition = ! empty($validated['edition_id'])
+            ? EpaperEdition::find($validated['edition_id'])
             : null;
 
         $event = $this->analyticsService->recordEvent(

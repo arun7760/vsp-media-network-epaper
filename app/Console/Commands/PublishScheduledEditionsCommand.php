@@ -27,6 +27,7 @@ class PublishScheduledEditionsCommand extends Command
 
         if ($editions->isEmpty()) {
             $this->info('No pending scheduled editions found for release.');
+
             return 0;
         }
 
@@ -39,6 +40,7 @@ class PublishScheduledEditionsCommand extends Command
                 $this->warn("Skipping Edition ID {$edition->id} ({$edition->title}): Lacks editorial approval.");
                 Log::warning("E-Paper Publish: Edition ID {$edition->id} skipped because approved_by is missing.");
                 $skippedCount++;
+
                 continue;
             }
 
@@ -47,6 +49,7 @@ class PublishScheduledEditionsCommand extends Command
                 $this->warn("Skipping Edition ID {$edition->id} ({$edition->title}): No processed broadsheet pages found.");
                 Log::warning("E-Paper Publish: Edition ID {$edition->id} skipped because no pages are processed.");
                 $skippedCount++;
+
                 continue;
             }
 
@@ -56,12 +59,14 @@ class PublishScheduledEditionsCommand extends Command
                 $this->error("Skipping Edition ID {$edition->id} ({$edition->title}): Contains failed page conversions.");
                 Log::error("E-Paper Publish: Edition ID {$edition->id} skipped because pages failed conversion.");
                 $skippedCount++;
+
                 continue;
             }
 
             if ($this->option('dry-run')) {
                 $this->line("[Dry Run] Would publish Edition ID {$edition->id}: {$edition->title}");
                 $publishedCount++;
+
                 continue;
             }
 
@@ -86,6 +91,7 @@ class PublishScheduledEditionsCommand extends Command
         }
 
         $this->info("Execution complete: {$publishedCount} published, {$skippedCount} skipped.");
+
         return 0;
     }
 }

@@ -53,7 +53,8 @@ class EpaperPage extends Model
             if (str_starts_with($this->image_path, 'http://') || str_starts_with($this->image_path, 'https://')) {
                 return $this->image_path;
             }
-            return '/' . ltrim($this->image_path, '/');
+
+            return '/'.ltrim($this->image_path, '/');
         }
 
         return '/images/epaper-page-placeholder.png';
@@ -65,7 +66,8 @@ class EpaperPage extends Model
             if (str_starts_with($this->thumbnail_path, 'http://') || str_starts_with($this->thumbnail_path, 'https://')) {
                 return $this->thumbnail_path;
             }
-            return '/' . ltrim($this->thumbnail_path, '/');
+
+            return '/'.ltrim($this->thumbnail_path, '/');
         }
 
         return $this->image_url;
@@ -81,6 +83,6 @@ class EpaperPage extends Model
             return $this->page_pdf_path;
         }
 
-        return '/' . ltrim($this->page_pdf_path, '/');
+        return '/'.ltrim($this->page_pdf_path, '/');
     }
 }

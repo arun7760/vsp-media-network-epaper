@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -104,7 +103,8 @@ class EpaperEdition extends Model
             if (str_starts_with($this->cover_image_path, 'http://') || str_starts_with($this->cover_image_path, 'https://')) {
                 return $this->cover_image_path;
             }
-            return '/' . ltrim($this->cover_image_path, '/');
+
+            return '/'.ltrim($this->cover_image_path, '/');
         }
 
         $firstPage = $this->pages->first();
@@ -121,7 +121,8 @@ class EpaperEdition extends Model
             if (str_starts_with($this->cover_thumbnail_path, 'http://') || str_starts_with($this->cover_thumbnail_path, 'https://')) {
                 return $this->cover_thumbnail_path;
             }
-            return '/' . ltrim($this->cover_thumbnail_path, '/');
+
+            return '/'.ltrim($this->cover_thumbnail_path, '/');
         }
 
         return $this->cover_url;
@@ -133,7 +134,8 @@ class EpaperEdition extends Model
             if (str_starts_with($this->master_pdf_path, 'http://') || str_starts_with($this->master_pdf_path, 'https://')) {
                 return $this->master_pdf_path;
             }
-            return '/' . ltrim($this->master_pdf_path, '/');
+
+            return '/'.ltrim($this->master_pdf_path, '/');
         }
 
         return null;
@@ -141,7 +143,7 @@ class EpaperEdition extends Model
 
     public function getDisplayTitleAttribute(): string
     {
-        if (app()->getLocale() === 'en' && !empty($this->title_en)) {
+        if (app()->getLocale() === 'en' && ! empty($this->title_en)) {
             return $this->title_en;
         }
 

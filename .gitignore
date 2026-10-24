@@ -58,3 +58,6 @@ Homestead.json
 Homestead.yaml
 /storage/*.key
 /storage/pail
+.claude/
+.mcp.json
+boost.json

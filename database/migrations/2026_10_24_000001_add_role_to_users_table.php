@@ -10,13 +10,13 @@ return new class extends Migration
     {
         if (Schema::hasTable('users')) {
             Schema::table('users', function (Blueprint $table) {
-                if (!Schema::hasColumn('users', 'role')) {
+                if (! Schema::hasColumn('users', 'role')) {
                     $table->string('role', 30)->default('editor')->after('email')->index();
                 }
-                if (!Schema::hasColumn('users', 'is_active')) {
+                if (! Schema::hasColumn('users', 'is_active')) {
                     $table->boolean('is_active')->default(true)->after('role')->index();
                 }
-                if (!Schema::hasColumn('users', 'last_login_at')) {
+                if (! Schema::hasColumn('users', 'last_login_at')) {
                     $table->timestamp('last_login_at')->nullable()->after('is_active');
                 }
             });
@@ -37,7 +37,7 @@ return new class extends Migration
                 if (Schema::hasColumn('users', 'last_login_at')) {
                     $dropColumns[] = 'last_login_at';
                 }
-                if (!empty($dropColumns)) {
+                if (! empty($dropColumns)) {
                     $table->dropColumn($dropColumns);
                 }
             });

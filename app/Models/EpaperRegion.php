@@ -38,7 +38,7 @@ class EpaperRegion extends Model
 
     public function getDisplayNameAttribute(): string
     {
-        if (app()->getLocale() === 'en' && !empty($this->name_en)) {
+        if (app()->getLocale() === 'en' && ! empty($this->name_en)) {
             return $this->name_en;
         }
 

@@ -13,7 +13,9 @@ class BilingualLocalizationTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected EpaperRegion $region;
+
     protected EpaperEdition $edition;
 
     protected function setUp(): void

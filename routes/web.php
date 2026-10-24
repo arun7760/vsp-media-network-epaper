@@ -1,7 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\EpaperAdminController;
+use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Api\ReadershipApiController;
 use App\Http\Controllers\PublicEpaperController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,12 +26,15 @@ Route::get('/locale/{lang}', function ($lang) {
     if (in_array($lang, ['te', 'en'], true)) {
         session(['locale' => $lang]);
     }
+
     return back();
 })->name('locale.switch');
 
 // Readership Analytics & Counter APIs
-Route::get('/api/readership/today', [\App\Http\Controllers\Api\ReadershipApiController::class, 'getToday'])->name('api.readership.today');
-Route::post('/api/track/event', [\App\Http\Controllers\Api\ReadershipApiController::class, 'recordEvent'])->name('api.track.event');
+Route::get('/api/readership/today', [ReadershipApiController::class, 'getToday'])->name('api.readership.today');
+Route::post('/api/track/event', [ReadershipApiController::class, 'recordEvent'])
+    ->middleware('throttle:60,1')
+    ->name('api.track.event');
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +45,9 @@ Route::get('/login', fn () => redirect()->route('admin.login'))->name('login');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+    Route::post('/login', [AuthController::class, 'login'])
+        ->middleware('throttle:10,1')
+        ->name('login.submit');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
@@ -48,11 +58,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 */
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'active'])->group(function () {
     Route::get('/dashboard', [EpaperAdminController::class, 'dashboard'])->name('dashboard');
-    Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('analytics.index');
+    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
 
     // Editions Management
     Route::get('/editions', [EpaperAdminController::class, 'index'])->name('editions.index');
-    
+
     // Upload & Create (SuperAdmin, Admin, Editor)
     Route::get('/editions/create', [EpaperAdminController::class, 'create'])
         ->name('editions.create')
@@ -104,33 +114,34 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'active'])->group(fu
         if (in_array($lang, ['te', 'en'], true)) {
             session(['locale' => $lang]);
         }
+
         return back();
     })->name('locale.switch');
 
     // User & Role Management (Super Admin, Admin)
-    Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])
+    Route::get('/users', [UserController::class, 'index'])
         ->name('users.index')
         ->middleware('role:super_admin,admin');
-    Route::post('/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])
+    Route::post('/users', [UserController::class, 'store'])
         ->name('users.store')
         ->middleware('role:super_admin,admin');
-    Route::put('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'update'])
+    Route::put('/users/{user}', [UserController::class, 'update'])
         ->name('users.update')
         ->middleware('role:super_admin,admin');
-    Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])
         ->name('users.destroy')
         ->middleware('role:super_admin,admin');
 
     // Audit Logs (Super Admin, Admin)
-    Route::get('/audit-logs', [\App\Http\Controllers\Admin\AuditLogController::class, 'index'])
+    Route::get('/audit-logs', [AuditLogController::class, 'index'])
         ->name('audit-logs.index')
         ->middleware('role:super_admin,admin');
 
     // System Settings (Super Admin, Admin)
-    Route::get('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'index'])
+    Route::get('/settings', [SettingsController::class, 'index'])
         ->name('settings.index')
         ->middleware('role:super_admin,admin');
-    Route::post('/settings', [\App\Http\Controllers\Admin\SettingsController::class, 'update'])
+    Route::post('/settings', [SettingsController::class, 'update'])
         ->name('settings.update')
         ->middleware('role:super_admin,admin');
 });

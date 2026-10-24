@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\EpaperEdition;
-use App\Models\EpaperPage;
 use App\Models\EpaperRegion;
 use App\Services\ReadershipAnalyticsService;
 use Carbon\Carbon;
@@ -15,6 +14,7 @@ class PublicEpaperController extends Controller
     public function __construct(
         protected ReadershipAnalyticsService $analyticsService
     ) {}
+
     /**
      * E-Paper Public Homepage - Today's Edition & Regional Showcase
      */

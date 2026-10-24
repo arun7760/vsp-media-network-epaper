@@ -44,6 +44,7 @@ class ReadershipAnalyticsService
         if (str_contains($ua, 'mobile') || str_contains($ua, 'android') || str_contains($ua, 'iphone') || str_contains($ua, 'ipod')) {
             return 'mobile';
         }
+
         return 'desktop';
     }
 
@@ -97,6 +98,7 @@ class ReadershipAnalyticsService
                 return true;
             }
         }
+
         return false;
     }
 
@@ -121,7 +123,7 @@ class ReadershipAnalyticsService
         $today = $this->getTodayDate();
 
         // 3. Deduplicate rapid duplicate hits within 15 seconds
-        $debounceKey = "event_debounce_{$visitorToken}_{$eventType}_" . ($edition ? $edition->id : 'site') . "_{$pageNumber}";
+        $debounceKey = "event_debounce_{$visitorToken}_{$eventType}_".($edition ? $edition->id : 'site')."_{$pageNumber}";
         if (Cache::has($debounceKey)) {
             return null;
         }
@@ -157,7 +159,7 @@ class ReadershipAnalyticsService
     {
         $today = $this->getTodayDate();
         $ttl = config('analytics.cache_ttl_seconds', 900);
-        $cacheKey = "epaper_readership_today_{$today}_" . ($editionId ?: 'default');
+        $cacheKey = "epaper_readership_today_{$today}_".($editionId ?: 'default');
 
         return Cache::remember($cacheKey, $ttl, function () use ($today, $editionId) {
             $query = EpaperReaderEvent::where('event_date', $today);
@@ -208,11 +210,12 @@ class ReadershipAnalyticsService
     public function formatNumber(int $num): string
     {
         if ($num >= 1000000) {
-            return round($num / 1000000, 1) . 'M';
+            return round($num / 1000000, 1).'M';
         }
         if ($num >= 10000) {
-            return round($num / 1000, 1) . 'K';
+            return round($num / 1000, 1).'K';
         }
+
         return number_format($num);
     }
 

@@ -17,6 +17,7 @@ class CheckRole
 
         if (! $user || ! $user->is_active) {
             auth()->logout();
+
             return redirect()->route('admin.login')->withErrors(['email' => 'మీ ఖాతా లాగిన్ చేయబడలేదు లేదా నిలిపివేయబడింది.']);
         }
 

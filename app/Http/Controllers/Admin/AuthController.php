@@ -31,6 +31,7 @@ class AuthController extends Controller
 
             if (! $user->is_active) {
                 Auth::logout();
+
                 return back()->withErrors(['email' => 'మీ ఖాతా ప్రస్తుతం నిలిపివేయబడింది. అడ్మినిస్ట్రేటర్‌ను సంప్రదించండి.']);
             }
 
@@ -38,7 +39,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             return redirect()->intended(route('admin.dashboard'))
-                ->with('success', 'లాగిన్ విజయవంతమైంది. స్వాగతం, ' . $user->name);
+                ->with('success', 'లాగిన్ విజయవంతమైంది. స్వాగతం, '.$user->name);
         }
 
         return back()->withErrors([

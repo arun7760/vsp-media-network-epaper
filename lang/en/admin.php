@@ -16,7 +16,7 @@ return [
     'view_live_epaper' => 'View Live E-Paper',
     'view_live_website' => 'View Live Website',
     'logout' => 'Logout',
-    
+
     // Navigation Headings
     'nav_overview' => 'Overview',
     'nav_management' => 'Management',

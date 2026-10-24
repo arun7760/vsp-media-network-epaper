@@ -152,7 +152,7 @@ class EpaperPlatformTest extends TestCase
 
     public function test_scheduled_publication_command_publishes_approved_ready_editions(): void
     {
-        $user = \App\Models\User::factory()->create();
+        $user = User::factory()->create();
         $tomorrow = Carbon::tomorrow();
 
         // Create an edition scheduled for tomorrow 5:00 AM IST
@@ -483,7 +483,7 @@ class EpaperPlatformTest extends TestCase
         $editor = User::factory()->create(['role' => 'editor', 'is_active' => true]);
 
         // Create a copy to simulate uploaded file
-        $tempPath = tempnam(sys_get_temp_dir(), 'vsp_test_') . '.pdf';
+        $tempPath = tempnam(sys_get_temp_dir(), 'vsp_test_').'.pdf';
         copy($fixturePath, $tempPath);
 
         $uploadedFile = new UploadedFile($tempPath, 'vsp_times_edition_oct2026.pdf', 'application/pdf', null, true);
@@ -550,7 +550,7 @@ class EpaperPlatformTest extends TestCase
     public function test_duplicate_edition_date_upload_returns_validation_error_gracefully(): void
     {
         $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
-        $pdfFile = \Illuminate\Http\UploadedFile::fake()->createWithContent('oct_edition.pdf', "%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF");
+        $pdfFile = UploadedFile::fake()->createWithContent('oct_edition.pdf', "%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF");
 
         // Try to upload an edition with the exact same region and date as $this->publishedEdition
         $response = $this->actingAs($admin)->post(route('admin.editions.store'), [
@@ -567,7 +567,7 @@ class EpaperPlatformTest extends TestCase
     public function test_uploading_previously_deleted_date_succeeds_without_unique_constraint_violation(): void
     {
         $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
-        $pdfFile = \Illuminate\Http\UploadedFile::fake()->createWithContent('oct22_edition.pdf', "%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF");
+        $pdfFile = UploadedFile::fake()->createWithContent('oct22_edition.pdf', "%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<< /Root 1 0 R >>\n%%EOF");
 
         // First, soft delete the draft edition
         $dateToReuse = $this->draftEdition->edition_date->toDateString();
@@ -590,5 +590,3 @@ class EpaperPlatformTest extends TestCase
         ]);
     }
 }
-
-

@@ -57,14 +57,14 @@ class EpaperPdfService
         // Method A: Imagick ping if available
         if (extension_loaded('imagick')) {
             try {
-                $im = new \Imagick();
+                $im = new \Imagick;
                 $im->pingImage($absolutePath);
                 $count = $im->getNumberImages();
                 if ($count > 0) {
                     return $count;
                 }
             } catch (\Throwable $e) {
-                Log::warning("Imagick ping failed, falling back to binary parser: " . $e->getMessage());
+                Log::warning('Imagick ping failed, falling back to binary parser: '.$e->getMessage());
             }
         }
 
@@ -87,7 +87,7 @@ class EpaperPdfService
                 return $count;
             }
         } catch (\Throwable $e) {
-            Log::error("PDF page count extraction error: " . $e->getMessage());
+            Log::error('PDF page count extraction error: '.$e->getMessage());
         }
 
         return 1; // Default minimum 1 page
@@ -100,12 +100,12 @@ class EpaperPdfService
     {
         try {
             // 1. Store original PDF in private staging storage (preserved forever)
-            $safeName = 'master_' . time() . '_' . Str::random(8) . '.pdf';
+            $safeName = 'master_'.time().'_'.Str::random(8).'.pdf';
             $stagedPath = $file->storeAs("epaper/staging/{$edition->id}", $safeName, 'local');
 
             // 2. Also place a derived copy in public storage for reader download
-            $publicPath = "storage/epaper/editions/" . $edition->edition_date->format('Y/m') . "/vsp_{$edition->id}_{$edition->region->slug}.pdf";
-            $publicStorageDir = public_path("storage/epaper/editions/" . $edition->edition_date->format('Y/m'));
+            $publicPath = 'storage/epaper/editions/'.$edition->edition_date->format('Y/m')."/vsp_{$edition->id}_{$edition->region->slug}.pdf";
+            $publicStorageDir = public_path('storage/epaper/editions/'.$edition->edition_date->format('Y/m'));
             if (! File::exists($publicStorageDir)) {
                 File::makeDirectory($publicStorageDir, 0755, true);
             }
@@ -175,7 +175,8 @@ class EpaperPdfService
 
             return true;
         } catch (\Throwable $e) {
-            Log::error("E-Paper Processing Failed for Edition ID {$edition->id}: " . $e->getMessage());
+            Log::error("E-Paper Processing Failed for Edition ID {$edition->id}: ".$e->getMessage());
+
             return false;
         }
     }
