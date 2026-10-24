@@ -139,6 +139,15 @@ class EpaperEdition extends Model
         return null;
     }
 
+    public function getDisplayTitleAttribute(): string
+    {
+        if (app()->getLocale() === 'en' && !empty($this->title_en)) {
+            return $this->title_en;
+        }
+
+        return $this->title;
+    }
+
     public function getTeluguDateStringAttribute(): string
     {
         if (! $this->edition_date) {

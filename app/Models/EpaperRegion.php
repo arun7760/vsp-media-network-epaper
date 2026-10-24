@@ -35,4 +35,13 @@ class EpaperRegion extends Model
     {
         return $query->where('is_active', true)->orderBy('display_order');
     }
+
+    public function getDisplayNameAttribute(): string
+    {
+        if (app()->getLocale() === 'en' && !empty($this->name_en)) {
+            return $this->name_en;
+        }
+
+        return $this->name;
+    }
 }

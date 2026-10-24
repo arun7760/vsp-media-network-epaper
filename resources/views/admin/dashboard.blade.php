@@ -373,7 +373,7 @@
                 <div class="stat-number">{{ $metrics['total_editions'] }}</div>
             </div>
             <div class="stat-footer-badge badge-soft-blue">
-                <i class="fa-solid fa-layer-group"></i> All Broadsheet Issues
+                <i class="fa-solid fa-layer-group"></i> {{ __('admin.badge_all_broadsheets') }}
             </div>
         </div>
 
@@ -390,7 +390,7 @@
                 <div class="stat-number">{{ $metrics['published_editions'] }}</div>
             </div>
             <div class="stat-footer-badge badge-soft-green">
-                <i class="fa-solid fa-circle-dot"></i> Live for Public Readers
+                <i class="fa-solid fa-circle-dot"></i> {{ __('admin.badge_live_readers') }}
             </div>
         </div>
 
@@ -407,7 +407,7 @@
                 <div class="stat-number">{{ $metrics['pending_approvals'] }}</div>
             </div>
             <div class="stat-footer-badge badge-soft-amber">
-                <i class="fa-solid fa-user-check"></i> Requires Review
+                <i class="fa-solid fa-user-check"></i> {{ __('admin.badge_requires_review') }}
             </div>
         </div>
 
@@ -424,7 +424,7 @@
                 <div class="stat-number">{{ $metrics['scheduled_editions'] }}</div>
             </div>
             <div class="stat-footer-badge badge-soft-indigo">
-                <i class="fa-solid fa-robot"></i> 5:00 AM Cron Release
+                <i class="fa-solid fa-robot"></i> {{ __('admin.badge_cron_release') }}
             </div>
         </div>
 
@@ -441,7 +441,7 @@
                 <div class="stat-number">{{ number_format($metrics['total_views']) }}</div>
             </div>
             <div class="stat-footer-badge badge-soft-rose">
-                <i class="fa-solid fa-chart-line"></i> GA4 &amp; Real-time Views
+                <i class="fa-solid fa-chart-line"></i> {{ __('admin.badge_realtime_views') }}
             </div>
         </div>
     </div>
@@ -451,7 +451,7 @@
         <div>
             <div class="desk-header-tag">
                 <i class="fa-solid fa-newspaper" style="color: var(--admin-red);"></i>
-                DAILY BROADSHEET PUBLISHING DESK &bull; LIVE CMS
+                {{ __('admin.publishing_desk_badge') }}
             </div>
             <h3 class="desk-heading">
                 {{ __('admin.ready_upload_title') }}
@@ -506,8 +506,8 @@
                             @foreach($pendingEditions as $pe)
                                 <tr>
                                     <td>
-                                        <strong>{{ $pe->region->name }}</strong>
-                                        <div style="font-size: 12px; color: var(--admin-muted);">{{ $pe->title }}</div>
+                                        <strong>{{ $pe->region->display_name }}</strong>
+                                        <div style="font-size: 12px; color: var(--admin-muted);">{{ $pe->display_title }}</div>
                                     </td>
                                     <td>{{ $pe->edition_date->format('d M Y') }}</td>
                                     <td>{{ $pe->creator?->name ?? 'Editor' }}</td>
@@ -527,10 +527,10 @@
                         <i class="fa-solid fa-check"></i>
                     </div>
                     <h4 style="font-size: 15px; font-weight: 700; color: #0F172A; margin-bottom: 4px;">
-                        అన్ని సంచికలు ఆమోదించబడ్డాయి!
+                        {{ __('admin.all_editions_approved') }}
                     </h4>
                     <p style="font-size: 13px; color: #64748B; margin: 0;">
-                        ప్రస్తుతం ఎలాంటి పెండింగ్ సంచికలు లేవు. అన్నీ తాజాగా ప్రచురించబడ్డాయి.
+                        {{ __('admin.no_pending_editions') }}
                     </p>
                 </div>
             @endif

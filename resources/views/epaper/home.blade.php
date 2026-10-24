@@ -337,7 +337,7 @@
                 <img id="hero-cover-img" src="{{ $edition->cover_url }}" alt="{{ $edition->title }}" onerror="this.src='/images/logo.png';">
                 <span class="live-badge-overlay">
                     <span class="live-badge-dot"></span>
-                    <span>{{ $edition->total_pages }} {{ __('epaper.pages') }} &bull; లైవ్</span>
+                    <span>{{ $edition->total_pages }} {{ __('epaper.pages') }} &bull; {{ app()->getLocale() === 'en' ? 'Live' : 'లైవ్' }}</span>
                 </span>
             </div>
 
@@ -345,14 +345,14 @@
             <div class="edition-details">
                 <div class="hero-kicker-strip">
                     <span class="kicker-tag kicker-red">
-                        <i class="fa-solid fa-newspaper"></i> {{ $edition->region->name ?? __('epaper.main_edition') }}
+                        <i class="fa-solid fa-newspaper"></i> {{ $edition->region?->display_name ?? __('epaper.main_edition') }}
                     </span>
                     <span class="kicker-tag kicker-blue">
-                        <i class="fa-solid fa-bolt"></i> డిజిటల్ లైవ్ ఎడిషన్
+                        <i class="fa-solid fa-bolt"></i> {{ app()->getLocale() === 'en' ? 'Digital Live Edition' : 'డిజిటల్ లైవ్ ఎడిషన్' }}
                     </span>
                 </div>
 
-                <h1 class="hero-edition-title">{{ $edition->title }}</h1>
+                <h1 class="hero-edition-title">{{ $edition->display_title }}</h1>
 
                 <div class="edition-meta-strip">
                     <div class="meta-pill">
@@ -362,18 +362,18 @@
                     @if($edition->volume_number)
                         <div class="meta-pill">
                             <i class="fa-solid fa-layer-group" style="color: var(--epaper-blue);"></i>
-                            <span>{{ $edition->volume_number }}</span>
+                            <span>{{ app()->getLocale() === 'en' ? str_replace('సంపుటి', 'Vol', $edition->volume_number) : $edition->volume_number }}</span>
                         </div>
                     @endif
                     @if($edition->issue_number)
                         <div class="meta-pill">
                             <i class="fa-regular fa-bookmark" style="color: #D97706;"></i>
-                            <span>{{ $edition->issue_number }}</span>
+                            <span>{{ app()->getLocale() === 'en' ? str_replace('సంచిక', 'Issue', $edition->issue_number) : $edition->issue_number }}</span>
                         </div>
                     @endif
                     <div class="meta-pill">
                         <i class="fa-regular fa-eye" style="color: #059669;"></i>
-                        <span><strong>{{ number_format($edition->views_count) }}</strong> పాఠకులు</span>
+                        <span><strong>{{ number_format($edition->views_count) }}</strong> {{ app()->getLocale() === 'en' ? 'Readers' : 'పాఠకులు' }}</span>
                     </div>
                 </div>
 
@@ -394,13 +394,13 @@
                 <div>
                     <div class="page-rail-heading">
                         <i class="fa-solid fa-hand-pointer"></i>
-                        <span>నేరుగా పేజీని ఎంచుకోండి (Quick Page Jump):</span>
+                        <span>{{ app()->getLocale() === 'en' ? 'Quick Page Jump:' : 'నేరుగా పేజీని ఎంచుకోండి (Quick Page Jump):' }}</span>
                     </div>
                     <div class="page-quick-jump">
                         @foreach($edition->pages as $page)
                             <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $page->page_number]) }}" class="page-jump-chip">
                                 <i class="fa-regular fa-file-lines"></i>
-                                <span>పేజీ {{ $page->page_number }}</span>
+                                <span>{{ __('epaper.page') }} {{ $page->page_number }}</span>
                             </a>
                         @endforeach
                     </div>
@@ -412,13 +412,13 @@
         <div style="background: #FFFFFF; border-radius: 16px; padding: 60px 24px; text-align: center; border: 1px solid #E2E8F0; box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
             <i class="fa-regular fa-newspaper" style="font-size: 56px; color: #94A3B8; margin-bottom: 16px;"></i>
             <h2 style="font-size: 22px; font-weight: 800; color: var(--epaper-navy); margin-bottom: 8px;">
-                ఈ తేదీకి సంచిక ఇంకా ప్రచురించబడలేదు
+                {{ __('epaper.no_edition_for_date') }}
             </h2>
             <p style="color: #64748B; font-size: 15px; margin-bottom: 24px;">
-                దయచేసి ఆర్కైవ్ నుండి మునుపటి తేదీల దినపత్రికలను ఎంచుకోండి.
+                {{ __('epaper.choose_another_date') }}
             </p>
             <a href="{{ route('epaper.archive') }}" class="btn-read-now" style="display: inline-flex;">
-                <i class="fa-solid fa-box-archive"></i> ఆర్కైవ్ చూడండి
+                <i class="fa-solid fa-box-archive"></i> {{ __('epaper.browse_archive') }}
             </a>
         </div>
     @endif
@@ -429,10 +429,10 @@
             <div class="strip-header">
                 <div class="strip-title">
                     <i class="fa-regular fa-calendar-days" style="color: var(--epaper-red);"></i>
-                    <span>మునుపటి దినపత్రికలు (Recent Editions Archive):</span>
+                    <span>{{ app()->getLocale() === 'en' ? 'Recent Editions Archive:' : 'మునుపటి దినపత్రికలు (Recent Editions Archive):' }}</span>
                 </div>
                 <a href="{{ route('epaper.archive') }}" class="strip-link">
-                    <span>పూర్తి ఆర్కైవ్ క్యాలెండర్</span>
+                    <span>{{ app()->getLocale() === 'en' ? 'Full Archive Calendar' : 'పూర్తి ఆర్కైవ్ క్యాలెండర్' }}</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
@@ -442,7 +442,7 @@
                     <a href="{{ route('epaper.edition', $re) }}" class="recent-date-card">
                         <span class="recent-date-day">{{ $re->edition_date->format('D') }}</span>
                         <span class="recent-date-num">{{ $re->edition_date->format('d M Y') }}</span>
-                        <span style="font-size: 11px; color: var(--epaper-red); font-weight: 700; margin-top: 4px;">{{ $re->total_pages }} పేజీలు</span>
+                        <span style="font-size: 11px; color: var(--epaper-red); font-weight: 700; margin-top: 4px;">{{ $re->total_pages }} {{ __('epaper.pages') }}</span>
                     </a>
                 @endforeach
             </div>

@@ -210,16 +210,16 @@
                                     <img src="{{ $ed->cover_url }}" alt="{{ $ed->title }}" class="thumb-mini" onerror="this.src='/images/logo.png';">
                                 </td>
                                 <td>
-                                    <strong style="color: var(--admin-navy); font-size: 15px;">{{ $ed->title }}</strong>
+                                    <strong style="color: var(--admin-navy); font-size: 15px;">{{ $ed->display_title }}</strong>
                                     <div style="font-size: 12px; color: var(--admin-muted);">
-                                        {{ $ed->volume_number }} &bull; {{ $ed->issue_number }}
+                                        {{ app()->getLocale() === 'en' ? str_replace(['సంపుటి', 'సంచిక'], ['Vol', 'Issue'], $ed->volume_number . ' • ' . $ed->issue_number) : $ed->volume_number . ' • ' . $ed->issue_number }}
                                     </div>
                                 </td>
                                 <td>
-                                    <span style="font-weight: 700; color: #0284C7;">{{ $ed->region->name }}</span>
+                                    <span style="font-weight: 700; color: #0284C7;">{{ $ed->region->display_name }}</span>
                                 </td>
                                 <td>{{ $ed->edition_date->format('d M Y') }}</td>
-                                <td><strong>{{ $ed->total_pages }}</strong> పేజీలు</td>
+                                <td><strong>{{ $ed->total_pages }}</strong> {{ __('admin.pages') }}</td>
                                 <td>
                                     <span class="badge-status badge-{{ $ed->status }}">
                                         {{ str_replace('_', ' ', $ed->status) }}
@@ -227,12 +227,12 @@
                                 </td>
                                 <td>{{ number_format($ed->views_count) }}</td>
                                 <td style="text-align: right; white-space: nowrap;">
-                                    <a href="{{ route('admin.editions.edit', $ed) }}" class="btn-admin btn-outline" style="padding: 5px 12px; font-size: 12px;" title="సవరించండి / సమీక్షించండి">
-                                        <i class="fa-solid fa-pen-to-square"></i> ఎడిటర్
+                                    <a href="{{ route('admin.editions.edit', $ed) }}" class="btn-admin btn-outline" style="padding: 5px 12px; font-size: 12px;" title="{{ __('admin.edit') }}">
+                                        <i class="fa-solid fa-pen-to-square"></i> {{ __('admin.editor') }}
                                     </a>
 
                                     @if($ed->isPublished())
-                                        <a href="{{ route('epaper.reader', $ed) }}" target="_blank" class="btn-admin btn-outline" style="padding: 5px 10px; font-size: 12px; color: #10B981;" title="లైవ్ రీడర్ చూడండి">
+                                        <a href="{{ route('epaper.reader', $ed) }}" target="_blank" class="btn-admin btn-outline" style="padding: 5px 10px; font-size: 12px; color: #10B981;" title="{{ __('admin.view') }}">
                                             <i class="fa-solid fa-eye"></i>
                                         </a>
                                     @endif
@@ -241,7 +241,7 @@
                                         <button type="button" 
                                                 class="btn-admin btn-outline" 
                                                 style="padding: 5px 10px; font-size: 12px; color: #DC2626;" 
-                                                title="తొలగించండి (Delete)"
+                                                title="{{ __('admin.delete') }}"
                                                 onclick="openDeleteEditionModal('{{ route('admin.editions.destroy', $ed) }}', '{{ addslashes($ed->title) }}', '{{ $ed->edition_date->format('d M Y') }}', '{{ addslashes($ed->region->name) }}')">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>

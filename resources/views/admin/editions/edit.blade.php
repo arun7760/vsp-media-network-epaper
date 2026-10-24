@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'సంచిక ఎడిటర్ - ' . $edition->title)
-@section('header_title', 'సంచిక నిర్వహణ & ఎడిటర్ (Edition Editor)')
+@section('title', (app()->getLocale() === 'en' ? 'Edition Editor - ' : 'సంచిక ఎడిటర్ - ') . $edition->display_title)
+@section('header_title', app()->getLocale() === 'en' ? 'Edition Editor & Management' : 'సంచిక నిర్వహణ & ఎడిటర్ (Edition Editor)')
 
 @section('content')
 <div>
@@ -9,32 +9,32 @@
     <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px;">
         <div style="display: flex; align-items: center; gap: 14px;">
             <a href="{{ route('admin.editions.index') }}" class="btn-admin btn-outline">
-                <i class="fa-solid fa-arrow-left"></i> సంచికల జాబితా
+                <i class="fa-solid fa-arrow-left"></i> {{ __('admin.editions_list') }}
             </a>
             <div>
                 <h2 style="font-family: 'Ramabhadra', sans-serif; font-size: 22px; color: var(--admin-navy); margin-bottom: 2px;">
-                    {{ $edition->title }}
+                    {{ $edition->display_title }}
                 </h2>
                 <div style="font-size: 13px; color: var(--admin-muted); display: flex; align-items: center; gap: 12px;">
                     <span><i class="fa-regular fa-calendar"></i> {{ \Carbon\Carbon::parse($edition->edition_date)->format('d M Y') }}</span>
-                    <span><i class="fa-solid fa-location-dot"></i> {{ $edition->region->name_te }}</span>
-                    <span><i class="fa-regular fa-file"></i> {{ $edition->total_pages }} పేజీలు</span>
+                    <span><i class="fa-solid fa-location-dot"></i> {{ $edition->region->display_name }}</span>
+                    <span><i class="fa-regular fa-file"></i> {{ $edition->total_pages }} {{ __('admin.pages') }}</span>
                     <span>
                         @if($edition->status === 'published')
                             <span style="background: #ECFDF5; color: #065F46; padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 11px;">
-                                <i class="fa-solid fa-circle-check"></i> లైవ్ (Published)
+                                <i class="fa-solid fa-circle-check"></i> {{ __('admin.status_live') }}
                             </span>
                         @elseif($edition->status === 'scheduled')
                             <span style="background: #EFF6FF; color: #1E40AF; padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 11px;">
-                                <i class="fa-solid fa-clock"></i> షెడ్యూల్డ్ ({{ $edition->scheduled_at ? \Carbon\Carbon::parse($edition->scheduled_at)->format('d M, h:i A') : '5:00 AM' }})
+                                <i class="fa-solid fa-clock"></i> {{ __('admin.status_scheduled') }} ({{ $edition->scheduled_at ? \Carbon\Carbon::parse($edition->scheduled_at)->format('d M, h:i A') : '5:00 AM' }})
                             </span>
                         @elseif($edition->status === 'pending_approval')
                             <span style="background: #FFFBEB; color: #92400E; padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 11px;">
-                                <i class="fa-solid fa-hourglass-half"></i> ఆమోదం కొరకు వేచి ఉంది
+                                <i class="fa-solid fa-hourglass-half"></i> {{ __('admin.status_pending') }}
                             </span>
                         @else
                             <span style="background: #F1F5F9; color: #475569; padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 11px;">
-                                <i class="fa-solid fa-pencil"></i> డ్రాఫ్ట్ (Draft)
+                                <i class="fa-solid fa-pencil"></i> {{ __('admin.status_draft') }}
                             </span>
                         @endif
                     </span>
@@ -47,11 +47,11 @@
             <!-- Public Preview Link -->
             @if($edition->status === 'published')
                 <a href="{{ route('epaper.edition', $edition) }}" target="_blank" class="btn-admin btn-outline" style="border-color: #10B981; color: #065F46;">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i> రీడర్‌లో చూడండి
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> {{ __('admin.view_in_reader') }}
                 </a>
             @else
-                <a href="{{ route('epaper.edition', $edition) }}" target="_blank" class="btn-admin btn-outline" title="అడ్మిన్ ప్రీవ్యూ">
-                    <i class="fa-solid fa-eye"></i> ప్రివ్యూ
+                <a href="{{ route('epaper.edition', $edition) }}" target="_blank" class="btn-admin btn-outline" title="{{ __('admin.admin_preview') }}">
+                    <i class="fa-solid fa-eye"></i> {{ __('admin.preview') }}
                 </a>
             @endif
 
@@ -59,8 +59,8 @@
             @if($edition->status === 'draft' && auth()->user()->canUpload())
                 <form action="{{ route('admin.editions.submit', $edition) }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn-admin btn-gold" onclick="return confirm('ఈ సంచికను ఎడిటోరియల్ ఆమోదం కొరకు పంపించాలా?');">
-                        <i class="fa-solid fa-paper-plane"></i> ఆమోదం కొరకు పంపండి
+                    <button type="submit" class="btn-admin btn-gold" onclick="return confirm('{{ __('admin.confirm_submit_review') }}');">
+                        <i class="fa-solid fa-paper-plane"></i> {{ __('admin.submit_for_review') }}
                     </button>
                 </form>
             @endif
@@ -71,8 +71,8 @@
                 <form action="{{ route('admin.editions.approve', $edition) }}" method="POST">
                     @csrf
                     <input type="hidden" name="publish_action" value="schedule_morning">
-                    <button type="submit" class="btn-admin btn-primary" onclick="return confirm('ఉదయం 5:00 AM IST కి ఆటోమేటిక్ ప్రచురణ కొరకు షెడ్యూల్ చేయాలా?');">
-                        <i class="fa-solid fa-clock"></i> ఆమోదించి 5:00 AM కి షెడ్యూల్ చేయండి
+                    <button type="submit" class="btn-admin btn-primary" onclick="return confirm('{{ __('admin.confirm_approve_schedule') }}');">
+                        <i class="fa-solid fa-clock"></i> {{ __('admin.approve_and_schedule') }}
                     </button>
                 </form>
 
@@ -80,15 +80,15 @@
                 @if(auth()->user()->canPublish())
                     <form action="{{ route('admin.editions.publish', $edition) }}" method="POST">
                         @csrf
-                        <button type="submit" class="btn-admin btn-success" onclick="return confirm('ఈ సంచికను ఇప్పుడే లైవ్ (Live Publish) చేయాలా?');">
-                            <i class="fa-solid fa-bolt"></i> ఇప్పుడే లైవ్ చేయండి
+                        <button type="submit" class="btn-admin btn-success" onclick="return confirm('{{ __('admin.confirm_publish_now') }}');">
+                            <i class="fa-solid fa-bolt"></i> {{ __('admin.publish_now') }}
                         </button>
                     </form>
                 @endif
 
                 <!-- Reject Button (Opens Modal) -->
                 <button type="button" class="btn-admin btn-danger" onclick="document.getElementById('rejectModal').style.display='flex';">
-                    <i class="fa-solid fa-ban"></i> తిరస్కరించండి
+                    <i class="fa-solid fa-ban"></i> {{ __('admin.reject') }}
                 </button>
             @endif
 
@@ -96,8 +96,8 @@
             @if($edition->status === 'scheduled' && auth()->user()->canPublish())
                 <form action="{{ route('admin.editions.publish', $edition) }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn-admin btn-success" onclick="return confirm('షెడ్యూల్డ్ సంచికను వెంటనే లైవ్ చేయాలా?');">
-                        <i class="fa-solid fa-bolt"></i> ఇప్పుడే లైవ్ చేయండి (Live Now)
+                    <button type="submit" class="btn-admin btn-success" onclick="return confirm('{{ __('admin.confirm_scheduled_publish') }}');">
+                        <i class="fa-solid fa-bolt"></i> {{ __('admin.publish_now') }}
                     </button>
                 </form>
             @endif
@@ -113,14 +113,14 @@
                 <div>
                     <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 18px; color: var(--admin-navy);">
                         <i class="fa-solid fa-file-invoice" style="color: var(--admin-gold); margin-right: 6px;"></i>
-                        పేజీల జాబితా &amp; వరుస క్రమం (Page Gallery)
+                        {{ __('admin.page_gallery') }}
                     </h3>
                     <p style="font-size: 13px; color: var(--admin-muted); margin-top: 2px;">
-                        మొత్తం {{ $edition->pages->count() }} పేజీలు అందుబాటులో ఉన్నాయి. బాణాల (Arrows) ద్వారా వరుస క్రమాన్ని మార్చవచ్చు.
+                        {{ __('admin.total_pages_available', ['count' => $edition->pages->count()]) }}
                     </p>
                 </div>
                 <div style="font-size: 12px; background: #F1F5F9; color: var(--admin-muted); padding: 5px 10px; border-radius: 6px; font-weight: 700;">
-                    కవర్ పేజీ: 1 వ పేజీ
+                    {{ __('admin.cover_page') }}
                 </div>
             </div>
 
@@ -134,18 +134,18 @@
                         <!-- Page Preview Thumbnail -->
                         <div style="position: relative; background: #F8FAFC; aspect-ratio: 0.7; overflow: hidden; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--admin-border);">
                             <canvas class="admin-page-thumb-canvas" data-page-num="{{ $page->page_number }}" style="display: none; width: 100%; height: 100%; object-fit: contain;"></canvas>
-                            <img src="{{ $page->thumbnail_url }}" alt="పేజీ {{ $page->page_number }}" 
+                            <img src="{{ $page->thumbnail_url }}" alt="{{ __('admin.page') }} {{ $page->page_number }}" 
                                  onerror="this.src='/images/logo.png';"
                                  style="width: 100%; height: 100%; object-fit: contain;">
                             
                             <!-- Page Number Badge -->
                             <div style="position: absolute; top: 8px; left: 8px; background: var(--admin-navy); color: #FFFFFF; font-size: 12px; font-weight: 800; padding: 3px 8px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-                                పేజీ {{ $page->page_number }}
+                                {{ __('admin.page') }} {{ $page->page_number }}
                             </div>
 
                             @if($page->page_number === 1)
                                 <div style="position: absolute; top: 8px; right: 8px; background: var(--admin-gold); color: var(--admin-navy); font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 3px; text-transform: uppercase;">
-                                    కవర్
+                                    {{ __('admin.cover') }}
                                 </div>
                             @endif
                         </div>
@@ -153,7 +153,7 @@
                         <!-- Card Controls -->
                         <div style="padding: 12px; display: flex; flex-direction: column; gap: 8px;">
                             <div style="font-size: 13px; font-weight: 700; color: var(--admin-navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                {{ $page->page_title ?: 'పేజీ ' . $page->page_number }}
+                                {{ $page->page_title ?: __('admin.page') . ' ' . $page->page_number }}
                             </div>
 
                             <!-- Move Up / Down Buttons -->
@@ -165,8 +165,8 @@
                                     <input type="hidden" name="direction" value="up">
                                     <button type="submit" class="btn-admin btn-outline" style="width: 100%; padding: 6px; justify-content: center; font-size: 11px;"
                                             {{ $page->page_number <= 1 ? 'disabled style=opacity:0.4;cursor:not-allowed;' : '' }}
-                                            title="పైకి జరపండి">
-                                        <i class="fa-solid fa-arrow-up"></i> ముందు
+                                            title="{{ __('admin.move_up') }}">
+                                        <i class="fa-solid fa-arrow-up"></i> {{ __('admin.move_earlier') }}
                                     </button>
                                 </form>
 
@@ -177,8 +177,8 @@
                                     <input type="hidden" name="direction" value="down">
                                     <button type="submit" class="btn-admin btn-outline" style="width: 100%; padding: 6px; justify-content: center; font-size: 11px;"
                                             {{ $page->page_number >= $edition->total_pages ? 'disabled style=opacity:0.4;cursor:not-allowed;' : '' }}
-                                            title="క్రిందికి జరపండి">
-                                        తర్వాత <i class="fa-solid fa-arrow-down"></i>
+                                            title="{{ __('admin.move_down') }}">
+                                        {{ __('admin.move_later') }} <i class="fa-solid fa-arrow-down"></i>
                                     </button>
                                 </form>
                             </div>
@@ -195,7 +195,7 @@
             <div class="card">
                 <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 16px; color: var(--admin-navy); margin-bottom: 16px; border-bottom: 1px solid var(--admin-border); padding-bottom: 10px;">
                     <i class="fa-solid fa-gear" style="color: var(--admin-gold); margin-right: 6px;"></i>
-                    సంచిక వివరాలు మార్చండి
+                    {{ __('admin.edit_edition_details') }}
                 </h3>
 
                 <form action="{{ route('admin.editions.update', $edition) }}" method="POST">
@@ -204,7 +204,7 @@
 
                     <div style="margin-bottom: 16px;">
                         <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--admin-navy);">
-                            సంచిక శీర్షిక
+                            {{ __('admin.edition_title') }}
                         </label>
                         <input type="text" name="title" value="{{ old('title', $edition->title) }}" required
                                style="width: 100%; padding: 9px 12px; border: 1px solid var(--admin-border); border-radius: 6px; font-size: 13px; font-family: inherit;">
@@ -212,7 +212,7 @@
 
                     <div style="margin-bottom: 16px;">
                         <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--admin-navy);">
-                            సంపుటి (Volume)
+                            {{ __('admin.volume') }}
                         </label>
                         <input type="text" name="volume_number" value="{{ old('volume_number', $edition->volume_number) }}"
                                style="width: 100%; padding: 9px 12px; border: 1px solid var(--admin-border); border-radius: 6px; font-size: 13px; font-family: inherit;">
@@ -220,7 +220,7 @@
 
                     <div style="margin-bottom: 16px;">
                         <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--admin-navy);">
-                            సంచిక సంఖ్య (Issue)
+                            {{ __('admin.issue_number') }}
                         </label>
                         <input type="text" name="issue_number" value="{{ old('issue_number', $edition->issue_number) }}"
                                style="width: 100%; padding: 9px 12px; border: 1px solid var(--admin-border); border-radius: 6px; font-size: 13px; font-family: inherit;">
@@ -228,16 +228,16 @@
 
                     <div style="margin-bottom: 20px;">
                         <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--admin-navy);">
-                            షెడ్యూల్డ్ సమయం (Scheduled Time IST)
+                            {{ __('admin.scheduled_time') }}
                         </label>
                         <input type="datetime-local" name="scheduled_at" 
                                value="{{ $edition->scheduled_at ? \Carbon\Carbon::parse($edition->scheduled_at)->format('Y-m-d\TH:i') : '' }}"
                                style="width: 100%; padding: 9px 12px; border: 1px solid var(--admin-border); border-radius: 6px; font-size: 13px; font-family: inherit;">
-                        <span style="font-size: 11px; color: var(--admin-muted);">సాధారణంగా ప్రతి ఉదయం 05:00 AM IST</span>
+                        <span style="font-size: 11px; color: var(--admin-muted);">{{ __('admin.scheduled_time_hint') }}</span>
                     </div>
 
                     <button type="submit" class="btn-admin btn-primary" style="width: 100%; justify-content: center;">
-                        <i class="fa-solid fa-floppy-disk"></i> మార్పులను భద్రపరచండి
+                        <i class="fa-solid fa-floppy-disk"></i> {{ __('admin.save_changes') }}
                     </button>
                 </form>
             </div>
@@ -245,12 +245,12 @@
             <!-- PDF Security & Storage Info -->
             <div class="card" style="background: #F8FAFC;">
                 <h4 style="font-size: 14px; font-weight: 700; color: var(--admin-navy); margin-bottom: 12px;">
-                    <i class="fa-solid fa-shield-halved" style="color: #10B981;"></i> ఫైల్ భద్రతా సమాచారం
+                    <i class="fa-solid fa-shield-halved" style="color: #10B981;"></i> {{ __('admin.security_storage_info') }}
                 </h4>
                 <div style="font-size: 12px; color: var(--admin-muted); display: flex; flex-direction: column; gap: 8px;">
-                    <div><strong>ఒరిజినల్ పీడీఎఫ్:</strong> {{ basename($edition->pdf_path ?? 'system/pdf') }}</div>
-                    <div><strong>స్టోరేజ్ డిస్క్:</strong> Private Local (Secured)</div>
-                    <div><strong>వ్యూస్:</strong> {{ number_format($edition->views_count) }} | <strong>డౌన్‌లోడ్స్:</strong> {{ number_format($edition->downloads_count) }}</div>
+                    <div><strong>{{ __('admin.original_pdf') }}:</strong> {{ basename($edition->pdf_path ?? 'system/pdf') }}</div>
+                    <div><strong>{{ __('admin.storage_disk') }}:</strong> Private Local (Secured)</div>
+                    <div><strong>{{ __('admin.views') }}:</strong> {{ number_format($edition->views_count) }} | <strong>{{ __('admin.downloads') }}:</strong> {{ number_format($edition->downloads_count) }}</div>
                 </div>
             </div>
 
@@ -258,7 +258,7 @@
             <div class="card">
                 <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 16px; color: var(--admin-navy); margin-bottom: 14px; border-bottom: 1px solid var(--admin-border); padding-bottom: 10px;">
                     <i class="fa-solid fa-clock-rotate-left" style="color: var(--admin-gold); margin-right: 6px;"></i>
-                    ఆడిట్ లాగ్ (Audit Trail)
+                    {{ __('admin.audit_trail') }}
                 </h3>
 
                 <div style="display: flex; flex-direction: column; gap: 14px; max-height: 380px; overflow-y: auto;">
@@ -272,11 +272,11 @@
                             </div>
                             <div style="color: #475569; margin-top: 2px;">{{ $log->notes }}</div>
                             <div style="color: #94A3B8; font-size: 11px; margin-top: 4px;">
-                                {{ $log->user->name ?? 'సిస్టమ్' }} &bull; {{ $log->created_at->diffForHumans() }}
+                                {{ $log->user->name ?? __('admin.system') }} &bull; {{ $log->created_at->diffForHumans() }}
                             </div>
                         </div>
                     @empty
-                        <div style="color: var(--admin-muted); font-size: 12px;">ఎటువంటి రికార్డులు లేవు.</div>
+                        <div style="color: var(--admin-muted); font-size: 12px;">{{ __('admin.no_audit_records') }}</div>
                     @endforelse
                 </div>
             </div>
@@ -285,17 +285,17 @@
             @if(auth()->user()->canPublish())
                 <div class="card" style="border-color: #FECACA; background: #FEF2F2;">
                     <h4 style="font-size: 14px; font-weight: 700; color: #991B1B; margin-bottom: 8px;">
-                        డేంజర్‌ జోన్
+                        {{ __('admin.danger_zone') }}
                     </h4>
                     <p style="font-size: 12px; color: #7F1D1D; margin-bottom: 12px;">
-                        ఈ సంచికను తొలగిస్తే పబ్లిక్ రీడర్ నుండి తొలగించబడుతుంది (Soft delete).
+                        {{ __('admin.delete_warning') }}
                     </p>
                     <form action="{{ route('admin.editions.destroy', $edition) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn-admin btn-danger" style="width: 100%; justify-content: center; font-size: 12px;"
-                                onclick="return confirm('ఖచ్చితంగా ఈ సంచికను తొలగించాలనుకుంటున్నారా?');">
-                            <i class="fa-solid fa-trash"></i> సంచికను తొలగించండి
+                                onclick="return confirm('{{ __('admin.delete_confirm') }}');">
+                            <i class="fa-solid fa-trash"></i> {{ __('admin.delete_edition_btn') }}
                         </button>
                     </form>
                 </div>
@@ -309,20 +309,20 @@
 <div id="rejectModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
     <div style="background: #FFFFFF; border-radius: 10px; width: 100%; max-width: 500px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
         <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 18px; color: #DC2626; margin-bottom: 12px;">
-            <i class="fa-solid fa-triangle-exclamation"></i> సంచికను తిరస్కరించండి
+            <i class="fa-solid fa-triangle-exclamation"></i> {{ __('admin.reject_modal_title') }}
         </h3>
         <p style="font-size: 13px; color: var(--admin-muted); margin-bottom: 16px;">
-            సంచికను డ్రాఫ్ట్ స్టేటస్‌కు పంపే ముందు డెస్క్ టీమ్‌కు కారణం తెలియజేయండి.
+            {{ __('admin.reject_modal_desc') }}
         </p>
 
         <form action="{{ route('admin.editions.reject', $edition) }}" method="POST">
             @csrf
-            <textarea name="reason" rows="3" required placeholder="తిరస్కరణకు కారణం తెలపండి (ఉదా: పేజీ 3 లో ప్రకటన సరిగ్గా అమరలేదు)..."
+            <textarea name="reason" rows="3" required placeholder="{{ __('admin.reject_placeholder') }}"
                       style="width: 100%; padding: 10px; border: 1px solid var(--admin-border); border-radius: 6px; font-family: inherit; font-size: 13px; margin-bottom: 16px;"></textarea>
 
             <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                <button type="button" class="btn-admin btn-outline" onclick="document.getElementById('rejectModal').style.display='none';">రద్దు</button>
-                <button type="submit" class="btn-admin btn-danger">తిరస్కరించి పంపండి</button>
+                <button type="button" class="btn-admin btn-outline" onclick="document.getElementById('rejectModal').style.display='none';">{{ __('admin.cancel') }}</button>
+                <button type="submit" class="btn-admin btn-danger">{{ __('admin.reject_and_send') }}</button>
             </div>
         </form>
     </div>

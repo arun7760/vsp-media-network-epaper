@@ -540,14 +540,14 @@
                 <img src="/images/logo.png" alt="VSP TIMES" class="reader-logo-img">
             </a>
 
-            <a href="{{ route('epaper.home') }}" class="reader-back-btn" title="హోమ్ పేజీకి తిరిగి వెళ్లండి">
+            <a href="{{ route('epaper.home') }}" class="reader-back-btn" title="{{ __('epaper.back_to_home') }}">
                 <i class="fa-solid fa-arrow-left"></i>
-                <span>హోమ్</span>
+                <span>{{ __('epaper.home') }}</span>
             </a>
 
             <div class="reader-date-pill">
                 @if($prevEdition)
-                    <a href="{{ route('epaper.reader', $prevEdition) }}" class="reader-date-nav" title="మునుపటి సంచిక: {{ $prevEdition->edition_date->format('d M Y') }}">
+                    <a href="{{ route('epaper.reader', $prevEdition) }}" class="reader-date-nav" title="Previous: {{ $prevEdition->edition_date->format('d M Y') }}">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                 @endif
@@ -555,20 +555,20 @@
                 <span><i class="fa-regular fa-calendar" style="color: var(--epaper-red); margin-right: 4px;"></i> {{ $edition->edition_date->format('d M Y') }}</span>
 
                 @if($nextEdition)
-                    <a href="{{ route('epaper.reader', $nextEdition) }}" class="reader-date-nav" title="తదుపరి సంచిక: {{ $nextEdition->edition_date->format('d M Y') }}">
+                    <a href="{{ route('epaper.reader', $nextEdition) }}" class="reader-date-nav" title="Next: {{ $nextEdition->edition_date->format('d M Y') }}">
                         <i class="fa-solid fa-chevron-right"></i>
                     </a>
                 @endif
 
                 <span style="color: #CBD5E1; margin: 0 2px;">|</span>
-                <strong style="color: var(--epaper-navy);">{{ $edition->region->name ?? 'ప్రధాన సంచిక' }}</strong>
+                <strong style="color: var(--epaper-navy);">{{ $edition->region?->display_name ?? __('epaper.main_edition') }}</strong>
             </div>
         </div>
 
         <!-- Center: Clean Page Navigation -->
         <div class="reader-header-center">
             @if($prevPageNumber)
-                <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $prevPageNumber]) }}" class="page-nav-arrow" title="మునుపటి పేజీ (పేజీ {{ $prevPageNumber }})">
+                <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $prevPageNumber]) }}" class="page-nav-arrow" title="{{ __('epaper.previous_page') }} ({{ __('epaper.page') }} {{ $prevPageNumber }})">
                     <i class="fa-solid fa-chevron-left"></i>
                 </a>
             @else
@@ -579,7 +579,7 @@
                 <select id="pageSelect" class="page-select" onchange="window.location.href=this.value;">
                     @foreach($edition->pages as $p)
                         <option value="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $p->page_number]) }}" {{ $p->page_number === $pageNumber ? 'selected' : '' }}>
-                            పేజీ {{ $p->page_number }}: {{ $p->page_title ?: 'పేజీ ' . $p->page_number }}
+                            {{ __('epaper.page') }} {{ $p->page_number }}: {{ (app()->getLocale() === 'en' && $p->page_title_en) ? $p->page_title_en : ($p->page_title ?: __('epaper.page') . ' ' . $p->page_number) }}
                         </option>
                     @endforeach
                 </select>
@@ -587,14 +587,14 @@
             </div>
 
             @if($nextPageNumber)
-                <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $nextPageNumber]) }}" class="page-nav-arrow" title="తదుపరి పేజీ (పేజీ {{ $nextPageNumber }})">
+                <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $nextPageNumber]) }}" class="page-nav-arrow" title="{{ __('epaper.next_page') }} ({{ __('epaper.page') }} {{ $nextPageNumber }})">
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
             @else
                 <span class="page-nav-arrow disabled"><i class="fa-solid fa-chevron-right"></i></span>
             @endif
 
-            <span class="page-badge-counter">పేజీ {{ $pageNumber }} / {{ $totalPages }}</span>
+            <span class="page-badge-counter">{{ __('epaper.page') }} {{ $pageNumber }} / {{ $totalPages }}</span>
         </div>
 
         <!-- Right: Zoom, Filmstrip, Download, Language -->
@@ -620,9 +620,9 @@
             </div>
 
             <!-- Filmstrip Toggle -->
-            <button type="button" id="toggleFilmstripBtn" class="btn-filmstrip-trigger active" title="పేజీల థంబ్‌నెయిల్స్ చూడండి/దాచండి">
+            <button type="button" id="toggleFilmstripBtn" class="btn-filmstrip-trigger active" title="{{ app()->getLocale() === 'en' ? 'Toggle Filmstrip' : 'పేజీల థంబ్‌నెయిల్స్ చూడండి/దాచండి' }}">
                 <i class="fa-solid fa-images"></i>
-                <span>పేజీలు (Filmstrip)</span>
+                <span>{{ app()->getLocale() === 'en' ? 'Pages (Filmstrip)' : 'పేజీలు (Filmstrip)' }}</span>
                 <i class="fa-solid fa-chevron-down" id="filmstripChevron"></i>
             </button>
 
@@ -630,7 +630,7 @@
             <a href="{{ route('epaper.download', $edition) }}" 
                onclick="if(window.vspAnalytics){window.vspAnalytics.track('epaper_pdf_download', {edition_id: {{ $edition->id }}, edition_title: '{{ addslashes($edition->title) }}'});}" 
                class="btn-download-pill" 
-               title="పూర్తి సంచిక పీడీఎఫ్ డౌన్‌లోడ్ చేయండి">
+               title="{{ __('epaper.download_pdf') }}">
                 <i class="fa-solid fa-cloud-arrow-down"></i>
                 <span>{{ __('epaper.download_pdf') }}</span>
             </a>
@@ -646,7 +646,7 @@
     <!-- 2. Main Canvas Viewport -->
     <div class="reader-stage" id="reader-stage">
         @if($prevPageNumber)
-            <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $prevPageNumber]) }}" class="screen-edge-arrow screen-edge-arrow-left" title="మునుపటి పేజీ (పేజీ {{ $prevPageNumber }})">
+            <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $prevPageNumber]) }}" class="screen-edge-arrow screen-edge-arrow-left" title="{{ __('epaper.previous_page') }} ({{ __('epaper.page') }} {{ $prevPageNumber }})">
                 <i class="fa-solid fa-chevron-left"></i>
             </a>
         @endif
@@ -655,7 +655,7 @@
             <!-- Loading Spinner while rendering PDF -->
             <div id="pdf-page-loading" style="display: none; padding: 100px 40px; text-align: center; color: var(--epaper-navy); background: #FFFFFF; border-radius: 6px;">
                 <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 42px; color: var(--epaper-red); margin-bottom: 16px;"></i>
-                <div style="font-weight: 700; font-size: 16px;">వార్తాపత్రిక పేజీ సిద్ధమవుతోంది...</div>
+                <div style="font-weight: 700; font-size: 16px;">{{ app()->getLocale() === 'en' ? 'Rendering broadsheet page...' : 'వార్తాపత్రిక పేజీ సిద్ధమవుతోంది...' }}</div>
                 <div style="font-size: 13px; color: #64748B; margin-top: 6px;">Loading high-resolution broadsheet...</div>
             </div>
 
@@ -666,19 +666,19 @@
                 <img id="page-image" 
                      class="broadsheet-img"
                      src="{{ $currentPage->image_url }}" 
-                     alt="పేజీ {{ $pageNumber }} - {{ $currentPage->page_title }}" 
+                     alt="{{ __('epaper.page') }} {{ $pageNumber }} - {{ $currentPage->page_title }}" 
                      onerror="this.src='/images/logo.png';">
             @else
                 <div style="padding: 120px 40px; text-align: center; color: #64748B;">
                     <i class="fa-solid fa-file-circle-exclamation" style="font-size: 48px; color: #94A3B8; margin-bottom: 14px;"></i>
-                    <h3 style="font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 6px;">ఈ పేజీ అందుబాటులో లేదు</h3>
-                    <p style="font-size: 14px;">దయచేసి వేరొక పేజీని ఎంచుకోండి.</p>
+                    <h3 style="font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 6px;">{{ __('epaper.no_edition_for_date') }}</h3>
+                    <p style="font-size: 14px;">{{ __('epaper.choose_another_date') }}</p>
                 </div>
             @endif
         </div>
 
         @if($nextPageNumber)
-            <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $nextPageNumber]) }}" class="screen-edge-arrow screen-edge-arrow-right" title="తదుపరి పేజీ (పేజీ {{ $nextPageNumber }})">
+            <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $nextPageNumber]) }}" class="screen-edge-arrow screen-edge-arrow-right" title="{{ __('epaper.next_page') }} ({{ __('epaper.page') }} {{ $nextPageNumber }})">
                 <i class="fa-solid fa-chevron-right"></i>
             </a>
         @endif
@@ -689,11 +689,11 @@
         <div class="filmstrip-drawer-header">
             <span>
                 <i class="fa-solid fa-film" style="color: var(--epaper-red); margin-right: 6px;"></i>
-                అన్ని పేజీల జాబితా (Filmstrip) &bull; క్లిక్ చేసి నేరుగా పేజీకి వెళ్లండి
+                {{ app()->getLocale() === 'en' ? 'Pages Overview (Filmstrip) • Click to navigate directly' : 'అన్ని పేజీల జాబితా (Filmstrip) • క్లిక్ చేసి నేరుగా పేజీకి వెళ్లండి' }}
             </span>
             <div style="display: flex; align-items: center; gap: 12px;">
-                <span>మొత్తం {{ $totalPages }} పేజీలు</span>
-                <button type="button" class="filmstrip-close-btn" id="closeFilmstripBtn" title="దాచండి">
+                <span>{{ app()->getLocale() === 'en' ? 'Total ' . $totalPages . ' ' . __('epaper.pages') : 'మొత్తం ' . $totalPages . ' పేజీలు' }}</span>
+                <button type="button" class="filmstrip-close-btn" id="closeFilmstripBtn" title="{{ __('admin.cancel') }}">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -703,13 +703,13 @@
             @foreach($edition->pages as $p)
                 <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $p->page_number]) }}" 
                    class="filmstrip-thumb {{ $p->page_number === $pageNumber ? 'active' : '' }}"
-                   title="పేజీ {{ $p->page_number }}: {{ $p->page_title }}">
+                   title="{{ __('epaper.page') }} {{ $p->page_number }}: {{ (app()->getLocale() === 'en' && $p->page_title_en) ? $p->page_title_en : ($p->page_title ?: __('epaper.page') . ' ' . $p->page_number) }}">
                     <div class="thumb-preview-box">
                         <canvas class="filmstrip-thumb-canvas" data-page-num="{{ $p->page_number }}" style="display: none; width: 100%; height: 100%; object-fit: cover;"></canvas>
-                        <img src="{{ $p->thumbnail_url }}" alt="పేజీ {{ $p->page_number }}" onerror="this.src='/images/logo.png';">
+                        <img src="{{ $p->thumbnail_url }}" alt="{{ __('epaper.page') }} {{ $p->page_number }}" onerror="this.src='/images/logo.png';">
                         <span class="thumb-badge">{{ $p->page_number }}</span>
                     </div>
-                    <span class="thumb-label">పేజీ {{ $p->page_number }}</span>
+                    <span class="thumb-label">{{ __('epaper.page') }} {{ $p->page_number }}</span>
                 </a>
             @endforeach
         </div>

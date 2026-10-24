@@ -455,7 +455,7 @@
                 <!-- System Status Indicator -->
                 <div style="display: flex; align-items: center; gap: 7px; background: #ECFDF5; border: 1px solid #A7F3D0; padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #065F46;">
                     <span class="live-dot-pulse"></span>
-                    <span>5:00 AM IST Auto-Publish Active</span>
+                    <span>{{ app()->getLocale() === 'en' ? '5:00 AM IST Auto-Publish Active' : '5:00 AM IST ఆటోమేటిక్ ప్రచురణ యాక్టివ్' }}</span>
                 </div>
 
                 <!-- English / Telugu Language Segmented Control -->

@@ -139,9 +139,9 @@
 
             <!-- Action Buttons -->
             <div style="display: flex; gap: 14px; justify-content: flex-end; align-items: center; border-top: 1px solid var(--admin-border); padding-top: 20px;">
-                <a href="{{ route('admin.editions.index') }}" class="btn-admin btn-outline">రద్దు చేయండి</a>
+                <a href="{{ route('admin.editions.index') }}" class="btn-admin btn-outline">{{ __('admin.cancel') }}</a>
                 <button type="submit" id="submitBtn" class="btn-admin btn-gold" style="font-size: 14px; padding: 11px 24px;">
-                    <i class="fa-solid fa-check"></i> అప్‌లోడ్ చేసి పేజీలను ఎడిట్ చేయండి
+                    <i class="fa-solid fa-check"></i> {{ app()->getLocale() === 'en' ? 'Upload & Process Pages' : 'అప్‌లోడ్ చేసి పేజీలను ఎడిట్ చేయండి' }}
                 </button>
             </div>
         </form>
@@ -150,13 +150,13 @@
     <!-- Newsroom Staff Guidelines -->
     <div class="card" style="background: #F8FAFC; border-left: 4px solid var(--admin-gold);">
         <h4 style="font-size: 15px; font-weight: 700; color: var(--admin-navy); margin-bottom: 8px;">
-            <i class="fa-solid fa-lightbulb" style="color: var(--admin-gold);"></i> న్యూస్‌రూమ్ సిబ్బందికి ముఖ్య సూచనలు:
+            <i class="fa-solid fa-lightbulb" style="color: var(--admin-gold);"></i> {{ app()->getLocale() === 'en' ? 'Important Guidelines for Newsroom Staff:' : 'న్యూస్‌రూమ్ సిబ్బందికి ముఖ్య సూచనలు:' }}
         </h4>
         <ul style="font-size: 13px; color: var(--admin-muted); line-height: 1.8; margin-left: 20px;">
-            <li>అప్‌లోడ్ చేసే పీడీఎఫ్ అసలైనది (Original) ప్రైవేట్ స్టోరేజ్‌లో భద్రపరచబడుతుంది.</li>
-            <li>అప్‌లోడ్ పూర్తయిన తర్వాత ప్రతి పేజీ విడివిడిగా బ్రాడ్‌షీట్ రీడర్ కోసం సిద్ధమవుతుంది.</li>
-            <li>డ్రాఫ్ట్ స్టేటస్‌లో ఉన్నప్పుడు మీరు పేజీల వరుస క్రమాన్ని (Page Order) సరిచూసుకోవచ్చు.</li>
-            <li>ఆమోదం పొందిన తర్వాత ప్రతిరోజూ ఉదయం <strong>5:00 AM IST</strong> కి ఆటోమేటిక్‌గా లైవ్ చేయబడుతుంది.</li>
+            <li>{{ app()->getLocale() === 'en' ? 'Original uploaded PDF is safely preserved in secure private storage.' : 'అప్‌లోడ్ చేసే పీడీఎఫ్ అసలైనది (Original) ప్రైవేట్ స్టోరేజ్‌లో భద్రపరచబడుతుంది.' }}</li>
+            <li>{{ app()->getLocale() === 'en' ? 'Pages are automatically extracted and pre-rendered for the high-definition broadsheet reader.' : 'అప్‌లోడ్ పూర్తయిన తర్వాత ప్రతి పేజీ విడివిడిగా బ్రాడ్‌షీట్ రీడర్ కోసం సిద్ధమవుతుంది.' }}</li>
+            <li>{{ app()->getLocale() === 'en' ? 'Review page sequences in Draft status before editorial approval.' : 'డ్రాఫ్ట్ స్టేటస్‌లో ఉన్నప్పుడు మీరు పేజీల వరుస క్రమాన్ని (Page Order) సరిచూసుకోవచ్చు.' }}</li>
+            <li>{{ app()->getLocale() === 'en' ? 'Once approved, the edition is scheduled for publication at 5:00 AM IST daily.' : 'ఆమోదం పొందిన తర్వాత ప్రతిరోజూ ఉదయం 5:00 AM IST కి ఆటోమేటిక్‌గా లైవ్ చేయబడుతుంది.' }}</li>
         </ul>
     </div>
 </div>
