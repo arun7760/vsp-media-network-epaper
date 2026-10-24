@@ -231,6 +231,15 @@
                                         <i class="fa-solid fa-pen-to-square"></i> {{ __('admin.editor') }}
                                     </a>
 
+                                    @if(!$ed->isPublished() && auth()->user()->canPublish())
+                                        <form action="{{ route('admin.editions.publish', $ed) }}" method="POST" style="display: inline-block; margin: 0;">
+                                            @csrf
+                                            <button type="submit" class="btn-admin btn-outline" style="padding: 5px 10px; font-size: 12px; color: #10B981; border-color: #A7F3D0; background: #ECFDF5;" title="{{ app()->getLocale() === 'en' ? 'Publish Live' : 'లైవ్ చేయండి' }}">
+                                                <i class="fa-solid fa-bolt"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+
                                     @if($ed->isPublished())
                                         <a href="{{ route('epaper.reader', $ed) }}" target="_blank" class="btn-admin btn-outline" style="padding: 5px 10px; font-size: 12px; color: #10B981;" title="{{ __('admin.view') }}">
                                             <i class="fa-solid fa-eye"></i>

@@ -137,6 +137,28 @@
                 </p>
             </div>
 
+            <!-- Publishing Status Option -->
+            <div style="background: #F8FAFC; border: 1px solid var(--admin-border); border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+                <label style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 10px; color: var(--admin-navy);">
+                    <i class="fa-solid fa-satellite-dish" style="color: var(--admin-red); margin-right: 6px;"></i>
+                    {{ app()->getLocale() === 'en' ? 'Publication Status after Upload:' : 'అప్‌లోడ్ చేసిన తర్వాత ప్రచురణ స్థితి:' }}
+                </label>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; color: #065F46;">
+                        <input type="radio" name="publish_mode" value="publish_now" checked style="accent-color: #10B981; width: 16px; height: 16px;">
+                        <span><i class="fa-solid fa-bolt" style="color: #10B981;"></i> {{ app()->getLocale() === 'en' ? 'Publish Live Immediately' : 'వెంటనే లైవ్ చేయండి (Live Now)' }}</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; color: #1E40AF;">
+                        <input type="radio" name="publish_mode" value="schedule" style="accent-color: #3B82F6; width: 16px; height: 16px;">
+                        <span><i class="fa-solid fa-clock" style="color: #3B82F6;"></i> {{ app()->getLocale() === 'en' ? 'Schedule for Morning (5:00 AM IST)' : 'ఉదయం 5:00 AM కి షెడ్యూల్ చేయండి' }}</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; cursor: pointer; color: #475569;">
+                        <input type="radio" name="publish_mode" value="draft" style="accent-color: #64748B; width: 16px; height: 16px;">
+                        <span><i class="fa-solid fa-pencil"></i> {{ app()->getLocale() === 'en' ? 'Save as Draft' : 'డ్రాఫ్ట్‌గా ఉంచండి (Draft)' }}</span>
+                    </label>
+                </div>
+            </div>
+
             <!-- Action Buttons -->
             <div style="display: flex; gap: 14px; justify-content: flex-end; align-items: center; border-top: 1px solid var(--admin-border); padding-top: 20px;">
                 <a href="{{ route('admin.editions.index') }}" class="btn-admin btn-outline">{{ __('admin.cancel') }}</a>

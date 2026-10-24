@@ -89,6 +89,7 @@ class EpaperAdminController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'volume_number' => ['nullable', 'string', 'max:50'],
             'issue_number' => ['nullable', 'string', 'max:50'],
+            'publish_mode' => ['nullable', 'string', 'in:publish_now,schedule,draft'],
             'pdf_file' => ['required', 'file', 'mimes:pdf', 'max:102400'], // 100MB max
         ]);
 
@@ -161,10 +162,38 @@ class EpaperAdminController extends Controller
             return back()->withInput()->withErrors(['pdf_file' => 'పీడీఎఫ్ పేజీలను ప్రాసెస్ చేయడం విఫలమైంది. దయచేసి మళ్లీ ప్రయత్నించండి.']);
         }
 
-        $edition->recordWorkflow('upload', null, 'draft', 'Initial PDF uploaded and pages extracted', Auth::id());
+        $publishMode = $request->input('publish_mode', 'publish_now');
+
+        if ($publishMode === 'publish_now' && (Auth::user()?->canPublish() ?? true)) {
+            $edition->status = 'published';
+            $edition->published_at = now();
+            $edition->approved_by = Auth::id();
+            $edition->save();
+
+            $edition->recordWorkflow('publish', 'draft', 'published', 'Published live immediately on upload', Auth::id());
+            $successMsg = app()->getLocale() === 'en'
+                ? "Edition successfully uploaded and published live! Total {$edition->total_pages} pages are now accessible to readers."
+                : "సంచిక విజయవంతంగా అప్‌లోడ్ చేయబడి లైవ్‌లోకి వెళ్ళింది! మొత్తం {$edition->total_pages} పేజీలు రీడర్లకు అందుబాటులో ఉన్నాయి.";
+        } elseif ($publishMode === 'schedule' && (Auth::user()?->canPublish() ?? true)) {
+            $scheduledAt = Carbon::parse($dateString)->setTime(5, 0, 0);
+            $edition->status = 'scheduled';
+            $edition->scheduled_at = $scheduledAt;
+            $edition->approved_by = Auth::id();
+            $edition->save();
+
+            $edition->recordWorkflow('schedule', 'draft', 'scheduled', 'Scheduled on upload for 5:00 AM IST on ' . $dateString, Auth::id());
+            $successMsg = app()->getLocale() === 'en'
+                ? "Edition uploaded and scheduled for 5:00 AM on {$dateString}. Total {$edition->total_pages} pages ready."
+                : "సంచిక విజయవంతంగా అప్‌లోడ్ చేయబడింది మరియు {$dateString} ఉదయం 5:00 AM కి షెడ్యూల్ చేయబడింది. మొత్తం {$edition->total_pages} పేజీలు సిద్ధమయ్యాయి.";
+        } else {
+            $edition->recordWorkflow('upload', null, 'draft', 'Initial PDF uploaded and pages extracted as draft', Auth::id());
+            $successMsg = app()->getLocale() === 'en'
+                ? "Edition saved as draft. Total {$edition->total_pages} pages ready for review."
+                : "సంచిక విజయవంతంగా అప్‌లోడ్ చేయబడింది (డ్రాఫ్ట్). మొత్తం {$edition->total_pages} పేజీలు సిద్ధమయ్యాయి.";
+        }
 
         return redirect()->route('admin.editions.edit', $edition)
-            ->with('success', "సంచిక విజయవంతంగా అప్‌లోడ్ చేయబడింది. మొత్తం {$edition->total_pages} పేజీలు సిద్ధమయ్యాయి.");
+            ->with('success', $successMsg);
     }
 
     /**
