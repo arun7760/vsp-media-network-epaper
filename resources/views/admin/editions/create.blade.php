@@ -1,22 +1,22 @@
 @extends('layouts.admin')
 
-@section('title', 'కొత్త సంచిక అప్‌లోడ్ - VSP TIMES E-Paper')
-@section('header_title', 'కొత్త ఈ-పేపర్ సంచిక అప్‌లోడ్ (Upload New Edition)')
+@section('title', (app()->getLocale() === 'en' ? 'Upload New Edition' : 'కొత్త సంచిక అప్‌లోడ్') . ' - VSP TIMES E-Paper')
+@section('header_title', app()->getLocale() === 'en' ? 'Upload New E-Paper Edition' : 'కొత్త ఈ-పేపర్ సంచిక అప్‌లోడ్')
 
 @section('content')
 <div style="max-width: 900px; margin: 0 auto;">
     <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;">
         <div>
-            <h2 style="font-family: 'Ramabhadra', sans-serif; font-size: 24px; color: var(--admin-navy);">
+            <h2 style="font-size: 24px; font-weight: 800; color: var(--admin-navy);">
                 <i class="fa-solid fa-cloud-arrow-up" style="color: var(--admin-gold); margin-right: 8px;"></i>
-                పీడీఎఫ్ అప్‌లోడ్ &amp; ప్రాసెసింగ్ డెస్క్
+                {{ app()->getLocale() === 'en' ? 'PDF Upload & Processing Desk' : 'పీడీఎఫ్ అప్‌లోడ్ & ప్రాసెసింగ్ డెస్క్' }}
             </h2>
             <p style="color: var(--admin-muted); font-size: 14px; margin-top: 4px;">
-                రోజువారీ ఈ-పేపర్ పీడీఎఫ్ ఫైల్‌ను అప్‌లోడ్ చేసి, పేజీలను ఆటోమేటిక్‌గా సంగ్రహించండి.
+                {{ app()->getLocale() === 'en' ? 'Upload daily broadsheet PDF to automatically decompose and prepare pages for readers.' : 'రోజువారీ ఈ-పేపర్ పీడీఎఫ్ ఫైల్‌ను అప్‌లోడ్ చేసి, పేజీలను ఆటోమేటిక్‌గా సంగ్రహించండి.' }}
             </p>
         </div>
         <a href="{{ route('admin.editions.index') }}" class="btn-admin btn-outline">
-            <i class="fa-solid fa-arrow-left"></i> వెనుకకు
+            <i class="fa-solid fa-arrow-left"></i> {{ app()->getLocale() === 'en' ? 'Back' : 'వెనుకకు' }}
         </a>
     </div>
 
@@ -28,13 +28,13 @@
                 <!-- Region Selection -->
                 <div>
                     <label style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--admin-navy);">
-                        ప్రాంతీయ ఎడిషన్ (Region) <span style="color: #DC2626;">*</span>
+                        {{ app()->getLocale() === 'en' ? 'Regional Edition' : 'ప్రాంతీయ ఎడిషన్ (Region)' }} <span style="color: #DC2626;">*</span>
                     </label>
                     <select name="region_id" id="region_id" required style="width: 100%; padding: 11px 14px; border: 1px solid {{ $errors->has('region_id') ? '#DC2626' : 'var(--admin-border)' }}; border-radius: 6px; font-size: 14px; font-family: inherit; background: #FFFFFF;">
-                        <option value="">-- ప్రాంతాన్ని ఎంచుకోండి --</option>
+                        <option value="">{{ app()->getLocale() === 'en' ? '-- Select Region --' : '-- ప్రాంతాన్ని ఎంచుకోండి --' }}</option>
                         @foreach($regions as $region)
                             <option value="{{ $region->id }}" {{ old('region_id') == $region->id ? 'selected' : '' }}>
-                                {{ $region->name_te }} ({{ $region->name_en }})
+                                {{ app()->getLocale() === 'en' ? $region->display_name : $region->name_te . ' (' . $region->name_en . ')' }}
                             </option>
                         @endforeach
                     </select>
@@ -48,7 +48,7 @@
                 <!-- Edition Date -->
                 <div>
                     <label style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--admin-navy);">
-                        ప్రచురణ తేదీ (Publication Date) <span style="color: #DC2626;">*</span>
+                        {{ app()->getLocale() === 'en' ? 'Publication Date' : 'ప్రచురణ తేదీ (Publication Date)' }} <span style="color: #DC2626;">*</span>
                     </label>
                     <input type="date" name="edition_date" id="edition_date" required 
                            value="{{ old('edition_date', now('Asia/Kolkata')->toDateString()) }}"
@@ -64,11 +64,11 @@
             <!-- Edition Title -->
             <div style="margin-bottom: 24px;">
                 <label style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--admin-navy);">
-                    సంచిక శీర్షిక (Edition Title) <span style="color: #DC2626;">*</span>
+                    {{ app()->getLocale() === 'en' ? 'Edition Title' : 'సంచిక శీర్షిక (Edition Title)' }} <span style="color: #DC2626;">*</span>
                 </label>
                 <input type="text" name="title" id="title" required 
-                       value="{{ old('title', 'విఎస్పీ టైమ్స్ ప్రధాన సంచిక') }}"
-                       placeholder="ఉదా: విశాఖపట్నం ప్రధాన సంచిక"
+                       value="{{ old('title', app()->getLocale() === 'en' ? 'VSP TIMES Main Edition' : 'విఎస్పీ టైమ్స్ ప్రధాన సంచిక') }}"
+                       placeholder="{{ app()->getLocale() === 'en' ? 'e.g. Visakhapatnam Main Edition' : 'ఉదా: విశాఖపట్నం ప్రధాన సంచిక' }}"
                        style="width: 100%; padding: 11px 14px; border: 1px solid var(--admin-border); border-radius: 6px; font-size: 14px; font-family: inherit;">
             </div>
 
@@ -76,18 +76,18 @@
                 <!-- Volume Number -->
                 <div>
                     <label style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--admin-navy);">
-                        సంపుటి (Volume Number)
+                        {{ app()->getLocale() === 'en' ? 'Volume Number' : 'సంపుటి (Volume Number)' }}
                     </label>
-                    <input type="text" name="volume_number" value="{{ old('volume_number', 'సంపుటి 1') }}"
+                    <input type="text" name="volume_number" value="{{ old('volume_number', app()->getLocale() === 'en' ? 'Vol 1' : 'సంపుటి 1') }}"
                            style="width: 100%; padding: 11px 14px; border: 1px solid var(--admin-border); border-radius: 6px; font-size: 14px; font-family: inherit;">
                 </div>
 
                 <!-- Issue Number -->
                 <div>
                     <label style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--admin-navy);">
-                        సంచిక సంఖ్య (Issue Number)
+                        {{ app()->getLocale() === 'en' ? 'Issue Number' : 'సంచిక సంఖ్య (Issue Number)' }}
                     </label>
-                    <input type="text" name="issue_number" value="{{ old('issue_number', 'సంచిక 1') }}"
+                    <input type="text" name="issue_number" value="{{ old('issue_number', app()->getLocale() === 'en' ? 'Issue 1' : 'సంచిక 1') }}"
                            style="width: 100%; padding: 11px 14px; border: 1px solid var(--admin-border); border-radius: 6px; font-size: 14px; font-family: inherit;">
                 </div>
             </div>
@@ -95,21 +95,21 @@
             <!-- PDF Drag & Drop Zone -->
             <div style="margin-bottom: 28px;">
                 <label style="display: block; font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--admin-navy);">
-                    ఈ-పేపర్ పీడీఎఫ్ ఫైల్ (Master PDF Document) <span style="color: #DC2626;">*</span>
+                    {{ app()->getLocale() === 'en' ? 'Master PDF Document' : 'ఈ-పేపర్ పీడీఎఫ్ ఫైల్ (Master PDF Document)' }} <span style="color: #DC2626;">*</span>
                 </label>
                 
                 <div id="dropZone" style="border: 2px dashed #CBD5E1; border-radius: 12px; padding: 40px 24px; text-align: center; background: #F8FAFC; cursor: pointer; transition: all 0.2s;">
                     <i class="fa-solid fa-file-pdf" style="font-size: 48px; color: #DC2626; margin-bottom: 14px;"></i>
                     <h3 style="font-size: 16px; font-weight: 700; color: var(--admin-navy); margin-bottom: 6px;">
-                        పీడీఎఫ్ ఫైల్‌ను ఇక్కడ లాగి వదలండి (Drag &amp; Drop) లేదా క్లిక్ చేయండి
+                        {{ app()->getLocale() === 'en' ? 'Drag & Drop newspaper PDF here, or click to browse' : 'పీడీఎఫ్ ఫైల్‌ను ఇక్కడ లాగి వదలండి (Drag & Drop) లేదా క్లిక్ చేయండి' }}
                     </h3>
                     <p style="font-size: 13px; color: var(--admin-muted); margin-bottom: 14px;">
-                        మరియు పరిమాణం గరిష్టంగా 100MB వరకు అనుమతించబడుతుంది. (%PDF- బైనరీ చెక్ చేయబడుతుంది).
+                        {{ app()->getLocale() === 'en' ? 'Maximum file size up to 100MB (%PDF- binary signature is verified).' : 'మరియు పరిమాణం గరిష్టంగా 100MB వరకు అనుమతించబడుతుంది. (%PDF- బైనరీ చెక్ చేయబడుతుంది).' }}
                     </p>
                     <input type="file" name="pdf_file" id="pdf_file" accept="application/pdf,.pdf" required style="display: none;">
                     
                     <button type="button" onclick="document.getElementById('pdf_file').click();" class="btn-admin btn-outline" style="background: #FFFFFF;">
-                        <i class="fa-solid fa-folder-open"></i> ఫైల్‌ను కంప్యూటర్ నుండి ఎంచుకోండి
+                        <i class="fa-solid fa-folder-open"></i> {{ app()->getLocale() === 'en' ? 'Browse PDF from Computer' : 'ఫైల్‌ను కంప్యూటర్ నుండి ఎంచుకోండి' }}
                     </button>
 
                     <div id="fileSelectedInfo" style="display: none; margin-top: 18px; padding: 12px; background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px; color: #065F46; font-size: 14px; font-weight: 600;">
@@ -126,14 +126,14 @@
             <!-- Progress Bar (Hidden initially) -->
             <div id="uploadProgressContainer" style="display: none; margin-bottom: 24px;">
                 <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--admin-navy);">
-                    <span><i class="fa-solid fa-spinner fa-spin"></i> పీడీఎఫ్ అప్‌లోడ్ &amp; పేజీలు విడదీయబడుతున్నాయి...</span>
+                    <span><i class="fa-solid fa-spinner fa-spin"></i> {{ app()->getLocale() === 'en' ? 'Uploading PDF & decomposing pages...' : 'పీడీఎఫ్ అప్‌లోడ్ & పేజీలు విడదీయబడుతున్నాయి...' }}</span>
                     <span id="progressText">0%</span>
                 </div>
                 <div style="height: 10px; background: #E2E8F0; border-radius: 999px; overflow: hidden;">
                     <div id="progressBar" style="height: 100%; width: 0%; background: linear-gradient(90deg, var(--admin-navy), var(--admin-gold)); transition: width 0.3s;"></div>
                 </div>
                 <p style="font-size: 12px; color: var(--admin-muted); margin-top: 6px;">
-                    * పెద్ద ఫైళ్ల విషయంలో పేజీల డికంపోజిషన్ కోసం కొన్ని సెకన్లు పట్టవచ్చు. దయచేసి విండోను మూసివేయవద్దు.
+                    {{ app()->getLocale() === 'en' ? '* Decomposing multi-page documents may take a few seconds. Please keep this window open.' : '* పెద్ద ఫైళ్ల విషయంలో పేజీల డికంపోజిషన్ కోసం కొన్ని సెకన్లు పట్టవచ్చు. దయచేసి విండోను మూసివేయవద్దు.' }}
                 </p>
             </div>
 

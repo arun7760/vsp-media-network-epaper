@@ -667,7 +667,7 @@
                      class="broadsheet-img"
                      src="{{ $currentPage->image_url }}" 
                      alt="{{ __('epaper.page') }} {{ $pageNumber }} - {{ $currentPage->page_title }}" 
-                     onerror="this.src='/images/logo.png';">
+                     onerror="this.src='/images/epaper-default-cover.jpg';">
             @else
                 <div style="padding: 120px 40px; text-align: center; color: #64748B;">
                     <i class="fa-solid fa-file-circle-exclamation" style="font-size: 48px; color: #94A3B8; margin-bottom: 14px;"></i>
@@ -706,7 +706,7 @@
                    title="{{ __('epaper.page') }} {{ $p->page_number }}: {{ (app()->getLocale() === 'en' && $p->page_title_en) ? $p->page_title_en : ($p->page_title ?: __('epaper.page') . ' ' . $p->page_number) }}">
                     <div class="thumb-preview-box">
                         <canvas class="filmstrip-thumb-canvas" data-page-num="{{ $p->page_number }}" style="display: none; width: 100%; height: 100%; object-fit: cover;"></canvas>
-                        <img src="{{ $p->thumbnail_url }}" alt="{{ __('epaper.page') }} {{ $p->page_number }}" onerror="this.src='/images/logo.png';">
+                        <img src="{{ $p->thumbnail_url }}" alt="{{ __('epaper.page') }} {{ $p->page_number }}" onerror="this.src='/images/epaper-default-cover.jpg';">
                         <span class="thumb-badge">{{ $p->page_number }}</span>
                     </div>
                     <span class="thumb-label">{{ __('epaper.page') }} {{ $p->page_number }}</span>

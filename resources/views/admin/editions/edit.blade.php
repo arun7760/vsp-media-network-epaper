@@ -178,7 +178,7 @@
                         <div style="position: relative; background: #F8FAFC; aspect-ratio: 0.7; overflow: hidden; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--admin-border);">
                             <canvas class="admin-page-thumb-canvas" data-page-num="{{ $page->page_number }}" style="display: none; width: 100%; height: 100%; object-fit: contain;"></canvas>
                             <img src="{{ $page->thumbnail_url }}" alt="{{ __('admin.page') }} {{ $page->page_number }}" 
-                                 onerror="this.src='/images/logo.png';"
+                                 onerror="this.src='/images/epaper-default-cover.jpg';"
                                  style="width: 100%; height: 100%; object-fit: contain;">
                             
                             <!-- Page Number Badge -->

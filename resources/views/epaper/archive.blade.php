@@ -245,7 +245,7 @@
             @foreach($editions as $ed)
                 <div class="archive-card">
                     <div class="archive-cover-wrap">
-                        <img src="{{ $ed->cover_url }}" alt="{{ $ed->title }}" onerror="this.src='/images/logo.png';">
+                        <img src="{{ $ed->cover_url }}" alt="{{ $ed->title }}" onerror="this.src='/images/epaper-default-cover.jpg';">
                     </div>
                     <div class="archive-card-body">
                         <div class="archive-region-tag">{{ $ed->region->name ?? 'ప్రధాన సంచిక' }}</div>

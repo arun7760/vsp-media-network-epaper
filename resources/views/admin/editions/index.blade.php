@@ -389,7 +389,7 @@
                         @foreach($editions as $ed)
                             <tr>
                                 <td>
-                                    <img src="{{ $ed->cover_url }}" alt="{{ $ed->title }}" class="thumb-mini" onerror="this.src='/images/logo.png';">
+                                    <img src="{{ $ed->cover_url }}" alt="{{ $ed->title }}" class="thumb-mini" onerror="this.src='/images/epaper-default-cover.jpg';">
                                 </td>
                                 <td>
                                     <strong style="color: var(--admin-navy); font-size: 15px;">{{ $ed->display_title }}</strong>

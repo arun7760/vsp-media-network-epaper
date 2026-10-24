@@ -334,7 +334,7 @@
             <!-- Left: Broadsheet Cover with 3D Depth -->
             <div class="cover-wrapper">
                 <canvas id="hero-cover-canvas" style="display: none; width: 100%; height: auto; border-radius: 6px;"></canvas>
-                <img id="hero-cover-img" src="{{ $edition->cover_url }}" alt="{{ $edition->title }}" onerror="this.src='/images/logo.png';">
+                <img id="hero-cover-img" src="{{ $edition->cover_url }}" alt="{{ $edition->title }}" onerror="this.src='/images/epaper-default-cover.jpg';">
                 <span class="live-badge-overlay">
                     <span class="live-badge-dot"></span>
                     <span>{{ $edition->total_pages }} {{ __('epaper.pages') }} &bull; {{ app()->getLocale() === 'en' ? 'Live' : 'లైవ్' }}</span>

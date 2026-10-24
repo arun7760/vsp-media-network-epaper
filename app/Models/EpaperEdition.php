@@ -112,7 +112,7 @@ class EpaperEdition extends Model
             return $firstPage->image_url;
         }
 
-        return '/images/epaper-default-cover.png';
+        return '/images/epaper-default-cover.jpg';
     }
 
     public function getThumbnailUrlAttribute(): string
