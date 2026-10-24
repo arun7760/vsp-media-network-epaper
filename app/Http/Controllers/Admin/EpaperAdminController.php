@@ -202,14 +202,14 @@ class EpaperAdminController extends Controller
     public function submitApproval(EpaperEdition $edition)
     {
         if ($edition->pages->isEmpty() || $edition->total_pages === 0) {
-            return back()->withErrors(['error' => 'పేజీలు లేని సంచికను ఆమోదం కొరకు పంపలేరు.']);
+            return back()->withErrors(['error' => app()->getLocale() === 'en' ? 'Cannot submit an edition with no pages.' : 'పేజీలు లేని సంచికను ఆమోదం కొరకు పంపలేరు.']);
         }
 
         $fromStatus = $edition->status;
         $edition->update(['status' => 'pending_approval']);
         $edition->recordWorkflow('submit_approval', $fromStatus, 'pending_approval', 'Submitted for editorial review', Auth::id());
 
-        return back()->with('success', 'సంచిక ఆమోదం కొరకు సమర్పించబడింది.');
+        return back()->with('success', app()->getLocale() === 'en' ? 'Edition submitted for editorial review.' : 'సంచిక ఆమోదం కొరకు సమర్పించబడింది.');
     }
 
     /**
@@ -229,11 +229,12 @@ class EpaperAdminController extends Controller
                 'published_at' => now(),
             ]);
             $edition->recordWorkflow('approve_and_publish', $fromStatus, 'published', $notes, Auth::id());
-            return back()->with('success', 'సంచిక ఆమోదించబడి లైవ్ చేయబడింది.');
+            return back()->with('success', app()->getLocale() === 'en' ? 'Edition approved and published live!' : 'సంచిక ఆమోదించబడి లైవ్ చేయబడింది.');
         }
 
-        // Default: Schedule for upcoming 5:00 AM IST
-        $scheduledTime = Carbon::parse($edition->edition_date)->setTime(5, 0, 0);
+        // Default: Schedule for 5:00 AM IST
+        $editionDate = Carbon::parse($edition->edition_date);
+        $scheduledTime = $editionDate->copy()->setTime(5, 0, 0);
 
         $edition->update([
             'status' => 'scheduled',
@@ -243,7 +244,7 @@ class EpaperAdminController extends Controller
 
         $edition->recordWorkflow('approve_and_schedule', $fromStatus, 'scheduled', "Approved and scheduled for {$scheduledTime->format('d M Y, h:i A')} IST. Notes: {$notes}", Auth::id());
 
-        return back()->with('success', 'సంచిక ఆమోదించబడింది. రేపు ఉదయం 5:00 గంటలకు ఆటోమేటిక్‌గా ప్రచురించబడుతుంది.');
+        return back()->with('success', app()->getLocale() === 'en' ? 'Edition approved and scheduled for release.' : 'సంచిక ఆమోదించబడింది. షెడ్యూల్ సమయానికి ఆటోమేటిక్‌గా ప్రచురించబడుతుంది.');
     }
 
     /**
@@ -278,7 +279,24 @@ class EpaperAdminController extends Controller
 
         $edition->recordWorkflow('publish_now', $fromStatus, 'published', 'Manual 1-click publication', Auth::id());
 
-        return back()->with('success', 'సంచిక ప్రత్యక్షంగా (Live) ప్రచురించబడింది.');
+        return back()->with('success', app()->getLocale() === 'en' ? 'Edition has been published live!' : 'సంచిక ప్రత్యక్షంగా (Live) ప్రచురించబడింది.');
+    }
+
+    /**
+     * Unpublish Edition (Revert from Published or Scheduled back to Draft)
+     */
+    public function unpublish(EpaperEdition $edition)
+    {
+        $fromStatus = $edition->status;
+        $edition->update([
+            'status' => 'draft',
+            'published_at' => null,
+            'scheduled_at' => null,
+        ]);
+
+        $edition->recordWorkflow('unpublish', $fromStatus, 'draft', 'Reverted edition to draft by administrator', Auth::id());
+
+        return back()->with('info', app()->getLocale() === 'en' ? 'Edition has been reverted to draft.' : 'సంచిక విజయవంతంగా డ్రాఫ్ట్‌గా మార్చబడింది.');
     }
 
     /**

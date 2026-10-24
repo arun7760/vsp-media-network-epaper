@@ -91,6 +91,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'active'])->group(fu
         ->name('editions.publish')
         ->middleware('role:super_admin,admin');
 
+    Route::post('/editions/{edition}/unpublish', [EpaperAdminController::class, 'unpublish'])
+        ->name('editions.unpublish')
+        ->middleware('role:super_admin,admin');
+
     Route::delete('/editions/{edition}', [EpaperAdminController::class, 'destroy'])
         ->name('editions.destroy')
         ->middleware('role:super_admin,admin');

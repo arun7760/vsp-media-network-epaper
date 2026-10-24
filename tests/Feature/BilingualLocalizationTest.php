@@ -141,4 +141,42 @@ class BilingualLocalizationTest extends TestCase
         $responseTe->assertSee('పేజీ 1 / 1');
         $responseTe->assertSee('పేజీలు (Filmstrip)');
     }
+
+    public function test_workflow_buttons_operate_correctly(): void
+    {
+        $draftEdition = EpaperEdition::create([
+            'region_id' => $this->region->id,
+            'edition_date' => now()->addDay()->toDateString(),
+            'title' => 'టెస్ట్ డ్రాఫ్ట్ సంచిక',
+            'status' => 'draft',
+            'total_pages' => 1,
+            'created_by' => $this->admin->id,
+        ]);
+
+        $draftEdition->pages()->create([
+            'page_number' => 1,
+            'image_path' => 'pages/1.jpg',
+            'thumbnail_path' => 'pages/1_thumb.jpg',
+        ]);
+
+        // 1. Publish Now
+        $publishResponse = $this->actingAs($this->admin)
+            ->post("/admin/editions/{$draftEdition->id}/publish-now");
+        $publishResponse->assertRedirect();
+        $this->assertEquals('published', $draftEdition->fresh()->status);
+
+        // 2. Unpublish (Revert to Draft)
+        $unpublishResponse = $this->actingAs($this->admin)
+            ->post("/admin/editions/{$draftEdition->id}/unpublish");
+        $unpublishResponse->assertRedirect();
+        $this->assertEquals('draft', $draftEdition->fresh()->status);
+
+        // 3. Approve & Schedule
+        $approveResponse = $this->actingAs($this->admin)
+            ->post("/admin/editions/{$draftEdition->id}/approve", [
+                'publish_action' => 'schedule_morning',
+            ]);
+        $approveResponse->assertRedirect();
+        $this->assertEquals('scheduled', $draftEdition->fresh()->status);
+    }
 }

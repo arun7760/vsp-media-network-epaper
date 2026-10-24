@@ -55,6 +55,16 @@ class User extends Authenticatable
         return in_array($this->role, ['super_admin', 'admin'], true);
     }
 
+    public function isEditor(): bool
+    {
+        return $this->role === 'editor';
+    }
+
+    public function isReviewer(): bool
+    {
+        return in_array($this->role, ['reviewer', 'approver'], true);
+    }
+
     public function canUpload(): bool
     {
         return $this->is_active && in_array($this->role, ['super_admin', 'admin', 'editor'], true);

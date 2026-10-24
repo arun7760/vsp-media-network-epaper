@@ -44,60 +44,103 @@
 
         <!-- Workflow Action Buttons -->
         <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            <!-- Public Preview Link -->
+            <!-- Public Preview / View in Reader -->
             @if($edition->status === 'published')
-                <a href="{{ route('epaper.edition', $edition) }}" target="_blank" class="btn-admin btn-outline" style="border-color: #10B981; color: #065F46;">
+                <a href="{{ route('epaper.edition', $edition) }}" target="_blank" class="btn-admin btn-outline" style="border-color: #10B981; color: #065F46; background: #ECFDF5; font-weight: 700;">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i> {{ __('admin.view_in_reader') }}
                 </a>
             @else
-                <a href="{{ route('epaper.edition', $edition) }}" target="_blank" class="btn-admin btn-outline" title="{{ __('admin.admin_preview') }}">
-                    <i class="fa-solid fa-eye"></i> {{ __('admin.preview') }}
+                <a href="{{ route('epaper.edition', $edition) }}" target="_blank" class="btn-admin btn-outline" title="{{ __('admin.admin_preview') }}" style="font-weight: 700;">
+                    <i class="fa-solid fa-eye" style="color: var(--admin-blue);"></i> {{ __('admin.preview') }}
                 </a>
             @endif
 
-            <!-- Submit for Review (if draft) -->
-            @if($edition->status === 'draft' && auth()->user()->canUpload())
-                <form action="{{ route('admin.editions.submit', $edition) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn-admin btn-gold" onclick="return confirm('{{ __('admin.confirm_submit_review') }}');">
-                        <i class="fa-solid fa-paper-plane"></i> {{ __('admin.submit_for_review') }}
-                    </button>
-                </form>
+            <!-- State: DRAFT -->
+            @if($edition->status === 'draft')
+                <!-- Submit for Editorial Review -->
+                @if(auth()->user()->canUpload())
+                    <form action="{{ route('admin.editions.submit', $edition) }}" method="POST" style="margin: 0;">
+                        @csrf
+                        <button type="submit" class="btn-admin btn-outline" style="border-color: #F59E0B; color: #B45309; background: #FFFBEB;">
+                            <i class="fa-solid fa-paper-plane"></i> {{ __('admin.submit_for_review') }}
+                        </button>
+                    </form>
+                @endif
+
+                <!-- If Admin / SuperAdmin: 1-Click Publish or Schedule directly -->
+                @if(auth()->user()->canPublish())
+                    <!-- Schedule for 5:00 AM IST -->
+                    <form action="{{ route('admin.editions.approve', $edition) }}" method="POST" style="margin: 0;">
+                        @csrf
+                        <input type="hidden" name="publish_action" value="schedule_morning">
+                        <button type="submit" class="btn-admin btn-primary">
+                            <i class="fa-solid fa-clock"></i> {{ __('admin.approve_and_schedule') }}
+                        </button>
+                    </form>
+
+                    <!-- Publish Live Immediately -->
+                    <form action="{{ route('admin.editions.publish', $edition) }}" method="POST" style="margin: 0;">
+                        @csrf
+                        <button type="submit" class="btn-admin btn-success" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFFFFF;">
+                            <i class="fa-solid fa-bolt"></i> {{ __('admin.publish_now') }}
+                        </button>
+                    </form>
+                @endif
             @endif
 
-            <!-- Approve Actions (for Reviewers / Admins) -->
-            @if(in_array($edition->status, ['draft', 'pending_approval']) && auth()->user()->canApprove())
+            <!-- State: PENDING APPROVAL -->
+            @if($edition->status === 'pending_approval' && auth()->user()->canApprove())
                 <!-- Approve & Schedule Morning 5:00 AM -->
-                <form action="{{ route('admin.editions.approve', $edition) }}" method="POST">
+                <form action="{{ route('admin.editions.approve', $edition) }}" method="POST" style="margin: 0;">
                     @csrf
                     <input type="hidden" name="publish_action" value="schedule_morning">
-                    <button type="submit" class="btn-admin btn-primary" onclick="return confirm('{{ __('admin.confirm_approve_schedule') }}');">
+                    <button type="submit" class="btn-admin btn-primary">
                         <i class="fa-solid fa-clock"></i> {{ __('admin.approve_and_schedule') }}
                     </button>
                 </form>
 
                 <!-- Immediate Publish (Admin/SuperAdmin) -->
                 @if(auth()->user()->canPublish())
-                    <form action="{{ route('admin.editions.publish', $edition) }}" method="POST">
+                    <form action="{{ route('admin.editions.publish', $edition) }}" method="POST" style="margin: 0;">
                         @csrf
-                        <button type="submit" class="btn-admin btn-success" onclick="return confirm('{{ __('admin.confirm_publish_now') }}');">
+                        <button type="submit" class="btn-admin btn-success" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFFFFF;">
                             <i class="fa-solid fa-bolt"></i> {{ __('admin.publish_now') }}
                         </button>
                     </form>
                 @endif
 
-                <!-- Reject Button (Opens Modal) -->
-                <button type="button" class="btn-admin btn-danger" onclick="document.getElementById('rejectModal').style.display='flex';">
+                <!-- Reject Button (Opens Modal with reason) -->
+                <button type="button" class="btn-admin btn-danger" onclick="document.getElementById('rejectModal').style.display='flex';" style="background: #EF4444; color: #FFFFFF;">
                     <i class="fa-solid fa-ban"></i> {{ __('admin.reject') }}
                 </button>
             @endif
 
-            <!-- Publish Now for Scheduled Edition -->
+            <!-- State: SCHEDULED -->
             @if($edition->status === 'scheduled' && auth()->user()->canPublish())
-                <form action="{{ route('admin.editions.publish', $edition) }}" method="POST">
+                <!-- Publish Live Immediately -->
+                <form action="{{ route('admin.editions.publish', $edition) }}" method="POST" style="margin: 0;">
                     @csrf
-                    <button type="submit" class="btn-admin btn-success" onclick="return confirm('{{ __('admin.confirm_scheduled_publish') }}');">
+                    <button type="submit" class="btn-admin btn-success" style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFFFFF;">
                         <i class="fa-solid fa-bolt"></i> {{ __('admin.publish_now') }}
+                    </button>
+                </form>
+
+                <!-- Revert back to Draft -->
+                <form action="{{ route('admin.editions.unpublish', $edition) }}" method="POST" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="btn-admin btn-outline" style="border-color: #CBD5E1; color: #475569;">
+                        <i class="fa-solid fa-arrow-rotate-left"></i> {{ app()->getLocale() === 'en' ? 'Revert to Draft' : 'డ్రాఫ్ట్‌గా మార్చండి' }}
+                    </button>
+                </form>
+            @endif
+
+            <!-- State: PUBLISHED -->
+            @if($edition->status === 'published' && auth()->user()->canPublish())
+                <!-- Unpublish / Take Down to Draft -->
+                <form action="{{ route('admin.editions.unpublish', $edition) }}" method="POST" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="btn-admin btn-outline" style="border-color: #FCA5A5; color: #DC2626;">
+                        <i class="fa-solid fa-eye-slash"></i> {{ app()->getLocale() === 'en' ? 'Unpublish (Move to Draft)' : 'అన్‌పబ్లిష్ చేయండి (డ్రాఫ్ట్‌గా మార్చండి)' }}
                     </button>
                 </form>
             @endif
