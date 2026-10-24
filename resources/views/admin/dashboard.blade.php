@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'డ్యాష్‌బోర్డ్ | VSP TIMES E-Paper CMS')
-@section('header_title', 'ఈ-పేపర్ ఎడిటోరియల్ డ్యాష్‌బోర్డ్')
+@section('title', __('admin.dashboard') . ' | VSP TIMES E-Paper CMS')
+@section('header_title', __('admin.editorial_dashboard'))
 
 @push('styles')
 <style>
@@ -14,24 +14,30 @@
     .metric-card {
         background: #FFFFFF;
         border: 1px solid var(--admin-border);
-        border-radius: 10px;
+        border-radius: 12px;
         padding: 20px 24px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         display: flex;
         align-items: center;
         gap: 16px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(10, 29, 55, 0.08);
     }
     .metric-icon {
         width: 48px;
         height: 48px;
-        border-radius: 8px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 20px;
+        flex-shrink: 0;
     }
     .metric-num {
-        font-size: 26px;
+        font-size: 28px;
         font-weight: 800;
         color: var(--admin-navy);
         line-height: 1.1;
@@ -40,6 +46,7 @@
         font-size: 13px;
         color: var(--admin-muted);
         font-weight: 600;
+        margin-top: 3px;
     }
 
     .table-responsive {
@@ -80,73 +87,73 @@
 
 @section('content')
 
-    <!-- Metrics Grid -->
+    <!-- Metrics Grid (Styled after vspmedianetwork.com/admin/dashboard) -->
     <div class="metrics-grid">
         <div class="metric-card">
-            <div class="metric-icon" style="background: rgba(10, 29, 55, 0.08); color: var(--admin-navy);">
+            <div class="metric-icon" style="background: #E0F2FE; color: #0284C7;">
                 <i class="fa-solid fa-newspaper"></i>
             </div>
             <div>
                 <div class="metric-num">{{ $metrics['total_editions'] }}</div>
-                <div class="metric-label">మొత్తం సంచికలు (Editions)</div>
+                <div class="metric-label">{{ __('admin.metrics_total') }}</div>
             </div>
         </div>
 
         <div class="metric-card">
-            <div class="metric-icon" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">
+            <div class="metric-icon" style="background: #DCFCE7; color: #16A34A;">
                 <i class="fa-solid fa-circle-check"></i>
             </div>
             <div>
                 <div class="metric-num">{{ $metrics['published_editions'] }}</div>
-                <div class="metric-label">లైవ్ సంచికలు (Published)</div>
+                <div class="metric-label">{{ __('admin.metrics_live') }}</div>
             </div>
         </div>
 
         <div class="metric-card">
-            <div class="metric-icon" style="background: rgba(245, 158, 11, 0.12); color: #F59E0B;">
+            <div class="metric-icon" style="background: #FEF3C7; color: #D97706;">
                 <i class="fa-solid fa-clock"></i>
             </div>
             <div>
                 <div class="metric-num">{{ $metrics['pending_approvals'] }}</div>
-                <div class="metric-label">ఆమోదం కోసం (Pending)</div>
+                <div class="metric-label">{{ __('admin.metrics_pending') }}</div>
             </div>
         </div>
 
         <div class="metric-card">
-            <div class="metric-icon" style="background: rgba(59, 130, 246, 0.1); color: #3B82F6;">
+            <div class="metric-icon" style="background: #E0E7FF; color: #4F46E5;">
                 <i class="fa-solid fa-calendar-check"></i>
             </div>
             <div>
                 <div class="metric-num">{{ $metrics['scheduled_editions'] }}</div>
-                <div class="metric-label">షెడ్యూల్డ్ (5:00 AM IST)</div>
+                <div class="metric-label">{{ __('admin.metrics_scheduled') }}</div>
             </div>
         </div>
 
         <div class="metric-card">
-            <div class="metric-icon" style="background: rgba(212, 175, 55, 0.15); color: #B8860B;">
+            <div class="metric-icon" style="background: #F3E8FF; color: #9333EA;">
                 <i class="fa-regular fa-eye"></i>
             </div>
             <div>
                 <div class="metric-num">{{ number_format($metrics['total_views']) }}</div>
-                <div class="metric-label">మొత్తం వీక్షణలు (Views)</div>
+                <div class="metric-label">{{ __('admin.metrics_views') }}</div>
             </div>
         </div>
     </div>
 
     <!-- Quick Action Banner -->
-    <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; background: linear-gradient(135deg, #0A1D37 0%, #173868 100%); color: #FFFFFF;">
+    <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; background: linear-gradient(135deg, #0A1D37 0%, #173868 100%); color: #FFFFFF; border-radius: 12px; margin-bottom: 28px;">
         <div>
-            <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 20px; color: #FFFFFF; margin-bottom: 4px;">
-                నేటి దినపత్రిక PDF అప్‌లోడ్ చేయడానికి సిద్ధంగా ఉన్నారా?
+            <h3 style="font-family: inherit; font-size: 20px; font-weight: 800; color: #FFFFFF; margin-bottom: 6px;">
+                {{ __('admin.ready_upload_title') }}
             </h3>
-            <p style="color: #CBD5E1; font-size: 14px;">
-                PDF ఫైల్‌ను అప్‌లోడ్ చేసి, పేజీలను సరిచూసి, ఉదయం 5:00 గంటలకు ఆటోమేటిక్ ప్రచురణకు షెడ్యూల్ చేయండి.
+            <p style="color: #CBD5E1; font-size: 14px; margin: 0;">
+                {{ __('admin.ready_upload_desc') }}
             </p>
         </div>
         <div style="display: flex; gap: 12px;">
             @if(auth()->user()->canUpload())
-                <a href="{{ route('admin.editions.create') }}" class="btn-admin btn-gold">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> కొత్త PDF అప్‌లోడ్ చేయండి
+                <a href="{{ route('admin.editions.create') }}" class="btn-admin btn-gold" style="font-size: 14px; padding: 11px 22px;">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> {{ __('admin.upload_new_pdf') }}
                 </a>
             @endif
         </div>
@@ -156,10 +163,12 @@
         <!-- Pending Approvals -->
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <h3 style="font-size: 16px; font-weight: 700; color: var(--admin-navy);">
-                    <i class="fa-solid fa-clipboard-check" style="color: #F59E0B;"></i> ఆమోదం కొరకు వేచిఉన్నవి (Pending Approval)
+                <h3 style="font-size: 16px; font-weight: 700; color: var(--admin-navy); margin: 0;">
+                    <i class="fa-solid fa-clipboard-check" style="color: #F59E0B; margin-right: 6px;"></i> {{ __('admin.pending_approval_heading') }}
                 </h3>
-                <a href="{{ route('admin.editions.index', ['status' => 'pending_approval']) }}" style="font-size: 13px; color: var(--admin-navy); font-weight: 700; text-decoration: none;">అన్నీ చూడండి</a>
+                <a href="{{ route('admin.editions.index', ['status' => 'pending_approval']) }}" style="font-size: 13px; color: var(--admin-blue); font-weight: 700; text-decoration: none;">
+                    {{ __('admin.view_all') }} &rarr;
+                </a>
             </div>
 
             @if($pendingEditions->isNotEmpty())
@@ -167,10 +176,10 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>సంచిక &amp; ప్రాంతం</th>
-                                <th>తేదీ</th>
-                                <th>సమర్పించిన వారు</th>
-                                <th>చర్య</th>
+                                <th>{{ __('admin.table_edition_region') }}</th>
+                                <th>{{ __('admin.table_date') }}</th>
+                                <th>{{ __('admin.table_submitted_by') }}</th>
+                                <th>{{ __('admin.table_action') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -181,10 +190,10 @@
                                         <div style="font-size: 12px; color: var(--admin-muted);">{{ $pe->title }}</div>
                                     </td>
                                     <td>{{ $pe->edition_date->format('d M Y') }}</td>
-                                    <td>{{ $pe->creator?->name ?? 'ఎడిటర్' }}</td>
+                                    <td>{{ $pe->creator?->name ?? 'Editor' }}</td>
                                     <td>
                                         <a href="{{ route('admin.editions.edit', $pe) }}" class="btn-admin btn-gold" style="padding: 4px 10px; font-size: 12px;">
-                                            సమీక్షించండి
+                                            {{ __('admin.table_review') }}
                                         </a>
                                     </td>
                                 </tr>
@@ -195,7 +204,7 @@
             @else
                 <div style="text-align: center; padding: 32px 16px; color: var(--admin-muted);">
                     <i class="fa-solid fa-circle-check" style="font-size: 28px; color: #10B981; margin-bottom: 8px;"></i>
-                    <p>ప్రస్తుతం ఆమోదం కోసం ఎటువంటి సంచికలు లేవు. అన్నీ పూర్తయ్యాయి!</p>
+                    <p style="margin: 0;">{{ __('admin.no_pending_editions') }}</p>
                 </div>
             @endif
         </div>
@@ -203,8 +212,8 @@
         <!-- Recent Audit Activity -->
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <h3 style="font-size: 16px; font-weight: 700; color: var(--admin-navy);">
-                    <i class="fa-solid fa-clock-rotate-left"></i> ఇటీవలి ఎడిటోరియల్ కార్యకలాపాలు (Audit Logs)
+                <h3 style="font-size: 16px; font-weight: 700; color: var(--admin-navy); margin: 0;">
+                    <i class="fa-solid fa-clock-rotate-left" style="color: var(--admin-blue); margin-right: 6px;"></i> {{ __('admin.recent_audit_logs') }}
                 </h3>
             </div>
 
@@ -212,11 +221,11 @@
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     @foreach($recentLogs as $log)
                         <div style="display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; border-radius: 6px; background: #F8FAFC; border: 1px solid var(--admin-border);">
-                            <div style="width: 28px; height: 28px; border-radius: 50%; background: #E2E8F0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: var(--admin-navy);">
+                            <div style="width: 28px; height: 28px; border-radius: 50%; background: #E0F2FE; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #0284C7;">
                                 {{ strtoupper(substr($log->user?->name ?? 'S', 0, 1)) }}
                             </div>
                             <div style="flex: 1; font-size: 13px;">
-                                <div><strong>{{ $log->user?->name ?? 'సిస్టమ్' }}</strong> &bull; <span style="text-transform: capitalize; color: #0284C7; font-weight: 700;">{{ str_replace('_', ' ', $log->action) }}</span></div>
+                                <div><strong>{{ $log->user?->name ?? __('admin.system') }}</strong> &bull; <span style="text-transform: capitalize; color: #0284C7; font-weight: 700;">{{ str_replace('_', ' ', $log->action) }}</span></div>
                                 <div style="color: #64748B; font-size: 12px;">{{ $log->edition?->title }}: {{ $log->notes }}</div>
                             </div>
                             <div style="font-size: 11px; color: #94A3B8; white-space: nowrap;">
@@ -226,7 +235,7 @@
                     @endforeach
                 </div>
             @else
-                <p style="color: var(--admin-muted); font-size: 13px;">కార్యకలాపాల వివరాలు నమోదు కాలేదు.</p>
+                <p style="color: var(--admin-muted); font-size: 13px; margin: 0;">{{ __('admin.no_recent_activity') }}</p>
             @endif
         </div>
     </div>

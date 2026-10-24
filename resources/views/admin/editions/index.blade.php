@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'సంచికల నిర్వహణ | VSP TIMES E-Paper CMS')
-@section('header_title', 'ఈ-పేపర్ సంచికల నిర్వహణ (Manage Editions)')
+@section('title', __('admin.manage_editions') . ' | VSP TIMES E-Paper CMS')
+@section('header_title', __('admin.manage_editions'))
 
 @push('styles')
 <style>
@@ -172,16 +172,16 @@
     <!-- Top Action & Filter Strip -->
     <div class="filter-strip">
         <div class="status-filters">
-            <a href="{{ route('admin.editions.index') }}" class="status-filter-btn {{ !request('status') ? 'active' : '' }}">అన్నీ (All)</a>
-            <a href="{{ route('admin.editions.index', ['status' => 'pending_approval']) }}" class="status-filter-btn {{ request('status') === 'pending_approval' ? 'active' : '' }}">ఆమోదం కోసం (Pending)</a>
-            <a href="{{ route('admin.editions.index', ['status' => 'scheduled']) }}" class="status-filter-btn {{ request('status') === 'scheduled' ? 'active' : '' }}">షెడ్యూల్డ్ (5:00 AM)</a>
-            <a href="{{ route('admin.editions.index', ['status' => 'published']) }}" class="status-filter-btn {{ request('status') === 'published' ? 'active' : '' }}">ప్రచురితమైనవి (Live)</a>
-            <a href="{{ route('admin.editions.index', ['status' => 'draft']) }}" class="status-filter-btn {{ request('status') === 'draft' ? 'active' : '' }}">డ్రాఫ్ట్‌లు (Drafts)</a>
+            <a href="{{ route('admin.editions.index') }}" class="status-filter-btn {{ !request('status') ? 'active' : '' }}">{{ __('admin.filter_all') }}</a>
+            <a href="{{ route('admin.editions.index', ['status' => 'pending_approval']) }}" class="status-filter-btn {{ request('status') === 'pending_approval' ? 'active' : '' }}">{{ __('admin.filter_pending') }}</a>
+            <a href="{{ route('admin.editions.index', ['status' => 'scheduled']) }}" class="status-filter-btn {{ request('status') === 'scheduled' ? 'active' : '' }}">{{ __('admin.filter_scheduled') }}</a>
+            <a href="{{ route('admin.editions.index', ['status' => 'published']) }}" class="status-filter-btn {{ request('status') === 'published' ? 'active' : '' }}">{{ __('admin.filter_published') }}</a>
+            <a href="{{ route('admin.editions.index', ['status' => 'draft']) }}" class="status-filter-btn {{ request('status') === 'draft' ? 'active' : '' }}">{{ __('admin.filter_draft') }}</a>
         </div>
 
         @if(auth()->user()->canUpload())
             <a href="{{ route('admin.editions.create') }}" class="btn-admin btn-gold">
-                <i class="fa-solid fa-cloud-arrow-up"></i> కొత్త సంచిక అప్‌లోడ్
+                <i class="fa-solid fa-cloud-arrow-up"></i> {{ __('admin.upload_edition') }}
             </a>
         @endif
     </div>
@@ -193,14 +193,14 @@
                 <table class="editions-table">
                     <thead>
                         <tr>
-                            <th style="width: 70px;">కవర్</th>
-                            <th>సంచిక శీర్షిక &amp; వివరాలు</th>
-                            <th>ప్రాంతం</th>
-                            <th>తేదీ</th>
-                            <th>పేజీలు</th>
-                            <th>స్థితి (Status)</th>
-                            <th>వీక్షణలు</th>
-                            <th style="text-align: right;">చర్యలు</th>
+                            <th style="width: 70px;">{{ __('admin.col_cover') }}</th>
+                            <th>{{ __('admin.col_title_details') }}</th>
+                            <th>{{ __('admin.col_region') }}</th>
+                            <th>{{ __('admin.col_date') }}</th>
+                            <th>{{ __('admin.col_pages') }}</th>
+                            <th>{{ __('admin.col_status') }}</th>
+                            <th>{{ __('admin.col_views') }}</th>
+                            <th style="text-align: right;">{{ __('admin.col_actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>

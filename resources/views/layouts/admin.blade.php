@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'VSP TIMES ఈ-పేపర్ ఎడిటోరియల్ డెస్క్')</title>
+    <title>@yield('title', __('admin.portal_title'))</title>
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
 
-    <!-- Fonts & Icons -->
+    <!-- Fonts matching main website (vspmedianetwork.com) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Ramabhadra&family=Source+Sans+3:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Ramabhadra&family=Source+Sans+3:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
-    <style>
         :root {
-            --admin-navy: #00205B;
-            --admin-navy-dark: #00143E;
+            --admin-navy: #0A1D37;
+            --admin-navy-dark: #000E24;
             --admin-blue: #0047AB;
-            --admin-red: #D6001C;
-            --admin-red-hover: #B80018;
+            --admin-red: #D91B24;
+            --admin-red-hover: #B80F17;
             --admin-red-light: #FEE2E2;
-            --admin-gold: #D6001C; /* Replaced legacy gold with brand red */
+            --admin-gold: #D91B24;
             --admin-bg: #F4F7FB;
             --admin-card: #FFFFFF;
             --admin-border: #E2E8F0;
@@ -34,7 +33,7 @@
         body {
             background-color: var(--admin-bg);
             color: var(--admin-text);
-            font-family: 'Mandali', 'Noto Sans Telugu', sans-serif;
+            font-family: {{ app()->getLocale() === 'en' ? "'Source Sans 3', system-ui, sans-serif" : "'Noto Sans Telugu', 'Mandali', sans-serif" }};
             display: flex;
             min-height: 100vh;
         }
@@ -48,10 +47,10 @@
             flex-direction: column;
             flex-shrink: 0;
             border-right: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 2px 0 16px rgba(0, 32, 91, 0.15);
+            box-shadow: 2px 0 16px rgba(10, 29, 55, 0.15);
         }
         .sidebar-brand {
-            padding: 22px 18px;
+            padding: 20px 18px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             text-decoration: none;
             display: block;
@@ -60,7 +59,7 @@
         .brand-logo-card {
             background: #FFFFFF;
             border-radius: 10px;
-            padding: 10px 14px;
+            padding: 8px 14px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -72,32 +71,14 @@
             transform: translateY(-1px);
         }
         .brand-logo-img {
-            max-height: 58px;
+            max-height: 60px;
             width: auto;
             max-width: 100%;
             object-fit: contain;
         }
-        .sidebar-badge-wrap {
-            text-align: center;
-            margin-top: 10px;
-        }
-        .sidebar-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: linear-gradient(135deg, #D6001C 0%, #B80018 100%);
-            color: #FFFFFF;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 3px 10px;
-            border-radius: 999px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            box-shadow: 0 2px 8px rgba(214, 0, 28, 0.4);
-        }
 
         .sidebar-nav {
-            padding: 20px 12px;
+            padding: 16px 12px;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -130,13 +111,20 @@
             transform: translateX(2px);
         }
         .nav-link.active {
-            background: linear-gradient(90deg, #0047AB 0%, #002D7A 100%);
+            background: linear-gradient(135deg, #D91B24 0%, #B80F17 100%);
             color: #FFFFFF;
             font-weight: 700;
-            border-left: 4px solid var(--admin-red);
-            box-shadow: 0 4px 12px rgba(0, 71, 171, 0.35);
+            box-shadow: 0 4px 12px rgba(217, 27, 36, 0.35);
         }
         .nav-link .badge {
+            margin-left: auto;
+            background: #FFFFFF;
+            color: #D91B24;
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 999px;
+            font-weight: 800;
+        }
             margin-left: auto;
             background: var(--admin-red);
             color: #FFFFFF;
@@ -310,28 +298,25 @@
             <div class="brand-logo-card">
                 <img src="{{ asset('images/logo.png') }}" alt="VSP TIMES" class="brand-logo-img">
             </div>
-            <div class="sidebar-badge-wrap">
-                <span class="sidebar-badge"><i class="fa-solid fa-newspaper"></i> ఈ-పేపర్ CMS డెస్క్</span>
-            </div>
         </a>
 
         <nav class="sidebar-nav">
-            <div class="nav-heading">నిర్వహణ (Management)</div>
+            <div class="nav-heading">{{ __('admin.nav_management') }}</div>
             <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                <i class="fa-solid fa-chart-pie"></i> డ్యాష్‌బోర్డ్
+                <i class="fa-solid fa-chart-pie"></i> {{ __('admin.dashboard') }}
             </a>
 
             @if(auth()->user()->canUpload())
                 <a href="{{ route('admin.editions.create') }}" class="nav-link {{ request()->routeIs('admin.editions.create') ? 'active' : '' }}">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> కొత్త సంచిక అప్‌లోడ్
+                    <i class="fa-solid fa-cloud-arrow-up"></i> {{ __('admin.upload_edition') }}
                 </a>
             @endif
 
             <a href="{{ route('admin.editions.index') }}" class="nav-link {{ request()->routeIs('admin.editions.index') && !request('status') ? 'active' : '' }}">
-                <i class="fa-solid fa-newspaper"></i> అన్ని సంచికలు
+                <i class="fa-solid fa-newspaper"></i> {{ __('admin.all_editions') }}
             </a>
 
-            <div class="nav-heading">పనితీరు &amp; ఆమోదాలు (Workflows)</div>
+            <div class="nav-heading">{{ __('admin.nav_workflows') }}</div>
             <a href="{{ route('admin.editions.index', ['status' => 'pending_approval']) }}" class="nav-link {{ request('status') === 'pending_approval' ? 'active' : '' }}">
                 <i class="fa-solid fa-clipboard-check"></i> {{ __('admin.pending_approvals') }}
                 @php $pendingCount = \App\Models\EpaperEdition::where('status', 'pending_approval')->count(); @endphp
@@ -341,7 +326,7 @@
             </a>
 
             <a href="{{ route('admin.editions.index', ['status' => 'scheduled']) }}" class="nav-link {{ request('status') === 'scheduled' ? 'active' : '' }}">
-                <i class="fa-solid fa-calendar-clock"></i> {{ __('admin.scheduled_editions') }}
+                <i class="fa-solid fa-calendar-check"></i> {{ __('admin.scheduled_editions') }}
             </a>
 
             <a href="{{ route('admin.editions.index', ['status' => 'published']) }}" class="nav-link {{ request('status') === 'published' ? 'active' : '' }}">
@@ -349,7 +334,7 @@
             </a>
 
             @if(auth()->user()->isAdmin())
-                <div class="nav-heading">నిర్వాహణ వ్యవస్థ (Administration)</div>
+                <div class="nav-heading">{{ __('admin.nav_administration') }}</div>
                 <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                     <i class="fa-solid fa-users-gear"></i> {{ __('admin.users_roles') }}
                 </a>
@@ -361,7 +346,7 @@
                 </a>
             @endif
 
-            <div class="nav-heading">పబ్లిక్ పోర్టల్ (Public)</div>
+            <div class="nav-heading">{{ __('admin.nav_public') }}</div>
             <a href="{{ route('epaper.home') }}" target="_blank" class="nav-link">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i> {{ __('admin.view_live_epaper') }}
             </a>
@@ -389,21 +374,41 @@
     <!-- Main Content Area -->
     <div class="admin-main">
         <header class="admin-header">
-            <h2>@yield('header_title', __('admin.portal_title'))</h2>
+            <div>
+                <div style="font-size: 12px; color: var(--admin-muted); display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
+                    <i class="fa-solid fa-house"></i>
+                    <span>{{ __('admin.dashboard') }}</span>
+                </div>
+                <h2 style="font-size: 20px; font-weight: 800; color: var(--admin-navy); margin: 0;">
+                    @yield('header_title', __('admin.portal_title'))
+                </h2>
+            </div>
+            
             <div style="display: flex; align-items: center; gap: 18px;">
-                <!-- English / Telugu Language Toggle -->
+                <!-- English / Telugu Language Toggle (Image 3 Style) -->
                 <div style="display: flex; background: #F1F5F9; border-radius: 6px; padding: 3px; border: 1px solid var(--admin-border);">
-                    <a href="{{ route('admin.locale.switch', 'te') }}" 
-                       style="padding: 4px 12px; font-size: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; color: {{ app()->getLocale() === 'te' ? '#FFFFFF' : 'var(--admin-navy)' }}; background: {{ app()->getLocale() === 'te' ? 'var(--admin-red)' : 'transparent' }}; transition: all 0.2s;">
-                        తెలుగు
-                    </a>
                     <a href="{{ route('admin.locale.switch', 'en') }}" 
-                       style="padding: 4px 12px; font-size: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; color: {{ app()->getLocale() === 'en' ? '#FFFFFF' : 'var(--admin-navy)' }}; background: {{ app()->getLocale() === 'en' ? 'var(--admin-red)' : 'transparent' }}; transition: all 0.2s;">
+                       style="padding: 5px 14px; font-size: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; color: {{ app()->getLocale() === 'en' ? '#FFFFFF' : '#64748B' }}; background: {{ app()->getLocale() === 'en' ? '#0F172A' : 'transparent' }}; transition: all 0.2s;">
                         English
+                    </a>
+                    <a href="{{ route('admin.locale.switch', 'te') }}" 
+                       style="padding: 5px 14px; font-size: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; color: {{ app()->getLocale() === 'te' ? '#FFFFFF' : '#64748B' }}; background: {{ app()->getLocale() === 'te' ? '#0F172A' : 'transparent' }}; transition: all 0.2s;">
+                        తెలుగు
                     </a>
                 </div>
 
-                <div style="font-size: 13px; color: var(--admin-muted);">
+                <a href="{{ route('epaper.home') }}" target="_blank" style="color: var(--admin-navy); font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--admin-red);"></i> {{ __('admin.view_live_website') }}
+                </a>
+
+                <form action="{{ route('admin.logout') }}" method="POST" style="margin: 0;">
+                    @csrf
+                    <button type="submit" style="background: none; border: none; color: #DC2626; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-power-off"></i> {{ __('admin.logout') }}
+                    </button>
+                </form>
+
+                <div style="font-size: 12px; color: var(--admin-muted); border-left: 1px solid var(--admin-border); padding-left: 14px;">
                     <i class="fa-regular fa-clock"></i> {{ now('Asia/Kolkata')->format('d M Y, h:i A') }} IST
                 </div>
             </div>

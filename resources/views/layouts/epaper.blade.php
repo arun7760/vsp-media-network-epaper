@@ -14,22 +14,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
-    <style>
         :root {
-            --epaper-navy: #00205B;
-            --epaper-navy-light: #001640;
+            --epaper-navy: #0A1D37;
+            --epaper-navy-light: #000E24;
             --epaper-blue: #0047AB;
-            --epaper-red: #D6001C;
-            --epaper-red-dark: #B80018;
-            --epaper-gold: #D6001C;
-            --epaper-gold-dark: #B80018;
+            --epaper-red: #D91B24;
+            --epaper-red-dark: #B80F17;
+            --epaper-gold: #D91B24;
+            --epaper-gold-dark: #B80F17;
             --epaper-bg: #F4F7FB;
             --epaper-card: #FFFFFF;
             --epaper-text: #0F172A;
             --epaper-muted: #64748B;
             --epaper-border: #E2E8F0;
-            --font-telugu-serif: 'Ramabhadra', 'Noto Sans Telugu', serif;
-            --font-telugu-sans: 'Mandali', 'Noto Sans Telugu', sans-serif;
+            --font-telugu-serif: 'Noto Sans Telugu', 'Mandali', serif;
+            --font-telugu-sans: 'Noto Sans Telugu', 'Mandali', sans-serif;
             --font-sans: 'Source Sans 3', sans-serif;
         }
 
@@ -42,7 +41,7 @@
         body {
             background-color: var(--epaper-bg);
             color: var(--epaper-text);
-            font-family: var(--font-telugu-sans);
+            font-family: {{ app()->getLocale() === 'en' ? "'Source Sans 3', system-ui, sans-serif" : "'Noto Sans Telugu', 'Mandali', sans-serif" }};
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
             display: flex;
@@ -151,19 +150,19 @@
         .brand-logo-wrap {
             background: #FFFFFF;
             border-radius: 12px;
-            padding: 8px 18px;
+            padding: 10px 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 18px rgba(0,0,0,0.25);
-            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.28);
+            border: 1px solid rgba(255,255,255,0.4);
             transition: transform 0.2s ease;
         }
         .brand-logo-wrap:hover {
             transform: translateY(-2px);
         }
         .main-logo-img {
-            max-height: 64px;
+            max-height: 75px;
             width: auto;
             object-fit: contain;
         }
@@ -317,10 +316,6 @@
             <a href="{{ route('epaper.home') }}" class="brand-block">
                 <div class="brand-logo-wrap">
                     <img src="{{ asset('images/logo.png') }}" alt="VSP TIMES" class="main-logo-img">
-                </div>
-                <div class="brand-text-block">
-                    <div class="brand-tagline">తెలుగు రాష్ట్రాల విశ్వసనీయ డిజిటల్ దినపత్రిక &bull; The Future of News</div>
-                    <div class="brand-badge"><i class="fa-solid fa-newspaper"></i> ఈ-పేపర్ డిజిటల్ ఎడిషన్</div>
                 </div>
             </a>
             <div class="masthead-actions">
