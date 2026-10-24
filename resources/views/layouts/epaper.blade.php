@@ -226,12 +226,12 @@
         }
         .brand-logo-wrap {
             background: #FFFFFF;
-            border-radius: 12px;
-            padding: 10px 24px;
-            display: flex;
+            border-radius: 8px;
+            padding: 4px 12px;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.28);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
             border: 1px solid rgba(255,255,255,0.4);
             transition: transform 0.2s ease;
         }
@@ -239,9 +239,11 @@
             transform: translateY(-2px);
         }
         .main-logo-img {
-            max-height: 75px;
+            height: 82px;
+            max-height: 88px;
             width: auto;
             object-fit: contain;
+            display: block;
         }
         .brand-text-block {
             display: flex;
@@ -379,6 +381,10 @@
             }
             .epaper-masthead {
                 padding: 16px;
+            }
+            .main-logo-img {
+                height: 54px;
+                max-height: 58px;
             }
             .topbar-left, .topbar-right {
                 width: 100%;
