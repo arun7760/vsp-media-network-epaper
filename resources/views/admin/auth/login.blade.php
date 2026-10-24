@@ -14,7 +14,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: #071526;
+            background: linear-gradient(135deg, #00143E 0%, #00205B 50%, #003380 100%);
             font-family: 'Mandali', 'Noto Sans Telugu', sans-serif;
             display: flex;
             align-items: center;
@@ -24,31 +24,33 @@
         }
         .login-card {
             background: #FFFFFF;
-            border-radius: 12px;
-            padding: 40px 36px;
+            border-radius: 16px;
+            padding: 42px 38px;
             width: 100%;
             max-width: 440px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 50px rgba(0, 16, 60, 0.45);
             text-align: center;
+            border-top: 5px solid #D6001C;
         }
-        .login-brand {
-            font-family: 'Ramabhadra', sans-serif;
-            font-size: 28px;
-            color: #0A1D37;
-            margin-bottom: 4px;
+        .login-logo {
+            max-height: 80px;
+            width: auto;
+            max-width: 240px;
+            margin-bottom: 16px;
+            object-fit: contain;
         }
-        .login-brand span { color: #D4AF37; }
         .login-badge {
             display: inline-block;
-            background: #D4AF37;
-            color: #0A1D37;
+            background: #FEE2E2;
+            color: #D6001C;
             font-weight: 800;
             font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 4px;
+            padding: 4px 12px;
+            border-radius: 999px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 24px;
+            border: 1px solid #FECACA;
         }
         .form-group {
             text-align: left;
@@ -58,7 +60,7 @@
             display: block;
             font-size: 13px;
             font-weight: 700;
-            color: #1E293B;
+            color: #00205B;
             margin-bottom: 6px;
         }
         .form-control {
@@ -68,28 +70,30 @@
             border-radius: 6px;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.15s;
+            transition: all 0.2s;
         }
         .form-control:focus {
-            border-color: #0A1D37;
-            box-shadow: 0 0 0 3px rgba(10,29,55,0.1);
+            border-color: #0047AB;
+            box-shadow: 0 0 0 3px rgba(0, 71, 171, 0.15);
         }
         .btn-submit {
             width: 100%;
-            background: #0A1D37;
+            background: linear-gradient(135deg, #0047AB 0%, #00205B 100%);
             color: #FFFFFF;
-            padding: 12px;
+            padding: 13px;
             border-radius: 6px;
             font-size: 15px;
             font-weight: 700;
             border: none;
             cursor: pointer;
-            transition: background 0.15s;
+            transition: all 0.2s;
             margin-top: 8px;
+            box-shadow: 0 4px 12px rgba(0, 71, 171, 0.3);
         }
         .btn-submit:hover {
-            background: #D4AF37;
-            color: #0A1D37;
+            background: linear-gradient(135deg, #D6001C 0%, #B80018 100%);
+            box-shadow: 0 4px 15px rgba(214, 0, 28, 0.4);
+            transform: translateY(-1px);
         }
         .alert-error {
             background: #FEF2F2;
@@ -106,8 +110,11 @@
 <body>
 
     <div class="login-card">
-        <div class="login-brand">VSP <span>TIMES</span></div>
-        <div class="login-badge">ఈ-పేపర్ ఎడిటోరియల్ డెస్క్ లాగిన్</div>
+        <a href="{{ route('epaper.home') }}" title="VSP TIMES E-Paper Home">
+            <img src="{{ asset('images/logo.png') }}" alt="VSP TIMES" class="login-logo">
+        </a>
+        <br>
+        <div class="login-badge"><i class="fa-solid fa-lock"></i> ఎడిటోరియల్ డెస్క్ లాగిన్</div>
 
         @if($errors->any())
             <div class="alert-error">

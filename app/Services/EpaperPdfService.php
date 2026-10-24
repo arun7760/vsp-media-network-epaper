@@ -192,8 +192,9 @@ class EpaperPdfService
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 1754" width="100%" height="100%">
     <defs>
         <linearGradient id="headerGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stop-color="#0A1D37"/>
-            <stop offset="100%" stop-color="#1E3A8A"/>
+            <stop offset="0%" stop-color="#00143E"/>
+            <stop offset="60%" stop-color="#00205B"/>
+            <stop offset="100%" stop-color="#0047AB"/>
         </linearGradient>
         <pattern id="newspaperGrid" width="40" height="40" patternUnits="userSpaceOnUse">
             <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#F1F5F9" stroke-width="1"/>
@@ -207,26 +208,26 @@ class EpaperPdfService
 
     <!-- Masthead Header Bar -->
     <rect x="30" y="30" width="1180" height="120" fill="url(#headerGrad)" rx="6"/>
-    <text x="60" y="85" font-family="'Ramabhadra', 'Noto Sans Telugu', sans-serif" font-size="44" font-weight="900" fill="#FFFFFF">VSP <tspan fill="#D4AF37">TIMES</tspan></text>
+    <text x="60" y="85" font-family="'Ramabhadra', 'Noto Sans Telugu', sans-serif" font-size="44" font-weight="900" fill="#FFFFFF">VSP <tspan fill="#D6001C">TIMES</tspan></text>
     <text x="60" y="125" font-family="'Noto Sans Telugu', sans-serif" font-size="18" fill="#94A3B8">విశ్వసనీయ తెలుగు డిజిటల్ దినపత్రిక &bull; {$regionName}</text>
     
     <!-- Page & Date Badges -->
-    <rect x="980" y="55" width="200" height="70" fill="#071526" rx="4"/>
-    <text x="1080" y="85" font-family="'Noto Sans Telugu', sans-serif" font-size="15" fill="#D4AF37" text-anchor="middle" font-weight="bold">పేజీ నంబర్: {$pageNumber}</text>
+    <rect x="980" y="55" width="200" height="70" fill="#00143E" rx="4" stroke="#D6001C" stroke-width="1.5"/>
+    <text x="1080" y="85" font-family="'Noto Sans Telugu', sans-serif" font-size="15" fill="#D6001C" text-anchor="middle" font-weight="bold">పేజీ నంబర్: {$pageNumber}</text>
     <text x="1080" y="110" font-family="'Noto Sans Telugu', sans-serif" font-size="13" fill="#FFFFFF" text-anchor="middle">{$dateStr}</text>
 
     <!-- Page Title Banner -->
     <rect x="30" y="165" width="1180" height="48" fill="#F1F5F9" stroke="#E2E8F0" stroke-width="1"/>
-    <text x="50" y="196" font-family="'Noto Sans Telugu', sans-serif" font-size="20" font-weight="bold" fill="#0A1D37">§ {$pageTitle}</text>
+    <text x="50" y="196" font-family="'Noto Sans Telugu', sans-serif" font-size="20" font-weight="bold" fill="#00205B">§ {$pageTitle}</text>
     <text x="1190" y="196" font-family="'Noto Sans Telugu', sans-serif" font-size="14" fill="#64748B" text-anchor="end">వాల్యూమ్: {$edition->volume_number} &bull; సంచిక: {$edition->issue_number}</text>
 
     <!-- Broadsheet Content Simulation Grid -->
-    <line x1="30" y1="230" x2="1210" y2="230" stroke="#0A1D37" stroke-width="3"/>
+    <line x1="30" y1="230" x2="1210" y2="230" stroke="#00205B" stroke-width="3"/>
 
     <!-- Lead Story Area -->
     <rect x="50" y="255" width="700" height="420" fill="#F8FAFC" stroke="#E2E8F0" rx="4"/>
-    <text x="75" y="310" font-family="'Ramabhadra', 'Noto Sans Telugu', sans-serif" font-size="34" font-weight="bold" fill="#0A1D37">ముఖ్యాంశాలు &amp; ప్రత్యేక కథనం</text>
-    <text x="75" y="345" font-family="'Noto Sans Telugu', sans-serif" font-size="18" fill="#D32F2F" font-weight="bold">రాష్ట్ర సర్వతోముఖాభివృద్ధికి ప్రభుత్వ భారీ ప్రణాళికలు</text>
+    <text x="75" y="310" font-family="'Ramabhadra', 'Noto Sans Telugu', sans-serif" font-size="34" font-weight="bold" fill="#00205B">ముఖ్యాంశాలు &amp; ప్రత్యేక కథనం</text>
+    <text x="75" y="345" font-family="'Noto Sans Telugu', sans-serif" font-size="18" fill="#D6001C" font-weight="bold">రాష్ట్ర సర్వతోముఖాభివృద్ధికి ప్రభుత్వ భారీ ప్రణాళికలు</text>
     
     <rect x="75" y="375" width="650" height="180" fill="#E2E8F0" rx="4"/>
     <text x="400" y="475" font-family="'Noto Sans Telugu', sans-serif" font-size="18" fill="#64748B" text-anchor="middle">[బ్రాడ్‌షీట్ ఫోటో ఫీచర్ - డిజిటల్ ఆర్కైవ్]</text>
@@ -236,8 +237,8 @@ class EpaperPdfService
 
     <!-- Side Column 1 -->
     <rect x="780" y="255" width="410" height="420" fill="#FFFFFF" stroke="#E2E8F0" rx="4"/>
-    <text x="805" y="300" font-family="'Ramabhadra', 'Noto Sans Telugu', sans-serif" font-size="24" font-weight="bold" fill="#0A1D37">తాజా పరిణామాలు</text>
-    <line x1="805" y1="315" x2="1165" y2="315" stroke="#D4AF37" stroke-width="2"/>
+    <text x="805" y="300" font-family="'Ramabhadra', 'Noto Sans Telugu', sans-serif" font-size="24" font-weight="bold" fill="#00205B">తాజా పరిణామాలు</text>
+    <line x1="805" y1="315" x2="1165" y2="315" stroke="#D6001C" stroke-width="2"/>
     <text x="805" y="350" font-family="'Noto Sans Telugu', sans-serif" font-size="16" fill="#334155">• వ్యాపార, వాణిజ్య రంగాల్లో నూతన ఒరవడి</text>
     <text x="805" y="385" font-family="'Noto Sans Telugu', sans-serif" font-size="16" fill="#334155">• అంతర్జాతీయ సాంకేతిక సదస్సు ముగింపు</text>
     <text x="805" y="420" font-family="'Noto Sans Telugu', sans-serif" font-size="16" fill="#334155">• విద్యా రంగంలో సంస్కరణలు షురూ</text>

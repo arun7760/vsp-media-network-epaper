@@ -14,15 +14,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
+    <style>
         :root {
-            --epaper-navy: #0A1D37;
-            --epaper-navy-light: #132A4B;
-            --epaper-gold: #D4AF37;
-            --epaper-gold-dark: #B8860B;
-            --epaper-red: #D32F2F;
-            --epaper-bg: #F4F6F9;
+            --epaper-navy: #00205B;
+            --epaper-navy-light: #001640;
+            --epaper-blue: #0047AB;
+            --epaper-red: #D6001C;
+            --epaper-red-dark: #B80018;
+            --epaper-gold: #D6001C;
+            --epaper-gold-dark: #B80018;
+            --epaper-bg: #F4F7FB;
             --epaper-card: #FFFFFF;
-            --epaper-text: #1E293B;
+            --epaper-text: #0F172A;
             --epaper-muted: #64748B;
             --epaper-border: #E2E8F0;
             --font-telugu-serif: 'Ramabhadra', 'Noto Sans Telugu', serif;
@@ -48,7 +51,7 @@
 
         /* Top Utility Bar */
         .epaper-topbar {
-            background-color: #071526;
+            background-color: #00143E;
             color: #94A3B8;
             font-size: 13px;
             padding: 8px 24px;
@@ -72,17 +75,18 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            color: #10B981;
-            font-weight: 600;
-            font-size: 12px;
-            background: rgba(16, 185, 129, 0.1);
-            padding: 3px 10px;
+            color: #FFFFFF;
+            font-weight: 700;
+            font-size: 11.5px;
+            background: linear-gradient(135deg, #D6001C 0%, #B80018 100%);
+            padding: 3px 12px;
             border-radius: 999px;
+            box-shadow: 0 2px 6px rgba(214, 0, 28, 0.4);
         }
         .live-dot {
             width: 7px;
             height: 7px;
-            background-color: #10B981;
+            background-color: #FFFFFF;
             border-radius: 50%;
             animation: pulse 1.8s infinite;
         }
@@ -105,23 +109,28 @@
             gap: 6px;
         }
         .topbar-right a:hover {
-            color: var(--epaper-gold);
+            color: #FFFFFF;
         }
         .portal-link {
-            background: rgba(212, 175, 55, 0.15);
-            color: var(--epaper-gold) !important;
-            padding: 3px 10px;
+            background: rgba(0, 71, 171, 0.35);
+            color: #FFFFFF !important;
+            padding: 3px 12px;
             border-radius: 4px;
-            font-weight: 600;
+            font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.2s;
+        }
+        .portal-link:hover {
+            background: var(--epaper-red) !important;
         }
 
         /* Main Broadsheet Masthead */
         .epaper-masthead {
-            background: linear-gradient(180deg, var(--epaper-navy) 0%, var(--epaper-navy-light) 100%);
+            background: linear-gradient(180deg, #00143E 0%, #00205B 100%);
             color: #FFFFFF;
-            padding: 24px 24px;
-            border-bottom: 3px solid var(--epaper-gold);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            padding: 22px 24px;
+            border-bottom: 4px solid var(--epaper-red);
+            box-shadow: 0 6px 24px rgba(0, 32, 91, 0.2);
         }
         .epaper-masthead .container {
             max-width: 1380px;
@@ -135,38 +144,53 @@
         .brand-block {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 18px;
             text-decoration: none;
             color: inherit;
         }
-        .brand-title {
-            font-family: var(--font-telugu-serif);
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            line-height: 1.1;
-            color: #FFFFFF;
+        .brand-logo-wrap {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 8px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: transform 0.2s ease;
         }
-        .brand-title span {
-            color: var(--epaper-gold);
+        .brand-logo-wrap:hover {
+            transform: translateY(-2px);
+        }
+        .main-logo-img {
+            max-height: 64px;
+            width: auto;
+            object-fit: contain;
+        }
+        .brand-text-block {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
         .brand-badge {
-            display: inline-block;
-            background: var(--epaper-gold);
-            color: var(--epaper-navy);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--epaper-blue);
+            color: #FFFFFF;
             font-family: var(--font-sans);
-            font-weight: 900;
+            font-weight: 800;
             font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 3px;
-            letter-spacing: 1px;
+            padding: 3px 10px;
+            border-radius: 4px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
-            margin-top: 4px;
+            width: fit-content;
         }
         .brand-tagline {
-            font-size: 12px;
-            color: #94A3B8;
-            margin-top: 2px;
+            font-size: 13px;
+            color: #CBD5E1;
+            font-weight: 500;
         }
 
         /* Nav & Action Strip */
@@ -179,8 +203,8 @@
         .btn-epaper {
             background: #FFFFFF;
             color: var(--epaper-navy);
-            padding: 9px 18px;
-            border-radius: 6px;
+            padding: 10px 20px;
+            border-radius: 8px;
             font-weight: 700;
             font-size: 14px;
             text-decoration: none;
@@ -191,25 +215,28 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         .btn-epaper:hover {
-            background: var(--epaper-gold);
-            color: var(--epaper-navy);
+            background: var(--epaper-blue);
+            color: #FFFFFF;
             transform: translateY(-1px);
         }
-        .btn-epaper-gold {
-            background: linear-gradient(135deg, #F3C644 0%, #D4AF37 100%);
-            color: var(--epaper-navy);
+        .btn-epaper-gold, .btn-epaper-red {
+            background: linear-gradient(135deg, var(--epaper-red) 0%, var(--epaper-red-dark) 100%);
+            color: #FFFFFF !important;
             border: none;
+            box-shadow: 0 4px 14px rgba(214, 0, 28, 0.4);
         }
-        .btn-epaper-gold:hover {
-            filter: brightness(1.08);
+        .btn-epaper-gold:hover, .btn-epaper-red:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(214, 0, 28, 0.5);
         }
         .btn-epaper-outline {
-            background: transparent;
+            background: rgba(255,255,255,0.08);
             color: #FFFFFF;
             border: 1px solid rgba(255,255,255,0.25);
         }
         .btn-epaper-outline:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.18);
             color: #FFFFFF;
             border-color: #FFFFFF;
         }
@@ -288,10 +315,12 @@
     <div class="epaper-masthead">
         <div class="container">
             <a href="{{ route('epaper.home') }}" class="brand-block">
-                <div>
-                    <div class="brand-title">VSP <span>TIMES</span> ఈ-పేపర్</div>
-                    <div class="brand-badge">Digital Newspaper Reader</div>
-                    <div class="brand-tagline">తెలుగు రాష్ట్రాల సమగ్ర డిజిటల్ దినపత్రిక</div>
+                <div class="brand-logo-wrap">
+                    <img src="{{ asset('images/logo.png') }}" alt="VSP TIMES" class="main-logo-img">
+                </div>
+                <div class="brand-text-block">
+                    <div class="brand-tagline">తెలుగు రాష్ట్రాల విశ్వసనీయ డిజిటల్ దినపత్రిక &bull; The Future of News</div>
+                    <div class="brand-badge"><i class="fa-solid fa-newspaper"></i> ఈ-పేపర్ డిజిటల్ ఎడిషన్</div>
                 </div>
             </a>
             <div class="masthead-actions">
@@ -302,7 +331,7 @@
                     <i class="fa-solid fa-box-archive"></i> సంచికల ఆర్కైవ్
                 </a>
                 @if(isset($edition) && $edition)
-                    <a href="{{ route('epaper.edition', $edition) }}" class="btn-epaper btn-epaper-gold">
+                    <a href="{{ route('epaper.edition', $edition) }}" class="btn-epaper btn-epaper-red">
                         <i class="fa-solid fa-book-open"></i> నేటి పేపర్ చదవండి
                     </a>
                 @endif

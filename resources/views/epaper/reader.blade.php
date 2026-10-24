@@ -43,12 +43,13 @@
         gap: 8px;
     }
     .page-counter-badge {
-        background: var(--epaper-gold);
-        color: var(--epaper-navy);
+        background: linear-gradient(135deg, var(--epaper-red) 0%, var(--epaper-red-dark) 100%);
+        color: #FFFFFF;
         font-weight: 800;
         font-size: 13px;
-        padding: 4px 10px;
-        border-radius: 4px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        box-shadow: 0 2px 6px rgba(214, 0, 28, 0.4);
     }
 
     /* Zoom Controls */
@@ -69,13 +70,14 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        transition: all 0.15s;
+        transition: all 0.2s ease;
         text-decoration: none;
     }
     .tool-btn:hover {
-        background: #334155;
-        border-color: var(--epaper-gold);
-        color: var(--epaper-gold);
+        background: var(--epaper-blue);
+        border-color: var(--epaper-blue);
+        color: #FFFFFF;
+        transform: translateY(-1px);
     }
     .tool-btn:active {
         transform: scale(0.96);
@@ -138,9 +140,9 @@
         backdrop-filter: blur(4px);
     }
     .nav-arrow:hover {
-        background: var(--epaper-gold);
-        color: var(--epaper-navy);
-        border-color: var(--epaper-gold);
+        background: var(--epaper-red);
+        color: #FFFFFF;
+        border-color: var(--epaper-red);
     }
     .nav-arrow-left {
         left: 20px;
@@ -173,7 +175,7 @@
         overflow-x: auto;
         padding-bottom: 8px;
         scrollbar-width: thin;
-        scrollbar-color: var(--epaper-gold) #1E293B;
+        scrollbar-color: var(--epaper-red) #1E293B;
     }
     .thumb-card {
         flex: 0 0 110px;
@@ -202,8 +204,8 @@
         object-fit: cover;
     }
     .thumb-card.active .thumb-box {
-        border-color: var(--epaper-gold);
-        box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+        border-color: var(--epaper-red);
+        box-shadow: 0 0 12px rgba(214, 0, 28, 0.5);
     }
     .thumb-page-num {
         position: absolute;
@@ -217,8 +219,8 @@
         border-radius: 3px;
     }
     .thumb-card.active .thumb-page-num {
-        background: var(--epaper-gold);
-        color: var(--epaper-navy);
+        background: var(--epaper-red);
+        color: #FFFFFF;
     }
     .thumb-title {
         font-size: 11px;
@@ -238,8 +240,9 @@
     <!-- Top Action Toolbar -->
     <div class="reader-toolbar">
         <div class="toolbar-left">
-            <a href="{{ route('epaper.home') }}" class="tool-btn" title="హోమ్ పేజీకి తిరిగి వెళ్లండి">
-                <i class="fa-solid fa-arrow-left"></i> హోమ్
+            <a href="{{ route('epaper.home') }}" class="tool-btn" style="background: #FFFFFF; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.2);" title="హోమ్ పేజీకి తిరిగి వెళ్లండి">
+                <img src="{{ asset('images/logo.png') }}" alt="VSP TIMES" style="height: 24px; width: auto; object-fit: contain;">
+                <span style="color: var(--epaper-navy); font-weight: 700; font-size: 0.85rem;"><i class="fa-solid fa-arrow-left"></i> హోమ్</span>
             </a>
             <div class="toolbar-title">
                 <span>{{ $edition->region->name ?? 'ప్రధాన సంచిక' }}</span>
@@ -248,7 +251,7 @@
             </div>
             <!-- Page Jump Selector -->
             <div style="display: flex; align-items: center; gap: 6px;">
-                <select onchange="window.location.href=this.value;" class="tool-btn" style="padding: 5px 10px; font-weight: 700; background: #0B132B; border-color: var(--epaper-gold); color: #FFFFFF;">
+                <select onchange="window.location.href=this.value;" class="tool-btn" style="padding: 5px 10px; font-weight: 700; background: #00143E; border-color: var(--epaper-blue); color: #FFFFFF;">
                     @for($i = 1; $i <= $totalPages; $i++)
                         <option value="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $i]) }}" {{ $i == $pageNumber ? 'selected' : '' }}>
                             పేజీ {{ $i }} / {{ $totalPages }}
@@ -278,7 +281,7 @@
                 </select>
             @endif
 
-            <a href="{{ route('epaper.download', $edition) }}" class="tool-btn" style="background: var(--epaper-gold); color: var(--epaper-navy); border-color: var(--epaper-gold);">
+            <a href="{{ route('epaper.download', $edition) }}" class="tool-btn" style="background: linear-gradient(135deg, var(--epaper-red) 0%, var(--epaper-red-dark) 100%); color: #FFFFFF; border-color: var(--epaper-red); box-shadow: 0 2px 8px rgba(214, 0, 28, 0.4); font-weight: 700;">
                 <i class="fa-solid fa-download"></i> పీడీఎఫ్
             </a>
         </div>

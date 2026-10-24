@@ -50,11 +50,12 @@
         outline: none;
     }
     .filter-select:focus {
-        border-color: var(--epaper-gold-dark);
+        border-color: var(--epaper-blue);
         background: #FFFFFF;
+        box-shadow: 0 0 0 3px rgba(0, 71, 171, 0.15);
     }
     .btn-filter-submit {
-        background: var(--epaper-navy);
+        background: linear-gradient(135deg, var(--epaper-navy) 0%, var(--epaper-blue) 100%);
         color: #FFFFFF;
         padding: 8px 20px;
         border-radius: 6px;
@@ -65,11 +66,12 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        transition: background 0.2s;
+        transition: all 0.2s;
     }
     .btn-filter-submit:hover {
-        background: var(--epaper-gold-dark);
-        color: var(--epaper-navy);
+        background: linear-gradient(135deg, var(--epaper-red) 0%, var(--epaper-red-dark) 100%);
+        color: #FFFFFF;
+        box-shadow: 0 4px 12px rgba(214, 0, 28, 0.3);
     }
 
     /* Archive Grid */
@@ -113,10 +115,11 @@
     }
     .archive-region-tag {
         font-size: 12px;
-        font-weight: 700;
-        color: var(--epaper-gold-dark);
+        font-weight: 800;
+        color: var(--epaper-red);
         text-transform: uppercase;
         margin-bottom: 4px;
+        letter-spacing: 0.5px;
     }
     .archive-edition-title {
         font-family: var(--font-telugu-serif);
@@ -153,11 +156,12 @@
         align-items: center;
         justify-content: center;
         gap: 6px;
-        transition: background 0.15s;
+        transition: all 0.2s;
     }
     .btn-card-read:hover {
-        background: var(--epaper-gold-dark);
-        color: var(--epaper-navy);
+        background: linear-gradient(135deg, var(--epaper-red) 0%, var(--epaper-red-dark) 100%);
+        color: #FFFFFF;
+        box-shadow: 0 4px 10px rgba(214, 0, 28, 0.3);
     }
     .btn-card-pdf {
         background: #F8FAFC;
@@ -185,7 +189,7 @@
     <!-- Archive Filter Bar -->
     <div class="archive-header">
         <div class="archive-title-block">
-            <h1><i class="fa-solid fa-box-archive" style="color: var(--epaper-gold-dark);"></i> VSP TIMES ఈ-పేపర్ ఆర్కైవ్</h1>
+            <h1><i class="fa-solid fa-box-archive" style="color: var(--epaper-red);"></i> VSP TIMES ఈ-పేపర్ ఆర్కైవ్</h1>
             <p>గత సంచికలను తేదీ మరియు ప్రాంతీయ ఎడిషన్ల వారీగా సులభంగా వెతకండి మరియు డిజిటల్ ఫార్మాట్‌లో చదవండి.</p>
         </div>
 

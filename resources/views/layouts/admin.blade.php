@@ -13,14 +13,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
+    <style>
         :root {
-            --admin-navy: #0A1D37;
-            --admin-navy-dark: #071526;
-            --admin-gold: #D4AF37;
-            --admin-bg: #F8FAFC;
+            --admin-navy: #00205B;
+            --admin-navy-dark: #00143E;
+            --admin-blue: #0047AB;
+            --admin-red: #D6001C;
+            --admin-red-hover: #B80018;
+            --admin-red-light: #FEE2E2;
+            --admin-gold: #D6001C; /* Replaced legacy gold with brand red */
+            --admin-bg: #F4F7FB;
             --admin-card: #FFFFFF;
             --admin-border: #E2E8F0;
-            --admin-text: #1E293B;
+            --admin-text: #0F172A;
             --admin-muted: #64748B;
         }
 
@@ -36,38 +41,59 @@
 
         /* Sidebar */
         .admin-sidebar {
-            width: 270px;
-            background: var(--admin-navy);
+            width: 275px;
+            background: linear-gradient(180deg, var(--admin-navy) 0%, var(--admin-navy-dark) 100%);
             color: #FFFFFF;
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
             border-right: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 2px 0 16px rgba(0, 32, 91, 0.15);
         }
         .sidebar-brand {
-            padding: 24px 20px;
+            padding: 22px 18px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             text-decoration: none;
-            color: #FFFFFF;
             display: block;
+            background: rgba(0, 0, 0, 0.12);
         }
-        .sidebar-brand h1 {
-            font-family: 'Ramabhadra', sans-serif;
-            font-size: 22px;
-            line-height: 1.1;
+        .brand-logo-card {
+            background: #FFFFFF;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: transform 0.2s;
         }
-        .sidebar-brand span { color: var(--admin-gold); }
+        .brand-logo-card:hover {
+            transform: translateY(-1px);
+        }
+        .brand-logo-img {
+            max-height: 58px;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+        }
+        .sidebar-badge-wrap {
+            text-align: center;
+            margin-top: 10px;
+        }
         .sidebar-badge {
-            display: inline-block;
-            background: var(--admin-gold);
-            color: var(--admin-navy);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #D6001C 0%, #B80018 100%);
+            color: #FFFFFF;
             font-size: 10px;
             font-weight: 800;
-            padding: 2px 6px;
-            border-radius: 3px;
+            padding: 3px 10px;
+            border-radius: 999px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 4px;
+            letter-spacing: 0.8px;
+            box-shadow: 0 2px 8px rgba(214, 0, 28, 0.4);
         }
 
         .sidebar-nav {
@@ -80,14 +106,14 @@
         .nav-heading {
             font-size: 11px;
             text-transform: uppercase;
-            color: #64748B;
+            color: #94A3B8;
             font-weight: 800;
-            padding: 10px 12px 4px;
-            letter-spacing: 0.5px;
+            padding: 12px 12px 4px;
+            letter-spacing: 0.6px;
         }
         .nav-link {
             padding: 10px 14px;
-            border-radius: 6px;
+            border-radius: 8px;
             color: #CBD5E1;
             text-decoration: none;
             font-size: 14px;
@@ -95,20 +121,24 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: all 0.15s;
+            transition: all 0.2s ease;
+            position: relative;
         }
         .nav-link:hover {
             background: rgba(255,255,255,0.08);
             color: #FFFFFF;
+            transform: translateX(2px);
         }
         .nav-link.active {
-            background: var(--admin-gold);
-            color: var(--admin-navy);
+            background: linear-gradient(90deg, #0047AB 0%, #002D7A 100%);
+            color: #FFFFFF;
             font-weight: 700;
+            border-left: 4px solid var(--admin-red);
+            box-shadow: 0 4px 12px rgba(0, 71, 171, 0.35);
         }
         .nav-link .badge {
             margin-left: auto;
-            background: #D32F2F;
+            background: var(--admin-red);
             color: #FFFFFF;
             font-size: 11px;
             padding: 2px 7px;
@@ -131,13 +161,14 @@
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            background: var(--admin-gold);
-            color: var(--admin-navy);
+            background: linear-gradient(135deg, var(--admin-red) 0%, var(--admin-blue) 100%);
+            color: #FFFFFF;
             font-weight: 800;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
         }
         .user-name {
             font-size: 13px;
@@ -160,16 +191,28 @@
         }
         .admin-header {
             background: #FFFFFF;
-            border-bottom: 1px solid var(--admin-border);
+            border-bottom: 2px solid #E2E8F0;
             padding: 16px 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 32, 91, 0.04);
         }
         .admin-header h2 {
             font-family: 'Ramabhadra', sans-serif;
             font-size: 20px;
             color: var(--admin-navy);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .admin-header h2::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background: var(--admin-red);
+            border-radius: 2px;
         }
 
         .admin-content {
@@ -204,17 +247,49 @@
             gap: 8px;
             cursor: pointer;
             border: none;
-            transition: all 0.15s;
+            transition: all 0.2s ease;
         }
-        .btn-primary { background: var(--admin-navy); color: #FFFFFF; }
-        .btn-primary:hover { background: #132A4B; }
-        .btn-gold { background: var(--admin-gold); color: var(--admin-navy); }
-        .btn-gold:hover { filter: brightness(1.05); }
-        .btn-outline { background: #FFFFFF; color: var(--admin-navy); border: 1px solid var(--admin-border); }
-        .btn-outline:hover { background: #F8FAFC; }
-        .btn-danger { background: #DC2626; color: #FFFFFF; }
-        .btn-danger:hover { background: #B91C1C; }
-        .btn-success { background: #10B981; color: #FFFFFF; }
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--admin-blue) 0%, var(--admin-navy) 100%); 
+            color: #FFFFFF; 
+            box-shadow: 0 2px 8px rgba(0, 71, 171, 0.25);
+        }
+        .btn-primary:hover { 
+            filter: brightness(1.1); 
+            box-shadow: 0 4px 14px rgba(0, 71, 171, 0.4); 
+            color: #FFFFFF;
+        }
+        .btn-gold, .btn-brand { 
+            background: linear-gradient(135deg, var(--admin-red) 0%, var(--admin-red-hover) 100%); 
+            color: #FFFFFF; 
+            box-shadow: 0 2px 8px rgba(214, 0, 28, 0.3);
+        }
+        .btn-gold:hover, .btn-brand:hover { 
+            filter: brightness(1.1); 
+            box-shadow: 0 4px 14px rgba(214, 0, 28, 0.45); 
+            color: #FFFFFF;
+        }
+        .btn-outline { 
+            background: #FFFFFF; 
+            color: var(--admin-navy); 
+            border: 1px solid var(--admin-border); 
+        }
+        .btn-outline:hover { 
+            background: #F1F5F9; 
+            color: var(--admin-blue);
+            border-color: var(--admin-blue);
+        }
+        .btn-danger { 
+            background: var(--admin-red); 
+            color: #FFFFFF; 
+        }
+        .btn-danger:hover { 
+            background: var(--admin-red-hover); 
+        }
+        .btn-success { 
+            background: #10B981; 
+            color: #FFFFFF; 
+        }
 
         .card {
             background: #FFFFFF;
@@ -232,8 +307,12 @@
     <!-- Sidebar -->
     <aside class="admin-sidebar">
         <a href="{{ route('admin.dashboard') }}" class="sidebar-brand">
-            <h1>VSP <span>TIMES</span></h1>
-            <span class="sidebar-badge">E-Paper Editorial Desk</span>
+            <div class="brand-logo-card">
+                <img src="{{ asset('images/logo.png') }}" alt="VSP TIMES" class="brand-logo-img">
+            </div>
+            <div class="sidebar-badge-wrap">
+                <span class="sidebar-badge"><i class="fa-solid fa-newspaper"></i> ఈ-పేపర్ CMS డెస్క్</span>
+            </div>
         </a>
 
         <nav class="sidebar-nav">
@@ -315,11 +394,11 @@
                 <!-- English / Telugu Language Toggle -->
                 <div style="display: flex; background: #F1F5F9; border-radius: 6px; padding: 3px; border: 1px solid var(--admin-border);">
                     <a href="{{ route('admin.locale.switch', 'te') }}" 
-                       style="padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; color: {{ app()->getLocale() === 'te' ? 'var(--admin-navy)' : 'var(--admin-muted)' }}; background: {{ app()->getLocale() === 'te' ? 'var(--admin-gold)' : 'transparent' }};">
+                       style="padding: 4px 12px; font-size: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; color: {{ app()->getLocale() === 'te' ? '#FFFFFF' : 'var(--admin-navy)' }}; background: {{ app()->getLocale() === 'te' ? 'var(--admin-red)' : 'transparent' }}; transition: all 0.2s;">
                         తెలుగు
                     </a>
                     <a href="{{ route('admin.locale.switch', 'en') }}" 
-                       style="padding: 4px 10px; font-size: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; color: {{ app()->getLocale() === 'en' ? 'var(--admin-navy)' : 'var(--admin-muted)' }}; background: {{ app()->getLocale() === 'en' ? 'var(--admin-gold)' : 'transparent' }};">
+                       style="padding: 4px 12px; font-size: 12px; font-weight: 700; border-radius: 4px; text-decoration: none; color: {{ app()->getLocale() === 'en' ? '#FFFFFF' : 'var(--admin-navy)' }}; background: {{ app()->getLocale() === 'en' ? 'var(--admin-red)' : 'transparent' }}; transition: all 0.2s;">
                         English
                     </a>
                 </div>

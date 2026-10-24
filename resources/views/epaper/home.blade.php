@@ -142,12 +142,13 @@
         align-items: center;
         gap: 10px;
         box-shadow: 0 4px 14px rgba(10,29,55,0.25);
-        transition: all 0.2s;
+        transition: all 0.2s ease;
     }
     .btn-read-now:hover {
-        background: linear-gradient(135deg, #1A365D 0%, #0A1D37 100%);
-        color: var(--epaper-gold);
+        background: linear-gradient(135deg, var(--epaper-blue) 0%, var(--epaper-navy) 100%);
+        color: #FFFFFF;
         transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 71, 171, 0.4);
     }
     .btn-download-pdf {
         background: #FFFFFF;
@@ -165,8 +166,8 @@
     }
     .btn-download-pdf:hover {
         background: #F8FAFC;
-        border-color: var(--epaper-gold-dark);
-        color: var(--epaper-gold-dark);
+        border-color: var(--epaper-blue);
+        color: var(--epaper-blue);
     }
 
     /* Page Rail Grid inside Card */
@@ -193,9 +194,9 @@
         transition: all 0.15s;
     }
     .page-jump-chip:hover {
-        background: var(--epaper-gold);
-        color: var(--epaper-navy);
-        border-color: var(--epaper-gold);
+        background: var(--epaper-blue);
+        color: #FFFFFF;
+        border-color: var(--epaper-blue);
     }
 
     /* Other Regional Editions */
@@ -295,14 +296,14 @@
             </div>
 
             <div class="edition-details">
-                <div style="color: var(--epaper-gold-dark); font-weight: 700; font-size: 14px; text-transform: uppercase; margin-bottom: 6px;">
+                <div style="color: var(--epaper-red); font-weight: 800; font-size: 14px; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">
                     <i class="fa-regular fa-newspaper"></i> {{ $edition->region->name ?? 'ప్రధాన సంచిక' }}
                 </div>
                 <h1>{{ $edition->title }}</h1>
 
                 <div class="edition-meta-strip">
                     <div class="meta-item">
-                        <i class="fa-regular fa-calendar-check" style="color: var(--epaper-gold-dark);"></i>
+                        <i class="fa-regular fa-calendar-check" style="color: var(--epaper-blue);"></i>
                         <span>తేదీ: <strong>{{ $edition->telugu_date_string ?: $edition->edition_date->format('d M Y') }}</strong></span>
                     </div>
                     @if($edition->volume_number)
@@ -350,14 +351,14 @@
             <i class="fa-regular fa-newspaper" style="font-size: 48px; color: var(--epaper-muted); margin-bottom: 16px;"></i>
             <h2 style="font-size: 22px; color: var(--epaper-navy); margin-bottom: 8px;">ఎంచుకున్న తేదీకి ఈ-పేపర్ అందుబాటులో లేదు</h2>
             <p style="color: var(--epaper-muted); margin-bottom: 24px;">దయచేసి వేరొక తేదీ లేదా వేరొక ప్రాంతీయ ఎడిషన్‌ను ఎంచుకోండి.</p>
-            <a href="{{ route('epaper.archive') }}" class="btn-epaper btn-epaper-gold">ఆర్కైవ్‌ను బ్రౌజ్ చేయండి</a>
+            <a href="{{ route('epaper.archive') }}" class="btn-epaper btn-epaper-red">ఆర్కైవ్‌ను బ్రౌజ్ చేయండి</a>
         </div>
     @endif
 
     <!-- Other Regional Editions Published on this Date -->
     @if(isset($otherEditions) && $otherEditions->isNotEmpty())
         <div class="section-title">
-            <i class="fa-solid fa-earth-asia" style="color: var(--epaper-gold-dark);"></i> ఇతర జిల్లా & ప్రాంతీయ సంచికలు
+            <i class="fa-solid fa-earth-asia" style="color: var(--epaper-red);"></i> ఇతర జిల్లా & ప్రాంతీయ సంచికలు
         </div>
         <div class="editions-grid">
             @foreach($otherEditions as $oe)
