@@ -245,7 +245,7 @@
             @foreach($editions as $ed)
                 <div class="archive-card">
                     <div class="archive-cover-wrap">
-                        <img src="{{ $ed->cover_url }}" alt="{{ $ed->title }}" onerror="this.src='https://placehold.co/400x550/0A1D37/FFFFFF/png?text='+encodeURIComponent('{{ $ed->region->name }}');">
+                        <img src="{{ $ed->cover_url }}" alt="{{ $ed->title }}" onerror="this.src='/images/logo.png';">
                     </div>
                     <div class="archive-card-body">
                         <div class="archive-region-tag">{{ $ed->region->name ?? 'ప్రధాన సంచిక' }}</div>

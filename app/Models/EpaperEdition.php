@@ -101,9 +101,10 @@ class EpaperEdition extends Model
     public function getCoverUrlAttribute(): string
     {
         if ($this->cover_image_path) {
-            return str_starts_with($this->cover_image_path, 'http')
-                ? $this->cover_image_path
-                : asset($this->cover_image_path);
+            if (str_starts_with($this->cover_image_path, 'http://') || str_starts_with($this->cover_image_path, 'https://')) {
+                return $this->cover_image_path;
+            }
+            return '/' . ltrim($this->cover_image_path, '/');
         }
 
         $firstPage = $this->pages->first();
@@ -111,15 +112,16 @@ class EpaperEdition extends Model
             return $firstPage->image_url;
         }
 
-        return asset('images/epaper-default-cover.png');
+        return '/images/epaper-default-cover.png';
     }
 
     public function getThumbnailUrlAttribute(): string
     {
         if ($this->cover_thumbnail_path) {
-            return str_starts_with($this->cover_thumbnail_path, 'http')
-                ? $this->cover_thumbnail_path
-                : asset($this->cover_thumbnail_path);
+            if (str_starts_with($this->cover_thumbnail_path, 'http://') || str_starts_with($this->cover_thumbnail_path, 'https://')) {
+                return $this->cover_thumbnail_path;
+            }
+            return '/' . ltrim($this->cover_thumbnail_path, '/');
         }
 
         return $this->cover_url;

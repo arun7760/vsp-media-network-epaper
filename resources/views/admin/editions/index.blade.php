@@ -207,7 +207,7 @@
                         @foreach($editions as $ed)
                             <tr>
                                 <td>
-                                    <img src="{{ $ed->cover_url }}" alt="{{ $ed->title }}" class="thumb-mini" onerror="this.src='https://placehold.co/48x64/0A1D37/FFFFFF/png?text=VSP';">
+                                    <img src="{{ $ed->cover_url }}" alt="{{ $ed->title }}" class="thumb-mini" onerror="this.src='/images/logo.png';">
                                 </td>
                                 <td>
                                     <strong style="color: var(--admin-navy); font-size: 15px;">{{ $ed->title }}</strong>

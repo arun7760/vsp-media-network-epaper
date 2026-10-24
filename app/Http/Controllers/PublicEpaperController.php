@@ -108,6 +108,19 @@ class PublicEpaperController extends Controller
             ->whereDate('edition_date', $edition->edition_date)
             ->get();
 
+        // Previous and Next editions for date switching in reader
+        $prevEdition = EpaperEdition::published()
+            ->where('region_id', $edition->region_id)
+            ->whereDate('edition_date', '<', $edition->edition_date)
+            ->latest('edition_date')
+            ->first();
+
+        $nextEdition = EpaperEdition::published()
+            ->where('region_id', $edition->region_id)
+            ->whereDate('edition_date', '>', $edition->edition_date)
+            ->oldest('edition_date')
+            ->first();
+
         return view('epaper.reader', compact(
             'edition',
             'currentPage',
@@ -115,7 +128,9 @@ class PublicEpaperController extends Controller
             'totalPages',
             'prevPageNumber',
             'nextPageNumber',
-            'siblingEditions'
+            'siblingEditions',
+            'prevEdition',
+            'nextEdition'
         ));
     }
 

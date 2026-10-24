@@ -295,7 +295,7 @@
         <!-- Hero Spotlight Card -->
         <div class="hero-edition-card">
             <div class="cover-wrapper">
-                <img src="{{ $edition->cover_url }}" alt="{{ $edition->title }}" onerror="this.src='https://placehold.co/600x850/0A1D37/FFFFFF/png?text=VSP+TIMES+E-PAPER';">
+                <img src="{{ $edition->cover_url }}" alt="{{ $edition->title }}" onerror="this.src='/images/logo.png';">
                 <span class="page-badge-overlay"><i class="fa-regular fa-file"></i> {{ $edition->total_pages }} {{ __('epaper.pages') }}</span>
             </div>
 
@@ -370,7 +370,7 @@
             @foreach($otherEditions as $oe)
                 <a href="{{ route('epaper.reader', ['edition' => $oe, 'pageNumber' => 1]) }}" class="edition-subcard">
                     <div class="edition-subcard-thumb">
-                        <img src="{{ $oe->cover_url }}" alt="{{ $oe->title }}" onerror="this.src='https://placehold.co/400x550/0A1D37/FFFFFF/png?text=VSP+TIMES';">
+                        <img src="{{ $oe->cover_url }}" alt="{{ $oe->title }}" onerror="this.src='/images/logo.png';">
                     </div>
                     <div class="edition-subcard-info">
                         <div class="edition-subcard-title">{{ $oe->region->name ?? $oe->title }}</div>

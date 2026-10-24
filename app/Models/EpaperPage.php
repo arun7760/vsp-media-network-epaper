@@ -50,20 +50,22 @@ class EpaperPage extends Model
     public function getImageUrlAttribute(): string
     {
         if ($this->image_path) {
-            return str_starts_with($this->image_path, 'http')
-                ? $this->image_path
-                : asset($this->image_path);
+            if (str_starts_with($this->image_path, 'http://') || str_starts_with($this->image_path, 'https://')) {
+                return $this->image_path;
+            }
+            return '/' . ltrim($this->image_path, '/');
         }
 
-        return asset('images/epaper-page-placeholder.png');
+        return '/images/epaper-page-placeholder.png';
     }
 
     public function getThumbnailUrlAttribute(): string
     {
         if ($this->thumbnail_path) {
-            return str_starts_with($this->thumbnail_path, 'http')
-                ? $this->thumbnail_path
-                : asset($this->thumbnail_path);
+            if (str_starts_with($this->thumbnail_path, 'http://') || str_starts_with($this->thumbnail_path, 'https://')) {
+                return $this->thumbnail_path;
+            }
+            return '/' . ltrim($this->thumbnail_path, '/');
         }
 
         return $this->image_url;
@@ -75,8 +77,10 @@ class EpaperPage extends Model
             return null;
         }
 
-        return str_starts_with($this->page_pdf_path, 'http')
-            ? $this->page_pdf_path
-            : asset($this->page_pdf_path);
+        if (str_starts_with($this->page_pdf_path, 'http://') || str_starts_with($this->page_pdf_path, 'https://')) {
+            return $this->page_pdf_path;
+        }
+
+        return '/' . ltrim($this->page_pdf_path, '/');
     }
 }

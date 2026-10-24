@@ -326,6 +326,25 @@
             max-width: 1380px;
             margin: 0 auto;
         }
+        .reader-main-full {
+            padding: 0 !important;
+            margin: 0 !important;
+            max-width: 100vw !important;
+            width: 100% !important;
+            min-height: 100vh !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow: hidden !important;
+        }
+        .reader-container-full {
+            max-width: 100% !important;
+            width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
         /* Footer */
         .epaper-footer {
@@ -372,6 +391,7 @@
 <body>
     @include('partials.analytics_noscript')
 
+    @unless(request()->routeIs('epaper.reader', 'epaper.edition'))
     <!-- Utility Topbar -->
     <header class="epaper-topbar">
         <div class="container">
@@ -439,14 +459,16 @@
             </div>
         </div>
     </div>
+    @endunless
 
     <!-- Page Body -->
-    <main>
-        <div class="content-container">
+    <main class="{{ request()->routeIs('epaper.reader', 'epaper.edition') ? 'reader-main-full' : '' }}">
+        <div class="{{ request()->routeIs('epaper.reader', 'epaper.edition') ? 'reader-container-full' : 'content-container' }}">
             @yield('content')
         </div>
     </main>
 
+    @unless(request()->routeIs('epaper.reader', 'epaper.edition'))
     <!-- Footer -->
     <footer class="epaper-footer">
         <div class="container">
@@ -460,6 +482,7 @@
             </div>
         </div>
     </footer>
+    @endunless
 
     @stack('scripts')
 
