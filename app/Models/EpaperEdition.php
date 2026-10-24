@@ -143,8 +143,26 @@ class EpaperEdition extends Model
 
     public function getDisplayTitleAttribute(): string
     {
-        if (app()->getLocale() === 'en' && ! empty($this->title_en)) {
-            return $this->title_en;
+        if (app()->getLocale() === 'en') {
+            if (! empty($this->title_en)) {
+                return $this->title_en;
+            }
+
+            if ($this->region && ! empty($this->region->name_en)) {
+                return $this->region->name_en;
+            }
+
+            $replacements = [
+                'ప్రధాన సంచిక' => 'Main Edition',
+                'విశాఖపట్నం ఎడిషన్' => 'Visakhapatnam Edition',
+                'అమరావతి - విజయవాడ' => 'Amaravati & Vijayawada',
+                'హైదరాబాద్ ఎడిషన్' => 'Hyderabad Edition',
+                'విఎస్పీ టైమ్స్' => 'VSP TIMES',
+            ];
+            $translated = strtr($this->title, $replacements);
+            if ($translated !== $this->title) {
+                return $translated;
+            }
         }
 
         return $this->title;
