@@ -7,16 +7,16 @@
 <div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div>
-            <h2 style="font-family: 'Ramabhadra', sans-serif; font-size: 22px; color: var(--admin-navy);">
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--admin-navy);">
                 <i class="fa-solid fa-users-gear" style="color: var(--admin-gold); margin-right: 8px;"></i>
-                వినియోగదారుల నిర్వహణ
+                {{ app()->getLocale() === 'en' ? 'User & Role Management' : 'వినియోగదారుల నిర్వహణ' }}
             </h2>
             <p style="color: var(--admin-muted); font-size: 13px; margin-top: 4px;">
-                ఎడిటోరియల్ డెస్క్ సిబ్బంది, రివ్యూవర్లు మరియు అడ్మినిస్ట్రేటర్ల ఖాతాలు మరియు పాత్రలు (RBAC).
+                {{ app()->getLocale() === 'en' ? 'Editorial desk personnel, reviewer, and administrator accounts (RBAC).' : 'ఎడిటోరియల్ డెస్క్ సిబ్బంది, రివ్యూవర్లు మరియు అడ్మినిస్ట్రేటర్ల ఖాతాలు మరియు పాత్రలు (RBAC).' }}
             </p>
         </div>
         <button type="button" class="btn-admin btn-gold" onclick="document.getElementById('createUserModal').style.display='flex';">
-            <i class="fa-solid fa-user-plus"></i> నూతన వినియోగదారుని చేర్చండి
+            <i class="fa-solid fa-user-plus"></i> {{ app()->getLocale() === 'en' ? 'Add New User' : 'నూతన వినియోగదారుని చేర్చండి' }}
         </button>
     </div>
 
@@ -25,12 +25,12 @@
         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
             <thead>
                 <tr style="background: #F8FAFC; border-bottom: 2px solid var(--admin-border); color: var(--admin-navy);">
-                    <th style="padding: 14px 20px; font-weight: 700;">పేరు (Name)</th>
-                    <th style="padding: 14px 20px; font-weight: 700;">ఈమెయిల్ (Email)</th>
-                    <th style="padding: 14px 20px; font-weight: 700;">పాత్ర (Role)</th>
-                    <th style="padding: 14px 20px; font-weight: 700;">స్థితి (Status)</th>
-                    <th style="padding: 14px 20px; font-weight: 700;">చివరి లాగిన్</th>
-                    <th style="padding: 14px 20px; font-weight: 700; text-align: right;">చర్యలు</th>
+                    <th style="padding: 14px 20px; font-weight: 700;">{{ app()->getLocale() === 'en' ? 'Name' : 'పేరు (Name)' }}</th>
+                    <th style="padding: 14px 20px; font-weight: 700;">{{ app()->getLocale() === 'en' ? 'Email' : 'ఈమెయిల్ (Email)' }}</th>
+                    <th style="padding: 14px 20px; font-weight: 700;">{{ app()->getLocale() === 'en' ? 'Role' : 'పాత్ర (Role)' }}</th>
+                    <th style="padding: 14px 20px; font-weight: 700;">{{ app()->getLocale() === 'en' ? 'Status' : 'స్థితి (Status)' }}</th>
+                    <th style="padding: 14px 20px; font-weight: 700;">{{ app()->getLocale() === 'en' ? 'Last Login' : 'చివరి లాగిన్' }}</th>
+                    <th style="padding: 14px 20px; font-weight: 700; text-align: right;">{{ app()->getLocale() === 'en' ? 'Actions' : 'చర్యలు' }}</th>
                 </tr>
             </thead>
             <tbody>

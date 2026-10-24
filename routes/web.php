@@ -24,7 +24,7 @@ Route::get('/edition/{edition}/download', [PublicEpaperController::class, 'downl
 // Public & Global Language / Locale Switcher
 Route::get('/locale/{lang}', function ($lang) {
     if (in_array($lang, ['te', 'en'], true)) {
-        session(['locale' => $lang]);
+        session(['locale' => $lang, 'admin_locale' => $lang]);
     }
 
     return back();
@@ -112,7 +112,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'active'])->group(fu
     // Language / Locale Switcher
     Route::get('/locale/{lang}', function ($lang) {
         if (in_array($lang, ['te', 'en'], true)) {
-            session(['locale' => $lang]);
+            session(['admin_locale' => $lang, 'locale' => $lang]);
         }
 
         return back();

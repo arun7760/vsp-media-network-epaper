@@ -7,12 +7,13 @@
 <div>
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
         <div>
-            <h2 style="font-family: 'Ramabhadra', sans-serif; font-size: 22px; color: var(--admin-navy);">
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--admin-navy);">
                 <i class="fa-solid fa-clock-rotate-left" style="color: var(--admin-gold); margin-right: 8px;"></i>
-                ఎడిటోరియల్ ఆడిట్ లాగ్స్
+                {{ app()->getLocale() === 'en' ? 'Editorial Audit Logs' : 'ఎడిటోరియల్ ఆడిట్ లాగ్స్' }}
+                <span style="font-size: 14px; font-weight: 600; color: var(--admin-muted); margin-left: 8px;">(ఎడిటోరియల్ ఆడిట్ లాగ్స్)</span>
             </h2>
             <p style="color: var(--admin-muted); font-size: 13px; margin-top: 4px;">
-                అప్‌లోడ్, ఎడిట్, ఆమోదం, తిరస్కరణ, షెడ్యూల్ మరియు ప్రచురణల సమగ్ర చరిత్ర.
+                {{ app()->getLocale() === 'en' ? 'Complete history of uploads, edits, approvals, rejections, scheduling, and publications.' : 'అప్‌లోడ్, ఎడిట్, ఆమోదం, తిరస్కరణ, షెడ్యూల్ మరియు ప్రచురణల సమగ్ర చరిత్ర.' }}
             </p>
         </div>
     </div>
@@ -21,13 +22,14 @@
     <div class="card" style="padding: 16px 20px; margin-bottom: 20px;">
         <form method="GET" action="{{ route('admin.audit-logs.index') }}" style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center;">
             <div style="flex: 1; min-width: 200px;">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="యూజర్ పేరు లేదా నోట్స్‌తో శోధించండి..."
+                <input type="text" name="search" value="{{ request('search') }}" 
+                       placeholder="{{ app()->getLocale() === 'en' ? 'Search by user name or notes...' : 'యూజర్ పేరు లేదా నోట్స్‌తో శోధించండి...' }}"
                        style="width: 100%; padding: 8px 12px; border: 1px solid var(--admin-border); border-radius: 6px; font-size: 13px; font-family: inherit;">
             </div>
 
             <div style="min-width: 180px;">
                 <select name="action" style="width: 100%; padding: 8px 12px; border: 1px solid var(--admin-border); border-radius: 6px; font-size: 13px; font-family: inherit; background: #FFFFFF;">
-                    <option value="">-- అన్ని చర్యలు (All Actions) --</option>
+                    <option value="">{{ app()->getLocale() === 'en' ? '-- All Actions --' : '-- అన్ని చర్యలు (All Actions) --' }}</option>
                     @foreach($actions as $act)
                         <option value="{{ $act }}" {{ request('action') === $act ? 'selected' : '' }}>
                             {{ strtoupper($act) }}
@@ -37,7 +39,7 @@
             </div>
 
             <button type="submit" class="btn-admin btn-primary" style="padding: 8px 16px;">
-                <i class="fa-solid fa-filter"></i> ఫిల్టర్
+                <i class="fa-solid fa-filter"></i> {{ app()->getLocale() === 'en' ? 'Filter' : 'ఫిల్టర్' }}
             </button>
 
             @if(request('action') || request('search'))
