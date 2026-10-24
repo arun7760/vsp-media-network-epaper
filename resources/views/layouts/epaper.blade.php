@@ -7,13 +7,17 @@
     <meta name="description" content="@yield('meta_description', 'VSP TIMES తెలుగు దినపత్రిక డిజిటల్ ఈ-పేపర్. ప్రతిరోజూ ఉదయం 5 గంటలకే తాజా వార్తలు, ప్రత్యేక కథనాలు, జిల్లా సమాచారం.')">
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
 
-    <!-- Telugu & International Typography -->
+    <!-- Best Telugu & International Typography (Ramabhadra + Mandali + Noto Sans Telugu + Outfit) matching vspmedianetwork.com -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Ramabhadra&family=Source+Sans+3:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Ramabhadra&family=Source+Sans+3:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    @include('partials.analytics')
+
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Ramabhadra&family=Source+Sans+3:wght@400;600;700;800;900&display=swap');
+
         :root {
             --epaper-navy: #0A1D37;
             --epaper-navy-light: #000E24;
@@ -27,21 +31,33 @@
             --epaper-text: #0F172A;
             --epaper-muted: #64748B;
             --epaper-border: #E2E8F0;
-            --font-telugu-serif: 'Noto Sans Telugu', 'Mandali', serif;
-            --font-telugu-sans: 'Noto Sans Telugu', 'Mandali', sans-serif;
-            --font-sans: 'Source Sans 3', sans-serif;
+            --font-telugu-body: 'Mandali', 'Noto Sans Telugu', 'Nirmala UI', sans-serif;
+            --font-telugu-headline: 'Ramabhadra', 'Noto Sans Telugu', 'Nirmala UI', sans-serif;
+            --font-sans: 'Outfit', 'Source Sans 3', system-ui, -apple-system, sans-serif;
         }
 
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        body, button, input, select, textarea, p, a, span, div, li {
+            font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-telugu-body)" }};
+        }
+
+        h1, h2, h3, h4, h5, h6, .brand-title, .live-pulse, .btn-epaper, .region-label, .region-pill, .page-rail-heading, .section-title {
+            font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-telugu-headline)" }};
+            letter-spacing: {{ app()->getLocale() === 'en' ? "-0.01em" : "0.01em" }};
+        }
+
+        .fa, .fas, .far, .fal, .fad, .fab, [class*="fa-"], [class*="fa-"]::before, [class*="fa-"]::after {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+        }
+
         body {
             background-color: var(--epaper-bg);
             color: var(--epaper-text);
-            font-family: {{ app()->getLocale() === 'en' ? "'Source Sans 3', system-ui, sans-serif" : "'Noto Sans Telugu', 'Mandali', sans-serif" }};
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
             display: flex;
@@ -121,6 +137,67 @@
         }
         .portal-link:hover {
             background: var(--epaper-red) !important;
+        }
+
+        /* Language Switcher in Public Header */
+        .locale-switcher {
+            display: inline-flex;
+            background: rgba(255, 255, 255, 0.14);
+            border-radius: 999px;
+            padding: 2px 4px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            align-items: center;
+            gap: 2px;
+        }
+        .locale-btn {
+            padding: 3px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 999px;
+            text-decoration: none;
+            color: #CBD5E1;
+            transition: all 0.2s;
+        }
+        .locale-btn.active {
+            background: var(--epaper-red);
+            color: #FFFFFF !important;
+            box-shadow: 0 2px 6px rgba(217, 27, 36, 0.45);
+        }
+        .locale-btn:hover:not(.active) {
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Masthead Primary Language Switcher */
+        .masthead-lang-switcher {
+            display: inline-flex;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        }
+        .masthead-lang-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 800;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #CBD5E1;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .masthead-lang-btn.active {
+            background: #FFFFFF;
+            color: var(--epaper-navy) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        }
+        .masthead-lang-btn:hover:not(.active) {
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.18);
         }
 
         /* Main Broadsheet Masthead */
@@ -293,18 +370,38 @@
     @stack('styles')
 </head>
 <body>
+    @include('partials.analytics_noscript')
 
     <!-- Utility Topbar -->
     <header class="epaper-topbar">
         <div class="container">
             <div class="topbar-left">
-                <span class="live-pulse"><span class="live-dot"></span> డిజిటల్ ఎడిషన్ లైవ్</span>
-                <span><i class="fa-regular fa-clock"></i> ప్రతిరోజూ తెల్లవారుజామున 5:00 గంటలకు నవీకరించబడుతుంది</span>
+                <span class="live-pulse"><span class="live-dot"></span> {{ app()->getLocale() === 'en' ? 'Digital Live Edition' : 'డిజిటల్ ఎడిషన్ లైవ్' }}</span>
+                <span><i class="fa-regular fa-clock"></i> {{ app()->getLocale() === 'en' ? 'Updated daily at 5:00 AM IST' : 'ప్రతిరోజూ తెల్లవారుజామున 5:00 గంటలకు నవీకరించబడుతుంది' }}</span>
+                
+                <!-- Live Readership Counter in Header -->
+                <span id="header-readership-counter" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); padding: 3px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.15); color: #E2E8F0; font-size: 12px; font-weight: 700;">
+                    <i class="fa-solid fa-users" style="color: var(--epaper-red);"></i>
+                    <span id="header-readership-text">{{ app()->getLocale() === 'en' ? "Today's Readers:" : "ఈ రోజు పాఠకులు:" }}</span>
+                    <strong id="header-readership-count" style="color: #FFFFFF;">--</strong>
+                </span>
             </div>
+
             <div class="topbar-right">
-                <a href="{{ url('/archive') }}"><i class="fa-solid fa-calendar-days"></i> పాత సంచికలు (Archive)</a>
+                <!-- English / Telugu Language Switcher in Top Bar -->
+                <div class="locale-switcher">
+                    <span style="color: #94A3B8; font-size: 11px; padding-left: 6px;"><i class="fa-solid fa-language"></i></span>
+                    <a href="{{ route('locale.switch', 'en') }}" class="locale-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">
+                        English
+                    </a>
+                    <a href="{{ route('locale.switch', 'te') }}" class="locale-btn {{ app()->getLocale() === 'te' ? 'active' : '' }}">
+                        తెలుగు
+                    </a>
+                </div>
+
+                <a href="{{ url('/archive') }}"><i class="fa-solid fa-calendar-days"></i> {{ __('epaper.archive') }}</a>
                 <a href="{{ config('app.main_portal_url', 'https://vspmedianetwork.com') }}" class="portal-link" target="_blank" rel="noopener">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i> ప్రధాన వార్తా పోర్టల్
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> {{ __('epaper.main_news_portal') }}
                 </a>
             </div>
         </div>
@@ -320,16 +417,26 @@
             </a>
             <div class="masthead-actions">
                 <a href="{{ route('epaper.home') }}" class="btn-epaper btn-epaper-outline">
-                    <i class="fa-solid fa-house"></i> హోమ్
+                    <i class="fa-solid fa-house"></i> {{ __('epaper.home') }}
                 </a>
                 <a href="{{ route('epaper.archive') }}" class="btn-epaper btn-epaper-outline">
-                    <i class="fa-solid fa-box-archive"></i> సంచికల ఆర్కైవ్
+                    <i class="fa-solid fa-box-archive"></i> {{ __('epaper.edition_archive') }}
                 </a>
                 @if(isset($edition) && $edition)
                     <a href="{{ route('epaper.edition', $edition) }}" class="btn-epaper btn-epaper-red">
-                        <i class="fa-solid fa-book-open"></i> నేటి పేపర్ చదవండి
+                        <i class="fa-solid fa-book-open"></i> {{ __('epaper.read_todays_paper') }}
                     </a>
                 @endif
+
+                <!-- Prominent Language Toggle matching Admin Header -->
+                <div class="masthead-lang-switcher" title="{{ app()->getLocale() === 'en' ? 'Switch to Telugu' : 'Switch to English' }}">
+                    <a href="{{ route('locale.switch', 'en') }}" class="masthead-lang-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">
+                        <i class="fa-solid fa-globe" style="font-size: 11px;"></i> English
+                    </a>
+                    <a href="{{ route('locale.switch', 'te') }}" class="masthead-lang-btn {{ app()->getLocale() === 'te' ? 'active' : '' }}">
+                        తెలుగు
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -345,16 +452,33 @@
     <footer class="epaper-footer">
         <div class="container">
             <div>
-                <strong>VSP TIMES E-PAPER</strong> &copy; {{ date('Y') }} VSP Media Network. All rights reserved.
+                <strong>VSP TIMES E-PAPER</strong> &copy; {{ date('Y') }} VSP Media Network. {{ __('epaper.all_rights_reserved') }}
             </div>
             <div style="display: flex; gap: 20px;">
-                <a href="{{ route('epaper.home') }}">హోమ్</a>
-                <a href="{{ route('epaper.archive') }}">ఆర్కైవ్</a>
-                <a href="{{ config('app.main_portal_url', 'https://vspmedianetwork.com') }}" target="_blank">మెయిన్ న్యూస్ వెబ్‌సైట్</a>
+                <a href="{{ route('epaper.home') }}">{{ __('epaper.home') }}</a>
+                <a href="{{ route('epaper.archive') }}">{{ __('epaper.archive') }}</a>
+                <a href="{{ config('app.main_portal_url', 'https://vspmedianetwork.com') }}" target="_blank">{{ __('epaper.main_news_portal') }}</a>
             </div>
         </div>
     </footer>
 
     @stack('scripts')
+
+    <!-- Live Readership Counter Dynamic Refresh -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const counterEl = document.getElementById('header-readership-count');
+        if (counterEl) {
+            fetch('{{ route('api.readership.today') }}')
+                .then(r => r.json())
+                .then(data => {
+                    if (data && data.success && data.formatted_readers) {
+                        counterEl.textContent = data.formatted_readers;
+                    }
+                })
+                .catch(function() {});
+        }
+    });
+    </script>
 </body>
 </html>

@@ -98,11 +98,12 @@
     }
 
     .edition-details h1 {
-        font-family: var(--font-telugu-serif);
+        font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-telugu-headline)" }};
         font-size: 32px;
         color: var(--epaper-navy);
         line-height: 1.25;
         margin-bottom: 12px;
+        font-weight: 800;
     }
     .edition-meta-strip {
         display: flex;
@@ -201,13 +202,14 @@
 
     /* Other Regional Editions */
     .section-title {
-        font-family: var(--font-telugu-serif);
+        font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-telugu-headline)" }};
         font-size: 22px;
         color: var(--epaper-navy);
         margin-bottom: 18px;
         display: flex;
         align-items: center;
         gap: 10px;
+        font-weight: 800;
     }
     .editions-grid {
         display: grid;
@@ -277,7 +279,7 @@
     <!-- Regional Edition Selector Tabs -->
     <div class="region-nav">
         <div class="region-label">
-            <i class="fa-solid fa-location-dot"></b> ఎడిషన్ ఎంచుకోండి:
+            <i class="fa-solid fa-location-dot"></i> {{ __('epaper.select_edition') }}
         </div>
         @foreach($regions as $region)
             <a href="{{ route('epaper.home', ['region' => $region->slug, 'date' => request('date')]) }}" 
@@ -292,19 +294,19 @@
         <div class="hero-edition-card">
             <div class="cover-wrapper">
                 <img src="{{ $edition->cover_url }}" alt="{{ $edition->title }}" onerror="this.src='https://placehold.co/600x850/0A1D37/FFFFFF/png?text=VSP+TIMES+E-PAPER';">
-                <span class="page-badge-overlay"><i class="fa-regular fa-file"></i> {{ $edition->total_pages }} పేజీలు</span>
+                <span class="page-badge-overlay"><i class="fa-regular fa-file"></i> {{ $edition->total_pages }} {{ __('epaper.pages') }}</span>
             </div>
 
             <div class="edition-details">
                 <div style="color: var(--epaper-red); font-weight: 800; font-size: 14px; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px;">
-                    <i class="fa-regular fa-newspaper"></i> {{ $edition->region->name ?? 'ప్రధాన సంచిక' }}
+                    <i class="fa-regular fa-newspaper"></i> {{ $edition->region->name ?? __('epaper.main_edition') }}
                 </div>
                 <h1>{{ $edition->title }}</h1>
 
                 <div class="edition-meta-strip">
                     <div class="meta-item">
                         <i class="fa-regular fa-calendar-check" style="color: var(--epaper-blue);"></i>
-                        <span>తేదీ: <strong>{{ $edition->telugu_date_string ?: $edition->edition_date->format('d M Y') }}</strong></span>
+                        <span>{{ __('epaper.date') }} <strong>{{ app()->getLocale() === 'te' && $edition->telugu_date_string ? $edition->telugu_date_string : $edition->edition_date->format('d M Y') }}</strong></span>
                     </div>
                     @if($edition->volume_number)
                         <div class="meta-item">
@@ -318,28 +320,28 @@
                     @endif
                     <div class="meta-item">
                         <i class="fa-regular fa-eye"></i>
-                        <span><strong>{{ number_format($edition->views_count) }}</strong> వీక్షణలు</span>
+                        <span><strong>{{ number_format($edition->views_count) }}</strong> {{ __('epaper.views') }}</span>
                     </div>
                 </div>
 
                 <div class="action-buttons">
                     <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => 1]) }}" class="btn-read-now">
-                        <i class="fa-solid fa-book-open-reader"></i> ఇప్పుడే చదవండి (Read Online)
+                        <i class="fa-solid fa-book-open-reader"></i> {{ __('epaper.read_online') }}
                     </a>
                     <a href="{{ route('epaper.download', $edition) }}" class="btn-download-pdf">
-                        <i class="fa-solid fa-file-pdf" style="color: var(--epaper-red);"></i> పూర్తి పీడీఎఫ్ డౌన్‌లోడ్
+                        <i class="fa-solid fa-file-pdf" style="color: var(--epaper-red);"></i> {{ __('epaper.download_pdf') }}
                     </a>
                 </div>
 
                 <!-- Quick Page Jump Chips -->
                 <div>
                     <div class="page-rail-heading">
-                        <i class="fa-solid fa-list-ol"></i> పేజీ వారీగా నేరుగా చదవండి:
+                        <i class="fa-solid fa-list-ol"></i> {{ __('epaper.direct_page_access') }}
                     </div>
                     <div class="page-quick-jump">
                         @foreach($edition->pages as $p)
                             <a href="{{ route('epaper.reader', ['edition' => $edition, 'pageNumber' => $p->page_number]) }}" class="page-jump-chip">
-                                పేజీ {{ $p->page_number }}: {{ Str::limit($p->page_title, 18) }}
+                                {{ __('epaper.page') }} {{ $p->page_number }}: {{ Str::limit($p->page_title, 18) }}
                             </a>
                         @endforeach
                     </div>
@@ -349,16 +351,16 @@
     @else
         <div style="background: #FFFFFF; padding: 48px; border-radius: 12px; text-align: center; border: 1px solid var(--epaper-border);">
             <i class="fa-regular fa-newspaper" style="font-size: 48px; color: var(--epaper-muted); margin-bottom: 16px;"></i>
-            <h2 style="font-size: 22px; color: var(--epaper-navy); margin-bottom: 8px;">ఎంచుకున్న తేదీకి ఈ-పేపర్ అందుబాటులో లేదు</h2>
-            <p style="color: var(--epaper-muted); margin-bottom: 24px;">దయచేసి వేరొక తేదీ లేదా వేరొక ప్రాంతీయ ఎడిషన్‌ను ఎంచుకోండి.</p>
-            <a href="{{ route('epaper.archive') }}" class="btn-epaper btn-epaper-red">ఆర్కైవ్‌ను బ్రౌజ్ చేయండి</a>
+            <h2 style="font-size: 22px; color: var(--epaper-navy); margin-bottom: 8px;">{{ __('epaper.no_edition_for_date') }}</h2>
+            <p style="color: var(--epaper-muted); margin-bottom: 24px;">{{ __('epaper.choose_another_date') }}</p>
+            <a href="{{ route('epaper.archive') }}" class="btn-epaper btn-epaper-red">{{ __('epaper.browse_archive') }}</a>
         </div>
     @endif
 
     <!-- Other Regional Editions Published on this Date -->
     @if(isset($otherEditions) && $otherEditions->isNotEmpty())
         <div class="section-title">
-            <i class="fa-solid fa-earth-asia" style="color: var(--epaper-red);"></i> ఇతర జిల్లా & ప్రాంతీయ సంచికలు
+            <i class="fa-solid fa-earth-asia" style="color: var(--epaper-red);"></i> {{ __('epaper.other_editions') }}
         </div>
         <div class="editions-grid">
             @foreach($otherEditions as $oe)
@@ -368,7 +370,7 @@
                     </div>
                     <div class="edition-subcard-info">
                         <div class="edition-subcard-title">{{ $oe->region->name ?? $oe->title }}</div>
-                        <div class="edition-subcard-date"><i class="fa-regular fa-calendar"></i> {{ $oe->edition_date->format('d M Y') }} &bull; {{ $oe->total_pages }} పేజీలు</div>
+                        <div class="edition-subcard-date"><i class="fa-regular fa-calendar"></i> {{ $oe->edition_date->format('d M Y') }} &bull; {{ $oe->total_pages }} {{ __('epaper.pages') }}</div>
                     </div>
                 </a>
             @endforeach

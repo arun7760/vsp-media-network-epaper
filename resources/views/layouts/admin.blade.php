@@ -9,10 +9,14 @@
     <!-- Fonts matching main website (vspmedianetwork.com) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Ramabhadra&family=Source+Sans+3:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Ramabhadra&family=Source+Sans+3:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    @include('partials.analytics')
+
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Ramabhadra&family=Source+Sans+3:wght@400;600;700;800;900&display=swap');
+
         :root {
             --admin-navy: #0A1D37;
             --admin-navy-dark: #000E24;
@@ -26,16 +30,35 @@
             --admin-border: #E2E8F0;
             --admin-text: #0F172A;
             --admin-muted: #64748B;
+            --font-telugu: 'Mandali', 'Noto Sans Telugu', 'Nirmala UI', sans-serif;
+            --font-headline: 'Ramabhadra', 'Noto Sans Telugu', 'Nirmala UI', sans-serif;
+            --font-sans: 'Outfit', 'Source Sans 3', system-ui, sans-serif;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, a, span, div {
+            font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-telugu)" }};
+        }
+
+        h1, h2, h3, h4, h5, h6, .brand-title {
+            font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-headline)" }};
+        }
+
+        .fa, .fas, .far, .fal, .fad, .fab, [class*="fa-"], [class*="fa-"]::before, [class*="fa-"]::after {
+            font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+        }
 
         body {
             background-color: var(--admin-bg);
             color: var(--admin-text);
-            font-family: {{ app()->getLocale() === 'en' ? "'Source Sans 3', system-ui, sans-serif" : "'Noto Sans Telugu', 'Mandali', sans-serif" }};
             display: flex;
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* Sidebar */
@@ -120,14 +143,6 @@
             margin-left: auto;
             background: #FFFFFF;
             color: #D91B24;
-            font-size: 11px;
-            padding: 2px 7px;
-            border-radius: 999px;
-            font-weight: 800;
-        }
-            margin-left: auto;
-            background: var(--admin-red);
-            color: #FFFFFF;
             font-size: 11px;
             padding: 2px 7px;
             border-radius: 999px;
@@ -335,6 +350,9 @@
 
             @if(auth()->user()->isAdmin())
                 <div class="nav-heading">{{ __('admin.nav_administration') }}</div>
+                <a href="{{ route('admin.analytics.index') }}" class="nav-link {{ request()->routeIs('admin.analytics.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-chart-line"></i> {{ __('admin.analytics') }}
+                </a>
                 <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                     <i class="fa-solid fa-users-gear"></i> {{ __('admin.users_roles') }}
                 </a>

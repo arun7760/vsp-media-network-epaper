@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\EpaperEdition;
 use App\Models\EpaperPage;
 use App\Models\EpaperRegion;
+use App\Services\ReadershipAnalyticsService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class PublicEpaperController extends Controller
 {
+    public function __construct(
+        protected ReadershipAnalyticsService $analyticsService
+    ) {}
     /**
      * E-Paper Public Homepage - Today's Edition & Regional Showcase
      */
@@ -55,6 +59,10 @@ class PublicEpaperController extends Controller
             ->get()
             ->unique(fn ($e) => $e->edition_date->toDateString());
 
+        if ($edition) {
+            $this->analyticsService->recordEvent($request, 'edition_open', $edition);
+        }
+
         return view('epaper.home', compact(
             'regions',
             'selectedRegion',
@@ -86,8 +94,8 @@ class PublicEpaperController extends Controller
             $currentPage = $edition->pages->firstWhere('page_number', $pageNumber) ?: $edition->pages->first();
         }
 
-        // Increment view count atomically
-        $edition->increment('views_count');
+        // Record first-party readership event
+        $this->analyticsService->recordEvent(request(), 'edition_open', $edition, $pageNumber);
 
         $prevPageNumber = ($pageNumber > 1) ? $pageNumber - 1 : null;
         $nextPageNumber = ($pageNumber < $totalPages) ? $pageNumber + 1 : null;
@@ -158,6 +166,7 @@ class PublicEpaperController extends Controller
         }
 
         $edition->increment('downloads_count');
+        $this->analyticsService->recordEvent(request(), 'pdf_download', $edition);
 
         if ($edition->master_pdf_path && Storage::disk('public')->exists($edition->master_pdf_path)) {
             return Storage::disk('public')->download(

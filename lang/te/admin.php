@@ -12,6 +12,7 @@ return [
     'users_roles' => 'వినియోగదారులు & పాత్రలు',
     'audit_logs' => 'ఆడిట్ లాగ్స్',
     'settings' => 'సెట్టింగ్స్',
+    'analytics' => 'రీడర్‌షిప్ అనలిటిక్స్',
     'view_live_epaper' => 'లైవ్ ఈ-పేపర్ చూడండి',
     'view_live_website' => 'లైవ్ వెబ్‌సైట్ చూడండి',
     'logout' => 'లాగౌట్',

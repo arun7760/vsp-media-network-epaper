@@ -16,6 +16,18 @@ Route::get('/edition/{edition}/page/{pageNumber?}', [PublicEpaperController::cla
 Route::get('/archive', [PublicEpaperController::class, 'archive'])->name('epaper.archive');
 Route::get('/edition/{edition}/download', [PublicEpaperController::class, 'downloadPdf'])->name('epaper.download');
 
+// Public & Global Language / Locale Switcher
+Route::get('/locale/{lang}', function ($lang) {
+    if (in_array($lang, ['te', 'en'], true)) {
+        session(['locale' => $lang]);
+    }
+    return back();
+})->name('locale.switch');
+
+// Readership Analytics & Counter APIs
+Route::get('/api/readership/today', [\App\Http\Controllers\Api\ReadershipApiController::class, 'getToday'])->name('api.readership.today');
+Route::post('/api/track/event', [\App\Http\Controllers\Api\ReadershipApiController::class, 'recordEvent'])->name('api.track.event');
+
 /*
 |--------------------------------------------------------------------------
 | Admin Authentication Routes
@@ -36,6 +48,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 */
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'active'])->group(function () {
     Route::get('/dashboard', [EpaperAdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/analytics', [\App\Http\Controllers\Admin\AnalyticsController::class, 'index'])->name('analytics.index');
 
     // Editions Management
     Route::get('/editions', [EpaperAdminController::class, 'index'])->name('editions.index');

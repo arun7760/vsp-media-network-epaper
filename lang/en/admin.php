@@ -12,6 +12,7 @@ return [
     'users_roles' => 'Users & Roles',
     'audit_logs' => 'Audit Logs',
     'settings' => 'Settings',
+    'analytics' => 'Analytics & Readership',
     'view_live_epaper' => 'View Live E-Paper',
     'view_live_website' => 'View Live Website',
     'logout' => 'Logout',
