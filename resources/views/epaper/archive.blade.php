@@ -13,8 +13,8 @@
         margin-bottom: 32px;
     }
     .archive-title-block h1 {
-        font-family: var(--font-telugu-serif);
         font-size: 26px;
+        font-weight: 800;
         color: var(--epaper-navy);
         margin-bottom: 6px;
     }
@@ -122,7 +122,6 @@
         letter-spacing: 0.5px;
     }
     .archive-edition-title {
-        font-family: var(--font-telugu-serif);
         font-size: 18px;
         font-weight: 700;
         color: var(--epaper-navy);

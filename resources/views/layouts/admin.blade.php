@@ -6,15 +6,13 @@
     <title>@yield('title', __('admin.portal_title'))</title>
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
 
-    <!-- Fonts matching main website (vspmedianetwork.com) -->
+    <!-- Unified Modern Typography: Outfit (English) + Noto Sans Telugu (Telugu) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Ramabhadra&family=Source+Sans+3:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Ramabhadra&family=Source+Sans+3:wght@400;600;700;800;900&display=swap');
-
         :root {
             --admin-navy: #0A1D37;
             --admin-navy-dark: #000E24;
@@ -28,23 +26,19 @@
             --admin-border: #E2E8F0;
             --admin-text: #0F172A;
             --admin-muted: #64748B;
-            --font-telugu: 'Mandali', 'Noto Sans Telugu', 'Nirmala UI', sans-serif;
-            --font-headline: 'Ramabhadra', 'Noto Sans Telugu', 'Nirmala UI', sans-serif;
-            --font-sans: 'Outfit', 'Source Sans 3', system-ui, sans-serif;
+            --font-main: {{ app()->getLocale() === 'te' ? "'Noto Sans Telugu', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" : "'Outfit', 'Noto Sans Telugu', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }};
+            --font-sans: var(--font-main);
+            --font-telugu: var(--font-main);
+            --font-headline: var(--font-main);
         }
 
-        *, *::before, *::after { 
+        *, *::before, *::after, html, body, button, input, select, textarea, label, h1, h2, h3, h4, h5, h6, p, a, span, div, li, td, th { 
             box-sizing: border-box; 
             margin: 0; 
             padding: 0; 
-        }
-
-        body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, a, span, div {
-            font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-telugu)" }};
-        }
-
-        h1, h2, h3, h4, h5, h6, .brand-title {
-            font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-headline)" }};
+            font-family: var(--font-main) !important;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .fa, .fas, .far, .fal, .fad, .fab, [class*="fa-"], [class*="fa-"]::before, [class*="fa-"]::after {
@@ -243,8 +237,8 @@
             box-shadow: 0 2px 10px rgba(0, 32, 91, 0.04);
         }
         .admin-header h2 {
-            font-family: 'Ramabhadra', sans-serif;
             font-size: 20px;
+            font-weight: 800;
             color: var(--admin-navy);
             display: flex;
             align-items: center;
@@ -343,11 +337,79 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.03);
             margin-bottom: 28px;
         }
+
+        /* Responsive Layout for Mobile & Tablet */
+        .mobile-nav-toggle {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--admin-border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 16px;
+            color: var(--admin-navy);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+        .admin-sidebar-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 998;
+            backdrop-filter: blur(2px);
+        }
+
+        @media (max-width: 991px) {
+            .mobile-nav-toggle {
+                display: inline-flex;
+            }
+            .admin-sidebar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: -290px;
+                z-index: 999;
+                transition: left 0.28s ease;
+            }
+            .admin-sidebar.active {
+                left: 0;
+            }
+            .admin-sidebar-backdrop.active {
+                display: block;
+            }
+            .admin-header {
+                padding: 14px 18px;
+                flex-wrap: wrap;
+                gap: 14px;
+            }
+            .admin-content {
+                padding: 20px 16px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .admin-header {
+                padding: 12px 14px;
+            }
+            .admin-header h2 {
+                font-size: 18px;
+            }
+            .admin-content {
+                padding: 16px 12px;
+            }
+            .card {
+                padding: 16px;
+                border-radius: 8px;
+            }
+        }
     </style>
     <link rel="stylesheet" href="{{ asset('css/admin-datatable.css') }}">
     @stack('styles')
 </head>
 <body>
+
+    <div class="admin-sidebar-backdrop" id="adminSidebarBackdrop" onclick="toggleAdminSidebar()"></div>
 
     <!-- Sidebar -->
     <aside class="admin-sidebar">
@@ -438,16 +500,21 @@
     <!-- Main Content Area -->
     <div class="admin-main">
         <header class="admin-header">
-            <div>
-                <div style="font-size: 12px; color: var(--admin-muted); display: flex; align-items: center; gap: 6px; margin-bottom: 3px; font-weight: 600;">
-                    <i class="fa-solid fa-house" style="font-size: 11px;"></i>
-                    <span>{{ __('admin.dashboard') }}</span>
-                    <span style="color: #CBD5E1;">/</span>
-                    <span style="color: var(--admin-navy);">{{ __('admin.portal_title') }}</span>
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <button type="button" class="mobile-nav-toggle" onclick="toggleAdminSidebar()" aria-label="Toggle Navigation Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <div style="font-size: 12px; color: var(--admin-muted); display: flex; align-items: center; gap: 6px; margin-bottom: 3px; font-weight: 600;">
+                        <i class="fa-solid fa-house" style="font-size: 11px;"></i>
+                        <span>{{ __('admin.dashboard') }}</span>
+                        <span style="color: #CBD5E1;">/</span>
+                        <span style="color: var(--admin-navy);">{{ __('admin.portal_title') }}</span>
+                    </div>
+                    <h2 style="font-size: 22px; font-weight: 800; color: var(--admin-navy); margin: 0; letter-spacing: -0.3px;">
+                        @yield('header_title', __('admin.portal_title'))
+                    </h2>
                 </div>
-                <h2 style="font-size: 22px; font-weight: 800; color: var(--admin-navy); margin: 0; letter-spacing: -0.3px;">
-                    @yield('header_title', __('admin.portal_title'))
-                </h2>
             </div>
             
             <div style="display: flex; align-items: center; gap: 16px;">
@@ -529,6 +596,16 @@
     </div>
 
     <script src="{{ asset('js/admin-datatable.js') }}"></script>
+    <script>
+        function toggleAdminSidebar() {
+            var sidebar = document.querySelector('.admin-sidebar');
+            var backdrop = document.getElementById('adminSidebarBackdrop');
+            if (sidebar && backdrop) {
+                sidebar.classList.toggle('active');
+                backdrop.classList.toggle('active');
+            }
+        }
+    </script>
     @stack('scripts')
 </body>
 </html>

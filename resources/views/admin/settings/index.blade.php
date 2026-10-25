@@ -6,7 +6,7 @@
 @section('content')
 <div style="max-width: 800px; margin: 0 auto;">
     <div style="margin-bottom: 24px;">
-        <h2 style="font-family: 'Ramabhadra', sans-serif; font-size: 22px; color: var(--admin-navy);">
+        <h2 style="font-weight: 800; font-size: 22px; color: var(--admin-navy);">
             <i class="fa-solid fa-sliders" style="color: var(--admin-gold); margin-right: 8px;"></i>
             ప్రచురణ &amp; సాధారణ ఆకృతీకరణ
         </h2>
@@ -19,7 +19,7 @@
         <form action="{{ route('admin.settings.update') }}" method="POST">
             @csrf
 
-            <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 16px; color: var(--admin-navy); margin-bottom: 16px; border-bottom: 1px solid var(--admin-border); padding-bottom: 8px;">
+            <h3 style="font-weight: 800; font-size: 16px; color: var(--admin-navy); margin-bottom: 16px; border-bottom: 1px solid var(--admin-border); padding-bottom: 8px;">
                 <i class="fa-solid fa-newspaper" style="color: var(--admin-gold); margin-right: 6px;"></i>
                 ప్రచురణ నియమాలు (Publishing Rules)
             </h3>
@@ -72,7 +72,7 @@
                 </p>
             </div>
 
-            <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 16px; color: var(--admin-navy); margin-bottom: 16px; border-bottom: 1px solid var(--admin-border); padding-bottom: 8px;">
+            <h3 style="font-weight: 800; font-size: 16px; color: var(--admin-navy); margin-bottom: 16px; border-bottom: 1px solid var(--admin-border); padding-bottom: 8px;">
                 <i class="fa-solid fa-address-book" style="color: var(--admin-gold); margin-right: 6px;"></i>
                 పోర్టల్ సమాచారం (Portal Information)
             </h3>

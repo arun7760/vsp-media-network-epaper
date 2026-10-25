@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,17 +7,15 @@
     <meta name="description" content="@yield('meta_description', 'VSP TIMES తెలుగు దినపత్రిక డిజిటల్ ఈ-పేపర్. ప్రతిరోజూ ఉదయం 5 గంటలకే తాజా వార్తలు, ప్రత్యేక కథనాలు, జిల్లా సమాచారం.')">
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
 
-    <!-- Best Telugu & International Typography (Ramabhadra + Mandali + Noto Sans Telugu + Outfit) matching vspmedianetwork.com -->
+    <!-- Unified Modern Typography: Outfit (English) + Noto Sans Telugu (Telugu) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Ramabhadra&family=Source+Sans+3:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     @include('partials.analytics')
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Ramabhadra&family=Source+Sans+3:wght@400;600;700;800;900&display=swap');
-
         :root {
             --epaper-navy: #0A1D37;
             --epaper-navy-light: #000E24;
@@ -31,24 +29,20 @@
             --epaper-text: #0F172A;
             --epaper-muted: #64748B;
             --epaper-border: #E2E8F0;
-            --font-telugu-body: 'Mandali', 'Noto Sans Telugu', 'Nirmala UI', sans-serif;
-            --font-telugu-headline: 'Ramabhadra', 'Noto Sans Telugu', 'Nirmala UI', sans-serif;
-            --font-sans: 'Outfit', 'Source Sans 3', system-ui, -apple-system, sans-serif;
+            --font-main: {{ app()->getLocale() === 'te' ? "'Noto Sans Telugu', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" : "'Outfit', 'Noto Sans Telugu', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }};
+            --font-sans: var(--font-main);
+            --font-telugu-body: var(--font-main);
+            --font-telugu-headline: var(--font-main);
+            --font-telugu-serif: var(--font-main);
         }
 
-        *, *::before, *::after {
+        *, *::before, *::after, html, body, button, input, select, textarea, label, h1, h2, h3, h4, h5, h6, p, a, span, div, li, td, th {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-        }
-
-        body, button, input, select, textarea, p, a, span, div, li {
-            font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-telugu-body)" }};
-        }
-
-        h1, h2, h3, h4, h5, h6, .brand-title, .live-pulse, .btn-epaper, .region-label, .region-pill, .page-rail-heading, .section-title {
-            font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-telugu-headline)" }};
-            letter-spacing: {{ app()->getLocale() === 'en' ? "-0.01em" : "0.01em" }};
+            font-family: var(--font-main) !important;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .fa, .fas, .far, .fal, .fad, .fab, [class*="fa-"], [class*="fa-"]::before, [class*="fa-"]::after {

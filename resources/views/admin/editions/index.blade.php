@@ -217,7 +217,7 @@
         box-shadow: 0 0 0 8px #FEF2F2;
     }
     .delete-modal-title {
-        font-family: 'Ramabhadra', sans-serif;
+        font-weight: 800;
         font-size: 20px;
         color: var(--admin-navy);
         margin-bottom: 2px;

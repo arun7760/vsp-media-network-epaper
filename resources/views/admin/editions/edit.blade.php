@@ -12,7 +12,7 @@
                 <i class="fa-solid fa-arrow-left"></i> {{ __('admin.editions_list') }}
             </a>
             <div>
-                <h2 style="font-family: 'Ramabhadra', sans-serif; font-size: 22px; color: var(--admin-navy); margin-bottom: 2px;">
+                <h2 style="font-weight: 800; font-size: 22px; color: var(--admin-navy); margin-bottom: 2px;">
                     {{ $edition->display_title }}
                 </h2>
                 <div style="font-size: 13px; color: var(--admin-muted); display: flex; align-items: center; gap: 12px;">
@@ -154,7 +154,7 @@
         <div class="card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--admin-border); padding-bottom: 14px;">
                 <div>
-                    <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 18px; color: var(--admin-navy);">
+                    <h3 style="font-weight: 800; font-size: 18px; color: var(--admin-navy);">
                         <i class="fa-solid fa-file-invoice" style="color: var(--admin-gold); margin-right: 6px;"></i>
                         {{ __('admin.page_gallery') }}
                     </h3>
@@ -236,7 +236,7 @@
             
             <!-- Metadata Card -->
             <div class="card">
-                <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 16px; color: var(--admin-navy); margin-bottom: 16px; border-bottom: 1px solid var(--admin-border); padding-bottom: 10px;">
+                <h3 style="font-weight: 800; font-size: 16px; color: var(--admin-navy); margin-bottom: 16px; border-bottom: 1px solid var(--admin-border); padding-bottom: 10px;">
                     <i class="fa-solid fa-gear" style="color: var(--admin-gold); margin-right: 6px;"></i>
                     {{ __('admin.edit_edition_details') }}
                 </h3>
@@ -299,7 +299,7 @@
 
             <!-- Workflow Audit Trail Log -->
             <div class="card">
-                <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 16px; color: var(--admin-navy); margin-bottom: 14px; border-bottom: 1px solid var(--admin-border); padding-bottom: 10px;">
+                <h3 style="font-weight: 800; font-size: 16px; color: var(--admin-navy); margin-bottom: 14px; border-bottom: 1px solid var(--admin-border); padding-bottom: 10px;">
                     <i class="fa-solid fa-clock-rotate-left" style="color: var(--admin-gold); margin-right: 6px;"></i>
                     {{ __('admin.audit_trail') }}
                 </h3>
@@ -351,7 +351,7 @@
 <!-- Modal for Rejection Reason -->
 <div id="rejectModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
     <div style="background: #FFFFFF; border-radius: 10px; width: 100%; max-width: 500px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-        <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 18px; color: #DC2626; margin-bottom: 12px;">
+        <h3 style="font-weight: 800; font-size: 18px; color: #DC2626; margin-bottom: 12px;">
             <i class="fa-solid fa-triangle-exclamation"></i> {{ __('admin.reject_modal_title') }}
         </h3>
         <p style="font-size: 13px; color: var(--admin-muted); margin-bottom: 16px;">

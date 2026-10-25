@@ -108,7 +108,7 @@
 <!-- Create User Modal -->
 <div id="createUserModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
     <div style="background: #FFFFFF; border-radius: 10px; width: 100%; max-width: 520px; padding: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-        <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 18px; color: var(--admin-navy); margin-bottom: 16px;">
+        <h3 style="font-weight: 800; font-size: 18px; color: var(--admin-navy); margin-bottom: 16px;">
             <i class="fa-solid fa-user-plus" style="color: var(--admin-gold); margin-right: 6px;"></i>
             నూతన వినియోగదారుని నమోదు చేయండి
         </h3>
@@ -154,7 +154,7 @@
 <!-- Edit User Modal -->
 <div id="editUserModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
     <div style="background: #FFFFFF; border-radius: 10px; width: 100%; max-width: 520px; padding: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-        <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 18px; color: var(--admin-navy); margin-bottom: 16px;">
+        <h3 style="font-weight: 800; font-size: 18px; color: var(--admin-navy); margin-bottom: 16px;">
             <i class="fa-solid fa-user-pen" style="color: var(--admin-gold); margin-right: 6px;"></i>
             యూజర్ వివరాలు సవరించండి
         </h3>
@@ -212,7 +212,7 @@
         <div style="width: 64px; height: 64px; border-radius: 50%; background: #FEE2E2; color: #DC2626; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 16px; box-shadow: 0 0 0 8px #FEF2F2;">
             <i class="fa-solid fa-triangle-exclamation"></i>
         </div>
-        <h3 style="font-family: 'Ramabhadra', sans-serif; font-size: 20px; color: var(--admin-navy); margin-bottom: 2px;">యూజర్‌ను తొలగించాలా?</h3>
+        <h3 style="font-weight: 800; font-size: 20px; color: var(--admin-navy); margin-bottom: 2px;">యూజర్‌ను తొలగించాలా?</h3>
         <p style="font-size: 12px; color: var(--admin-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; font-weight: 700;">Delete User Confirmation</p>
         
         <p style="font-size: 13.5px; color: #475569; line-height: 1.5; margin-bottom: 18px;">

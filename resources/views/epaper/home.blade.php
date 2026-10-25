@@ -114,7 +114,6 @@
     }
 
     .hero-edition-title {
-        font-family: {{ app()->getLocale() === 'en' ? "var(--font-sans)" : "var(--font-telugu-headline)" }};
         font-size: 34px;
         color: var(--epaper-navy);
         line-height: 1.25;
@@ -320,6 +319,37 @@
         }
         .hero-edition-title {
             font-size: 26px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-edition-card {
+            padding: 18px 14px;
+            border-radius: 14px;
+        }
+        .hero-edition-title {
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+        .btn-read-now {
+            width: 100%;
+            justify-content: center;
+            padding: 12px 20px;
+            font-size: 15px;
+        }
+        .btn-download-pdf {
+            width: 100%;
+            justify-content: center;
+            padding: 11px 20px;
+            font-size: 14px;
+        }
+        .meta-pill {
+            padding: 4px 10px;
+            font-size: 12px;
+        }
+        .recent-strip-container {
+            padding: 16px 14px;
+            border-radius: 12px;
         }
     }
 </style>
