@@ -6,15 +6,25 @@
     <title>{{ app()->getLocale() === 'te' ? 'ఎడిటోరియల్ లాగిన్' : 'Editorial Desk Login' }} | VSP TIMES E-Paper CMS</title>
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
     
-    <!-- Unified Modern Typography: Outfit (English) + Noto Sans Telugu (Telugu) -->
+    <!-- Elite Readable Typography: Plus Jakarta Sans + Inter + Noto Sans Telugu -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
         :root {
-            --font-main: {{ app()->getLocale() === 'te' ? "'Noto Sans Telugu', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" : "'Outfit', 'Noto Sans Telugu', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }};
+            --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-telugu: 'Noto Sans Telugu', 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-main: {!! app()->getLocale() === 'te' ? "var(--font-telugu)" : "var(--font-sans)" !!};
+        }
+
+        html[lang="te"], :lang(te) {
+            --font-main: var(--font-telugu);
+        }
+
+        html[lang="en"], :lang(en) {
+            --font-main: var(--font-sans);
         }
 
         *, *::before, *::after, html, body, button, input, select, textarea, label, h1, h2, h3, h4, h5, h6, p, a, span, div {

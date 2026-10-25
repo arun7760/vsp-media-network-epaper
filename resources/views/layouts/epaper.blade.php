@@ -7,10 +7,10 @@
     <meta name="description" content="@yield('meta_description', 'VSP TIMES తెలుగు దినపత్రిక డిజిటల్ ఈ-పేపర్. ప్రతిరోజూ ఉదయం 5 గంటలకే తాజా వార్తలు, ప్రత్యేక కథనాలు, జిల్లా సమాచారం.')">
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
 
-    <!-- Unified Modern Typography: Outfit (English) + Noto Sans Telugu (Telugu) -->
+    <!-- Elite Readable Typography: Plus Jakarta Sans + Inter + Noto Sans Telugu -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     @include('partials.analytics')
@@ -29,11 +29,20 @@
             --epaper-text: #0F172A;
             --epaper-muted: #64748B;
             --epaper-border: #E2E8F0;
-            --font-main: {{ app()->getLocale() === 'te' ? "'Noto Sans Telugu', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" : "'Outfit', 'Noto Sans Telugu', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }};
-            --font-sans: var(--font-main);
+            --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-telugu: 'Noto Sans Telugu', 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-main: {!! app()->getLocale() === 'te' ? "var(--font-telugu)" : "var(--font-sans)" !!};
             --font-telugu-body: var(--font-main);
             --font-telugu-headline: var(--font-main);
             --font-telugu-serif: var(--font-main);
+        }
+
+        html[lang="te"], :lang(te) {
+            --font-main: var(--font-telugu);
+        }
+
+        html[lang="en"], :lang(en) {
+            --font-main: var(--font-sans);
         }
 
         *, *::before, *::after, html, body, button, input, select, textarea, label, h1, h2, h3, h4, h5, h6, p, a, span, div, li, td, th {
