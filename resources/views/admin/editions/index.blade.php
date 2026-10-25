@@ -152,11 +152,12 @@
     }
     .thumb-mini {
         width: 48px;
-        height: 64px;
-        object-fit: cover;
+        height: auto;
+        max-height: 72px;
+        object-fit: contain;
         border-radius: 4px;
         border: 1px solid var(--admin-border);
-        background: #EEF2F6;
+        background: #FFFFFF;
         display: block;
     }
     .badge-status {

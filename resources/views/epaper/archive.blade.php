@@ -96,16 +96,19 @@
         box-shadow: 0 12px 28px rgba(10,29,55,0.1);
     }
     .archive-cover-wrap {
-        aspect-ratio: 1 / 1.38;
-        background: #F1F5F9;
+        background: #F8FAFC;
         overflow: hidden;
         position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 1px solid var(--epaper-border);
     }
     .archive-cover-wrap img {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
         display: block;
+        object-fit: contain;
     }
     .archive-card-body {
         padding: 18px;

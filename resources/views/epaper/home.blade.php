@@ -41,22 +41,23 @@
         box-shadow: -10px 18px 40px rgba(15, 23, 42, 0.18), 0 2px 8px rgba(15, 23, 42, 0.06);
         border: 1px solid #CBD5E1;
         transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
-        background: #F8FAFC;
-        aspect-ratio: 1 / 1.414;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        background: #FFFFFF;
+        width: 100%;
+        max-width: 380px;
+        margin: 0 auto;
+        display: block;
     }
     .cover-wrapper:hover {
         transform: translateY(-6px) scale(1.02);
         box-shadow: -12px 24px 50px rgba(15, 23, 42, 0.24);
     }
-    .cover-wrapper img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+    .cover-wrapper img,
+    .cover-wrapper canvas {
+        width: 100% !important;
+        height: auto !important;
         display: block;
         background: #FFFFFF;
+        object-fit: contain;
     }
     .live-badge-overlay {
         position: absolute;
